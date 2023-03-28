@@ -1,9 +1,10 @@
 
 configurations = {
-    'database' : {
-		'host' : 'localhost',
-        'username' : None,
-        'password' : None,
-        'dbname' : 'testingDB'
+	'database' : {
+		'host' : 'cloud.mongodb.com',
+		'username' : 'cs19btech11039',
+		'password' : 'testingdatabase',
+		'dbname' : 'testDB',
+		'collection' : 'users'
 	}
 }
