@@ -1,10 +1,9 @@
-
 configurations = {
-	'database' : {
-		'host' : 'cloud.mongodb.com',
-		'username' : 'cs19btech11039',
-		'password' : 'testingdatabase',
-		'dbname' : 'testDB',
-		'collection' : 'users'
-	}
+    'database' : {
+        'host' : 'localhost',
+        'username' : None,
+        'password' : None,
+        'dbname' : 'testDB',
+        'student_collection' : 'student'
+    }
 }

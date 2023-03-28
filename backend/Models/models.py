@@ -1,100 +1,95 @@
-# # Pseudo Code representing Models/Classes
+from pydantic import BaseModel
+from typing import Optional,List
+import json
 
-# class User():
-#     __first_name
-#     __last_name
-#     __username
-#     __password
-#     __mail_address
-#     __photo_url
-#     __id
+class Notes(BaseModel):
+    note : str
+   
+    def add_note():
+        pass
+    def update_note():
+        pass
+    def delete_note():
+        pass        
 
-#     def update_metadata(...):
-
-class User():
-
-    def __init__(self):
-        self.__first_name = None
-        self.__last_name = None
-        self.__username = None
-        self.__password = None
-        self.__mail_address = None
-        self.__photo_url = None
-        self.__id = None
-
-    def update_metadata(self, first_name, last_name, username, password, mail_address, photo_url, id):
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__username = username
-        self.__password = password
-        self.__mail_address = mail_address
-        self.__photo_url = photo_url
-        self.__id = id
+class Course(BaseModel):
+    course_name : str
+    course_id: str
+    course_instructor : str
+    course_slot : str
+    course_sem : str
+    core_elective : str
+    course_prerequisites : List[str] = []
+ 
+    def JSONify(self):
+        return json.dumps(self.__dict__,object_hook=lambda d: d.dict())
+     
+    def print(self):
+        print(self.__course_id)
 
 
-# class Student(User):
-#     __department
-#     __cgpa    
-
-#     __course_list : list(Course)
-
-#     def update_metadata():
-#         pass
+class StudentCourseSpecification(BaseModel):
+    course_id: str
+    course_grade : str
+    course_status : str
+    registered_sem : bool
+    elective : str
+    met_prerequisite_flag : str
+    note : str
+ 
     
-#     def register():
-#         pass
-#     def deregister():
-#         pass    
-#     def mark_completed():
-#         pass
-
-# class Admin(User):
-#     def update_metadata():
-#         pass
-
-#     def add():
-#         pass
-#     def update():
-#         pass
-#     def delete():
-#         pass
-
-# class Course():
-#     __course_name
-#     __course_id
-#     __course_instructor
-#     __course_slot
-#     __course_sem
-#     __core_elective
-
-#     __course_prerequisites : list(string)
-#     __specification : StudentCourseSpecification
-
-# class StudentCourseSpecification():
-#     __course_grade
-#     __course_status
-#     __elective
-#     __met_prerequisite_flag
-#     __note : Notes()
-
+class User(BaseModel):
+    first_name: Optional[str]
+    last_name : Optional[str]
+    username : str
+    password : str
+    email : str
+    photo_url : Optional[str]
+    id : Optional[str]
     
 
-# class SpecializationPaths():
-#     __paths = list(image_urls)
+class Student(User,BaseModel):
+    department : str
+    cgpa : Optional[float]
+    course_list : Optional[List[StudentCourseSpecification]]
 
-#     def update_paths():
-#         pass
+    def JSONify(self):
+        return json.dumps(self.__dict__)
+    
+    def update_metadata(self,**metadata):
+        self.first_name = metadata.get("first_name")
+        self.last_name = metadata.get("last_name")
+        self.photo_url = metadata.get("photo_url")
+        self.cgpa = metadata.get("cgpa")
+        self.course_list = metadata.get("course_list")
+        pass 
+    def register():
+        pass
+    def deregister():
+        pass    
+    def mark_completed():
+        pass
+    
 
-# class Notes():
-#     _note : string
+class Admin(User,BaseModel):
+    def update_metadata():
+        pass
+    def add():
+        pass
+    def update():
+        pass
+    def delete():
+        pass
 
-#     def add_note():
-#         pass
-#     def update_note():
-#         pass
-#     def delete_note():
-#         pass
 
+class SpecializationPath(BaseModel):
+    name : str
+    path_url : str
 
-# class PictorialRepresenation():
-#     pass
+    def update_paths():
+        pass
+
+class PictorialRepresenation(BaseModel):
+    pass
+ 
+
