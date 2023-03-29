@@ -32,10 +32,13 @@ class StudentCourseSpecification(BaseModel):
     course_id: str
     course_grade : str
     course_status : str
-    registered_sem : bool
+    # registered_sem : bool
     elective : str
-    met_prerequisite_flag : str
+    met_prerequisite_flag : bool
     note : str
+
+    # def JSONify(self):
+    #     return json.dumps(self.__dict__,object_hook=lambda d: d.dict())
  
     
 class User(BaseModel):

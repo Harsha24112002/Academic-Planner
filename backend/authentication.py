@@ -2,9 +2,7 @@ from flask import request, session, Blueprint
 from passlib.hash import pbkdf2_sha256 as sha256
 from Models.models import  Student
 
-from db_connection import Database
-
-database = Database()
+from db_connection import database
 
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
