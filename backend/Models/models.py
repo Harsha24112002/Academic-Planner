@@ -35,7 +35,7 @@ class StudentCourseSpecification(BaseModel):
     # registered_sem : bool
     elective : str
     met_prerequisite_flag : bool
-    note : str
+    note : Optional[Notes]
 
     # def JSONify(self):
     #     return json.dumps(self.__dict__,object_hook=lambda d: d.dict())

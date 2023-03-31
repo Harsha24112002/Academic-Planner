@@ -1,6 +1,8 @@
 from flask import request, session, Blueprint
 from passlib.hash import pbkdf2_sha256 as sha256
-from Models.models import  Student
+from Models.models import  Student, StudentCourseSpecification
+from pydantic import parse_obj_as
+from typing import List
 
 from db_connection import database
 
@@ -11,10 +13,14 @@ authentication = Blueprint("authentication", __name__, url_prefix="/authenticati
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST"])
 def get_details():
+	if not session.get("user"):
+		return "Not logged in"
+
 	stud = Student(**session["user"])
-	stud.update_metadata(**request.form.to_dict())
-	session["user"] = stud.__dict__
-	
+	req = request.json
+	stud.update_metadata(**req)
+	database.studentOperations.update(session["user"], stud.dict())
+	session["user"] = stud.dict()
 	return "User added successfully"
 
 # code to signup user

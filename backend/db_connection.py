@@ -1,5 +1,6 @@
 import pymongo
 from config import configurations
+from Models.models import StudentCourseSpecification
 
 # !!! Add try catch block to handle errors while operating with Database
 # from pymongo.errors import BulkWriteError
@@ -66,6 +67,11 @@ class StudentDBOperations():
     # get user from the database using username
     def get_user_by_username(self,username):
         return self.collection.find_one({"username": username})
+
+    def update(self,query,newvalues):
+        new_q = {"$set" : newvalues}       
+        x = self.collection.update_one({"email":query["email"]}, new_q)
+        print(x.modified_count)
 
     def add_course(self, id, course_dict):
         self.collection.update_one(
