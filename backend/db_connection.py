@@ -112,7 +112,7 @@ class AdminDBOperations:
     
     def add_course(self,courseDetails):
         try:
-            if self.check_course(courseDetails["course_id"]) is None:
+            if not self.check_course(courseDetails["course_id"]):
                 self.courseCollection.insert_one(courseDetails)
                 return "Success"
             else:
@@ -122,10 +122,10 @@ class AdminDBOperations:
         
     def update_course(self,courseDetails):
         if self.check_course(courseDetails["course_id"]):
-            self.courseCollection.updateOne({
-                "course_id":courseDetails["course_id"],
-                "set":courseDetails
-            })
+            self.courseCollection.update_one(
+                { "course_id":courseDetails["course_id"]},
+                {"$set":courseDetails}
+            )
             return "Updated"
         else:
             return "Course Not Found in DataBase"
