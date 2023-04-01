@@ -124,7 +124,7 @@ class AdminDBOperations:
         if self.check_course(courseDetails["course_id"]):
             self.courseCollection.updateOne({
                 "course_id":courseDetails["course_id"],
-                "set":courseDetails
+                "$set":courseDetails
             })
             return "Updated"
         else:
@@ -164,7 +164,7 @@ class AdminDBOperations:
         
     def remove_path(self,pathName):
         try:
-            if self.check_path("name"):
+            if self.check_path(pathName):
                 self.pathCollection.delete_one({"name" : pathName})
                 return "Success"
             else:
@@ -172,11 +172,20 @@ class AdminDBOperations:
         except Exception as e:
             return e
     
-    def update_path(self,pathDetails):
+    def get_path_by_name(self,pathName):
         try:
-            if self.check_path("name"):
+            if self.check_path(pathName):
+                return self.pathCollection.find_one({"name" : pathName})
+            else:
+                return "Path doesn't exists"
+        except Exception as e:
+            return e
+    
+    def update_path(self,name,pathDetails):
+        try:
+            if self.check_path(name):
                 self.pathCollection.update_one(
-                    {"name" : pathDetails["name"]},
+                    {"name" : name},
                     {"$set" : pathDetails}
                 )
                 return "Success"
