@@ -106,15 +106,27 @@ class AdminDBOperations:
     
     def add_course(self,courseDetails):
         try:
-            if self.check_course(courseDetails["course_id"]):
+            if self.check_course(courseDetails["course_id"]) is None:
                 self.courseCollection.insert_one(courseDetails)
                 return "Success"
             else:
-                return "Course not found in DB"
+                return "Course already found in DB"
         except Exception as e:
             return e
         
-    def get_course(self,id):
+    def update_course(self,courseDetails):
+        if self.check_course(courseDetails["course_id"]):
+            self.courseCollection.updateOne({
+                "course_id":courseDetails["course_id"],
+                "set":courseDetails
+            })
+            return "Updated"
+        else:
+            return "Course Not Found in DataBase"
+
+    def get_course_by_id(self,course_id):
+        course = self.courseCollection.find_one({"course_id":course_id})
+        return course
 
     def check_course(self,course_id):
         try:
