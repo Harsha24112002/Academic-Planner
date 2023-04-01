@@ -30,7 +30,7 @@ class Database:
         
         # Student collection
         self.studentOperations = StudentDBOperations(self.cluster[configurations["database"]["student_collection"]])
-        
+        self.adminOperations = AdminDBOperations(self.cluster[configurations["database"]["course_collection"]])
 
     # code to check if remote mongo server is accessible
     def test_connection(self):
@@ -100,4 +100,28 @@ class StudentDBOperations():
     #         ]}
     #     )
 
+class AdminDBOperations:
+    def __init__(self,courseCollection) -> None:
+        self.courseCollection = courseCollection
+    
+    def add_course(self,courseDetails):
+        try:
+            if self.check_course(courseDetails["course_id"]):
+                self.courseCollection.insert_one(courseDetails)
+                return "Success"
+            else:
+                return "Course not found in DB"
+        except Exception as e:
+            return e
+        
+    def get_course(self,id):
+
+    def check_course(self,course_id):
+        try:
+            if self.courseCollection.find_one({"course_id":course_id}):
+                return True
+            else:
+                return False
+        except Exception as e:
+            return e 
 database = Database()
