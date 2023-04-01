@@ -97,8 +97,10 @@ class SpecializationPath(BaseModel):
     name : str
     path_url : str
 
-    def update_paths():
-        pass
+    def update_paths(self,**pathDetails):
+        self.name = pathDetails.get("name",self.name)
+        self.path_url = pathDetails.get("path_url",self.path_url)
+        
 
 class PictorialRepresenation(BaseModel):
     pass

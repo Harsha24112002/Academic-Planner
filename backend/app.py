@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 import authentication
-import maps
-import admin
+import maps, admin
+
 app = Flask(__name__)
 app.secret_key = "secret-key"
 
