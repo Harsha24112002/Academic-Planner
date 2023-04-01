@@ -28,9 +28,14 @@ class Database:
         # test the database connection
         self.test_connection()
         
+        #collections
+        student_col = self.cluster[configurations["database"]["student_collection"]]
+        course_col = self.cluster[configurations["database"]["course_collection"]]
+        path_col = self.cluster[configurations["database"]["path_collection"]]
+        
         # Student collection
-        self.studentOperations = StudentDBOperations(self.cluster[configurations["database"]["student_collection"]])
-        self.adminOperations = AdminDBOperations(self.cluster[configurations["database"]["course_collection"]])
+        self.studentOperations = StudentDBOperations(student_col)
+        self.adminOperations = AdminDBOperations(course_col,path_col)
 
     # code to check if remote mongo server is accessible
     def test_connection(self):
@@ -101,8 +106,9 @@ class StudentDBOperations():
     #     )
 
 class AdminDBOperations:
-    def __init__(self,courseCollection) -> None:
+    def __init__(self,courseCollection,pathCollection) -> None:
         self.courseCollection = courseCollection
+        self.pathCollection = pathCollection
     
     def add_course(self,courseDetails):
         try:
@@ -136,4 +142,47 @@ class AdminDBOperations:
                 return False
         except Exception as e:
             return e 
+        
+    def check_path(self,pathName):
+        try:
+            if self.pathCollection.find_one({"name":pathName}):
+                return True
+            else:
+                return False
+        except Exception as e:
+            return e 
+        
+    def add_path(self,pathDetails):
+        try:
+            if not self.check_path(pathDetails["name"]):
+                self.pathCollection.insert_one(pathDetails)
+                return "Success"
+            else:
+                return "Path already exists"
+        except Exception as e:
+            return e
+        
+    def remove_path(self,pathName):
+        try:
+            if self.check_path("name"):
+                self.pathCollection.delete_one({"name" : pathName})
+                return "Success"
+            else:
+                return "Path doesn't exists"
+        except Exception as e:
+            return e
+    
+    def update_path(self,pathDetails):
+        try:
+            if self.check_path("name"):
+                self.pathCollection.update_one(
+                    {"name" : pathDetails["name"]},
+                    {"$set" : pathDetails}
+                )
+                return "Success"
+            else:
+                return "Path doesn't exists"
+        except Exception as e:
+            return e
+        
 database = Database()

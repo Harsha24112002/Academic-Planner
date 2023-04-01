@@ -68,12 +68,12 @@ class Student(User,BaseModel):
         return json.dumps(self.__dict__)
     
     def update_metadata(self,**metadata):
-        self.first_name = metadata.get("first_name")
-        self.last_name = metadata.get("last_name")
-        self.photo_url = metadata.get("photo_url")
-        self.cgpa = metadata.get("cgpa")
-        self.course_list = metadata.get("course_list")
-        pass 
+        self.first_name = metadata.get("first_name",self.first_name)
+        self.last_name = metadata.get("last_name",self.last_name)
+        self.photo_url = metadata.get("photo_url",self.photo_url)
+        self.cgpa = metadata.get("cgpa",self.cgpa)
+        self.course_list = metadata.get("course_list",self.course_list)
+        pass
     def register():
         pass
     def deregister():
