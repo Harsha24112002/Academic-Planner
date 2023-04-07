@@ -6,6 +6,7 @@ from Models.models import StudentCourseSpecification
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
+from .notes import *
 
 @maps.route("/get_course_details", methods=["GET"])
 def get_course_details():
@@ -18,7 +19,9 @@ def get_course_details():
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 def register(id):
-
+    print(session["user"]["course_list"])
+    if session["user"]["course_list"] is None:
+        session["user"]["course_list"] = []
     if any( course["course_id"] == id for course in session["user"]["course_list"]) :
         return "The Course " + id + " is already registered"
 
@@ -33,7 +36,10 @@ def register(id):
 
     if response == "Success" :
         # Updating local course_list cache (only after successfull addition in Database)
-        session["user"]["course_list"].append(registeringCourse.__dict__)
+        session["user"]["course_list"].append(registeringCourse.dict())
+        session["user"]["course_list"].append(registeringCourse.dict())
+
+        print(session["user"])
         return "Course " + str(id) + " is successfully registered"
 
     # !!! Return proper? error messages.

@@ -60,7 +60,7 @@ def login():
 		# check if password is correct
 		if sha256.verify(request.form.get("password"), _user["password"]):
 			stud = Student(**database.studentOperations.get_user(email))
-			session["user"] = stud.__dict__
+			session["user"] = stud.dict()
 			return "Logged in successfully"
 		else:
 			return "Incorrect password"

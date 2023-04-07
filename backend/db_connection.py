@@ -73,9 +73,9 @@ class StudentDBOperations():
     def get_user_by_username(self,username):
         return self.collection.find_one({"username": username})
 
-    def update(self,query,newvalues):
+    def update(self,email,newvalues):
         new_q = {"$set" : newvalues}       
-        x = self.collection.update_one({"email":query["email"]}, new_q)
+        x = self.collection.update_one({"email":email}, new_q)
         print(x.modified_count)
 
     def add_course(self, id, course_dict):
@@ -104,6 +104,18 @@ class StudentDBOperations():
     #             { "course.course_id" : course_id }
     #         ]}
     #     )
+
+    def add_notes(self, student_id, course_id, notes):
+        self.collection.update_one(
+            {"id" : student_id, "course_list.course_id" : course_id},
+            { "$set" : {"course_list.$.note" : notes.note}}
+        )
+
+    def delete_notes(self, student_id, course_id):
+        self.collection.update_one(
+            {"id" : student_id, "course_list.course_id" : course_id},
+            { "$pull" : {"course_list.$.notes" : None}}
+        )
 
 class AdminDBOperations:
     def __init__(self,courseCollection,pathCollection) -> None:
