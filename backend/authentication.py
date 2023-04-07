@@ -38,9 +38,9 @@ def signup():
 
 	user_dict = request.form.to_dict()
 	user_dict["password"] = sha256.encrypt(user_dict["password"])
-	user = Student(**user_dict) # For pydantic check
+	user = Student(**user_dict, type="student") # For pydantic check
 	
-	database.studentOperations.add_user(user_dict)
+	database.studentOperations.add_user(user.dict())
 
 	return "User Added successfully"
 

@@ -28,6 +28,10 @@ admin = Blueprint("admin",__name__, url_prefix="/admin/")
 ### Add Course to DataBase by ADMIN
 @admin.route("/addcourse",methods=["POST"])
 def addCourse():
+    if session.get("user") is None:
+        return "Not logged in"
+    if session["user"]["type"] == "student":
+        return "Permission denied for student"
     req = request.json
     new_course = Course(**req)
     ### !!! Add good returns 
@@ -38,6 +42,10 @@ def addCourse():
 # !!! Assumed Course ID cannot be updated, should confirm with others
 @admin.route("/updatecourse/<string:id>",methods=["PUT"])
 def updateCourse(id):
+    if session.get("user") is None:
+        return "Not logged in"
+    if session["user"]["type"] == "student":
+        return "Permission denied for student"
     req = request.json
     coursedb = database.adminOperations.get_course_by_id(id)
     course = Course(**coursedb)
@@ -49,6 +57,10 @@ def updateCourse(id):
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])
 def addPath():
+    if session.get("user") is None:
+        return "Not logged in"
+    if session["user"]["type"] == "student":
+        return "Permission denied for student"
     req = request.json
     new_course = SpecializationPath(**req)
     ### !!! Add good returns 
@@ -58,6 +70,10 @@ def addPath():
 ### Update Path by ID in DataBase by ADMIN
 @admin.route("/updatepath/<string:name>",methods=["PUT"])
 def updatePath(name):
+    if session.get("user") is None:
+        return "Not logged in"
+    if session["user"]["type"] == "student":
+        return "Permission denied for student"
     req = request.json
     ### !!! Assumed path name can also be changed
     old_path_dict = database.adminOperations.get_path_by_name(name)
@@ -69,5 +85,9 @@ def updatePath(name):
 ### Delete Path by ID in DataBase by ADMIN
 @admin.route("/deletepath/<string:name>",methods=["DELETE"])
 def deletePath(name):
+    if session.get("user") is None:
+        return "Not logged in"
+    if session["user"]["type"] == "student":
+        return "Permission denied for student"
     resp = database.adminOperations.remove_path(name)
     return resp

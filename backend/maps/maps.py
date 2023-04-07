@@ -1,7 +1,5 @@
 from flask import request, session, Blueprint
-
 from db_connection import database
-from Models.models import Student
 from Models.models import StudentCourseSpecification
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
@@ -19,7 +17,9 @@ def get_course_details():
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 def register(id):
-    print(session["user"]["course_list"])
+    if session.get("user") is None:
+        return "Not logged in"
+    
     if session["user"]["course_list"] is None:
         session["user"]["course_list"] = []
     if any( course["course_id"] == id for course in session["user"]["course_list"]) :
@@ -35,11 +35,8 @@ def register(id):
     # ==> add in the studentDBOperations class not here
 
     if response == "Success" :
-        # Updating local course_list cache (only after successfull addition in Database)
         session["user"]["course_list"].append(registeringCourse.dict())
-        session["user"]["course_list"].append(registeringCourse.dict())
-
-        print(session["user"])
+        session.modified = True
         return "Course " + str(id) + " is successfully registered"
 
     # !!! Return proper? error messages.

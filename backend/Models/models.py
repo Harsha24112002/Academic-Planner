@@ -38,7 +38,7 @@ class Course(BaseModel):
 
 class StudentCourseSpecification(BaseModel):
     course_id: str
-    course_grade : str
+    course_grade : Optional[str]
     course_status : str
     # registered_sem : bool
     elective : str
@@ -57,6 +57,7 @@ class User(BaseModel):
     email : str
     photo_url : Optional[str]
     id : Optional[str]
+    type : str
     
 
 class Student(User,BaseModel):
