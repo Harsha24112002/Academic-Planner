@@ -44,7 +44,8 @@ def register(id):
 
 @maps.route("/deregister/<string:id>", methods=["DELETE"])
 def deregister(id):
-
+    if session.get("user") is None:
+        return "Not logged in"
     if not any( course["course_id"] == id for course in session["user"]["course_list"]) :
         return "The Course " + id + " is not registered to derigister!"
 
@@ -77,3 +78,24 @@ def deregister(id):
 #         return "Courses state changed succesfully"
 
 #     return response
+
+@maps.route("/get_registered_courses", methods = ["GET"])
+def get_registered_courses():
+    if session.get("user") is None:
+        return "Not logged in"
+    
+    if len(session["user"]["course_list"]) == 0:
+        return []
+    
+    course_ids = [course["course_id"] for course in session["user"]["course_list"]]
+    return course_ids
+    
+
+@maps.route("/get_courses/<string:query>", methods = ["GET"])
+def get_courses(query):
+    if session.get("user") is None:
+        return "Not logged in"
+    
+    print(query)
+    return database.studentOperations.get_courses(query)
+
