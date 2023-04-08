@@ -19,7 +19,7 @@ def get_details():
 	stud = Student(**session["user"])
 	req = request.json
 	stud.update_metadata(**req)
-	database.studentOperations.update(session["user"], stud.dict())
+	database.studentOperations.update(session["user"]["email"], stud.dict())
 	session["user"] = stud.dict()
 	return "User added successfully"
 

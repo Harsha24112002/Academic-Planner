@@ -30,7 +30,7 @@ def register(id):
 
     registeringCourse =  StudentCourseSpecification(**course_dict)    
 
-    response = database.studentOperations.add_course(session["user"]["id"], registeringCourse.__dict__)
+    response = database.studentOperations.add_course(session["user"]["email"], registeringCourse.dict())
     # !!! add a try cache block if DB operations fail
     # ==> add in the studentDBOperations class not here
 

@@ -76,14 +76,20 @@ class StudentDBOperations():
 
     def update(self,email,newvalues):
         new_q = {"$set" : newvalues}       
-        x = self.student_collection.update_one({"email":email}, new_q)
-        print(x.modified_count)
+        self.student_collection.update_one({"email":email}, new_q)
+        return "Success"
 
-    def add_course(self, id, course_dict):
-        self.student_collection.update_one(
-            { "id" : id }, 
-            { "$addToSet" : { "course_list" : course_dict }}
-        )
+    def add_course(self,email, course_dict):
+        if self.student_collection.find_one({"email":email})["course_list"] is None:
+            self.student_collection.update_one(
+                {"email":email},
+                {"$set" : {"course_list" : [course_dict]}}
+                )
+        else:
+            self.student_collection.update_one(
+                { "email" : email }, 
+                { "$addToSet" : { "course_list" : course_dict }}
+                )
         # !!! add try cache block and return the error message
         # return "Internal Server Error! Please Try Later"
         return "Success"
@@ -98,7 +104,7 @@ class StudentDBOperations():
         return "Success"
 
     # def update_course_status(self, id, course_id, status):
-    #     self.collection.update_one(
+    #     self.student_collection.update_one(
     #         { "id" : id , "course_list.course_id" },
     #         { "$set" : { "course_list.$[course].status" : status }},
     #         { arrayFilters: [
@@ -106,18 +112,21 @@ class StudentDBOperations():
     #         ]}
     #     )
 
-    def add_notes(self, student_id, course_id, notes):
-        self.collection.update_one(
-            {"id" : student_id, "course_list.course_id" : course_id},
+    def add_notes(self, email, course_id, notes):
+       
+        self.student_collection.update_one(
+            {"email" : email, "course_list.course_id" : course_id},
             { "$set" : {"course_list.$.note" : notes.note}}
         )
+        return "Success"
 
-    def delete_notes(self, student_id, course_id):
-        self.collection.update_one(
-            {"id" : student_id, "course_list.course_id" : course_id},
-            { "$pull" : {"course_list.$.notes" : None}}
+    def delete_notes(self, email, course_id):
+        self.student_collection.update_one(
+            {"email" : email, "course_list.course_id" : course_id},
+            { "$set" : {"course_list.$.note" : None}}
         )
-        
+        return "Success"
+    
     def get_courses(self,query):
         pattern = '.*'+str(query)+'.*'
         courses = self.course_collection.find({"course_id": {"$regex": pattern, "$options":"i"}})
