@@ -74,6 +74,7 @@ class Student(User,BaseModel):
         self.photo_url = metadata.get("photo_url",self.photo_url)
         self.cgpa = metadata.get("cgpa",self.cgpa)
         self.course_list = metadata.get("course_list",self.course_list)
+        self.id = metadata.get("id",self.id)        
         pass
     def register():
         pass
