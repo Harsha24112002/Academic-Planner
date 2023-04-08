@@ -107,13 +107,13 @@ class StudentDBOperations():
     #     )
 
     def add_notes(self, student_id, course_id, notes):
-        self.collection.update_one(
+        self.student_collection.update_one(
             {"id" : student_id, "course_list.course_id" : course_id},
             { "$set" : {"course_list.$.note" : notes.note}}
         )
 
     def delete_notes(self, student_id, course_id):
-        self.collection.update_one(
+        self.student_collection.update_one(
             {"id" : student_id, "course_list.course_id" : course_id},
             { "$pull" : {"course_list.$.notes" : None}}
         )
@@ -132,10 +132,50 @@ class AdminDBOperations:
         self.courseCollection = courseCollection
         self.pathCollection = pathCollection
     
+    def find_cycles(self, course, visited=set()):
+        visited.add(course)
+        pipeline = [
+            {
+                '$match': {
+                    'course_id': course
+                }
+            },
+            {
+                '$lookup': {
+                    'from' : 'course',
+                    'localField': 'course_prerequisites',
+                    'foreignField': 'course_id',
+                    'as': 'prerequisite_courses'
+                }
+            }
+        ]
+        try:
+            for doc in self.courseCollection.aggregate(pipeline):
+                for prerequisite in doc.get('prerequisite_courses', []):
+                    print(course,prerequisite)
+                    if prerequisite['course_id'] in visited:
+                        return True  # cycle detected!
+                    elif self.find_cycles(prerequisite['course_id'], visited):
+                        return True
+                visited.remove(course)
+                return False
+        except Exception as e:
+            print(e)
+            return False
+    
+        
+
     def add_course(self,courseDetails):
         try:
             if not self.check_course(courseDetails["course_id"]):
                 self.courseCollection.insert_one(courseDetails)
+                
+                if self.find_cycles(courseDetails["course_id"]):
+                    try:
+                        self.courseCollection.delete_one({"course_id":courseDetails["course_id"]})
+                        return f"Cycle detected in course prerequisites: {courseDetails}"
+                    except Exception as e:
+                        return f"{e}"
                 return "Success"
             else:
                 return "Course already found in DB"
@@ -144,10 +184,17 @@ class AdminDBOperations:
         
     def update_course(self,courseDetails):
         if self.check_course(courseDetails["course_id"]):
+            before_change = self.get_course_by_id(courseDetails["course_id"])
             self.courseCollection.update_one(
                 { "course_id":courseDetails["course_id"]},
                 {"$set":courseDetails}
             )
+            if self.find_cycles(courseDetails["course_id"]):
+                    try:
+                        self.courseCollection.update_one({"course_id":courseDetails["course_id"]},{"$set":before_change})
+                        return f"Cycle detected in course prerequisites: {courseDetails}"
+                    except Exception as e:
+                        return f"{e}"
             return "Updated"
         else:
             return "Course Not Found in DataBase"
