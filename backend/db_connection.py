@@ -84,12 +84,12 @@ class StudentDBOperations():
             self.student_collection.update_one(
                 {"email":email},
                 {"$set" : {"course_list" : [course_dict]}}
-                )
+            )
         else:
             self.student_collection.update_one(
                 { "email" : email }, 
                 { "$addToSet" : { "course_list" : course_dict }}
-                )
+            )
         # !!! add try cache block and return the error message
         # return "Internal Server Error! Please Try Later"
         return "Success"
@@ -134,7 +134,13 @@ class StudentDBOperations():
         courses = self.course_collection.find({"course_name": {"$regex": pattern,"$options":"i"}})
         course_ids.extend([course["course_id"] for course in courses])
         return course_ids
-        # pass
+        
+    def get_prerequisites_of_course(self, course_id):
+        course_details = self.course_collection.find_one({ "course_id" : course_id })
+
+        if course_details == None :
+            return None
+        return course_details["course_prerequisites"] 
 
 class AdminDBOperations:
     def __init__(self,courseCollection,pathCollection) -> None:
