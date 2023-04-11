@@ -15,7 +15,7 @@ class Database:
         self.client = None
         
         # connecting to the database
-        if self.host == 'localhost':
+        if self.host == 'localhost' or self.host == None:
             # connect to local database
             self.client = pymongo.MongoClient(self.host, 27017)
         else:

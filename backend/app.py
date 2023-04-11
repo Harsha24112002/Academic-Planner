@@ -11,5 +11,6 @@ app.secret_key = "secret-key"
 app.register_blueprint(authentication.authentication)
 app.register_blueprint(maps)
 app.register_blueprint(admin.admin)
+
 if __name__ == '__main__':
 	app.run(debug=True)

@@ -76,12 +76,52 @@ class Student(User,BaseModel):
         self.course_list = metadata.get("course_list",self.course_list)
         self.id = metadata.get("id",self.id)        
         pass
+
+    # function to check if already a course is present in the slot
+    def check_course_slot(self, course_id, course_slot, course_sem, courses):
+        for course in courses:
+            if course.course_sem == course_sem and course.course_slot == course_slot and course.course_status == "registered":
+                return False
+        return True
+
     def register():
         pass
+
+        # check if the course is already registered
+        # if not, then check if the course is present in the slot(retreive the course list from the database)
+        # if yes, then register the course
+
     def deregister():
         pass    
     def mark_completed():
         pass
+
+    def update_course_status(self, course_id, grade):
+        for course in self.course_list:
+            if course.course_id == course_id:
+                course.course_status = "completed"
+                course.course_grade = grade
+
+                # !!! if there is a function to update the prerequisite flags, call it here, or it continues
+
+                # check for other future course pre-requisite details met or not
+                for future_course in self.course_list:
+                    if future_course.course_status == "registered":
+                        prerequisites_flag = True
+                        for prereq in future_course.course_prerequisites:
+                            # if the prerequisite is not completed, then the flag is false
+                            # how to get out the prereq course from the course list?
+
+                            # for course in self.course_list:
+                            #     if course.course_id == prereq:
+                            #         prerequisites_flag = prerequisites_flag and course.course_status == "completed"
+
+                            prerequisites_flag = prerequisites_flag and self.course_list[prereq].course_status == "completed"
+                        future_course.met_prerequisite_flag = prerequisites_flag
+    
+                break
+
+        # based on the course prerequisite flags, reflect it on the frontend.
     
 
 class Admin(User,BaseModel):
