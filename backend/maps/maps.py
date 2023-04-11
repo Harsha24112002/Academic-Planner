@@ -1,6 +1,7 @@
 from flask import request, session, Blueprint
 from db_connection import database
 from Models.models import StudentCourseSpecification
+import threading
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
@@ -28,6 +29,34 @@ def register(id):
     course_dict = request.form.to_dict()
     course_dict["course_id"] = id
 
+    prereq_list = database.studentOperations.get_prerequisites_of_course(id)
+    if prereq_list == None :
+        return "The Course " + id + " is not available"
+
+    student_has_this_prereq = { course:False for course in prereq_list }
+    student_registered_courses = session["user"]["course_list"]
+
+    def is_prerequisite_completed(course_id):
+        for course in student_registered_courses :
+            if course["course_id"] == course_id :
+                student_has_this_prereq[course_id] = True
+                break
+
+    threads_list = []
+    for course in prereq_list :
+        thread = threading.Thread(target=is_prerequisite_completed, args=[course])
+        thread.start()
+        threads_list.append(thread)
+
+    for thread in threads_list:
+        thread.join()
+
+    course_dict["met_prerequisite_flag"] = True
+    for flag in student_has_this_prereq.values() :
+        if not flag :
+            course_dict["met_prerequisite_flag"] = False
+            break
+    
     registeringCourse =  StudentCourseSpecification(**course_dict)    
 
     response = database.studentOperations.add_course(session["user"]["email"], registeringCourse.dict())
@@ -37,9 +66,14 @@ def register(id):
     if response == "Success" :
         session["user"]["course_list"].append(registeringCourse.dict())
         session.modified = True
-        return "Course " + str(id) + " is successfully registered"
 
-    # !!! Return proper? error messages.
+        # return message when the course is registered with all its prerequisites fulfilled
+        response = "Course " + str(id) + " is successfully registered"
+
+        # when all the prerequisites are not met, a dict of prerequisite courses showing course-completion boolean is sent
+        if course_dict["met_prerequisite_flag"] == False :
+            response = student_has_this_prereq
+
     return response
 
 @maps.route("/deregister/<string:id>", methods=["DELETE"])

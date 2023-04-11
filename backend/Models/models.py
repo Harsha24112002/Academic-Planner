@@ -43,7 +43,8 @@ class StudentCourseSpecification(BaseModel):
     # registered_sem : bool
     elective : str
     met_prerequisite_flag : bool
-    note : Optional[Notes]
+    # note : Optional[Notes]
+    note : Optional[str]
 
     # def JSONify(self):
     #     return json.dumps(self.__dict__,object_hook=lambda d: d.dict())
@@ -57,7 +58,7 @@ class User(BaseModel):
     email : str
     photo_url : Optional[str]
     id : Optional[str]
-    type : str
+    # type : str
     
 
 class Student(User,BaseModel):
