@@ -112,6 +112,18 @@ class StudentDBOperations():
     #         ]}
     #     )
 
+    def update_course_status(self, id, course_id, status):
+
+        # !!! add try and cache blocks for error handling
+
+        # update the student collection course details
+        # !!! nothing to do with id as it is session id?
+        filter = {"courses.course_id": course_id}
+        update = {"$set": {"courses.$.status": status}}
+        result = self.student_collection.update_one(filter, update)
+
+        return "Success" if result.modified_count == 1 else "Failed"
+
     def add_notes(self, email, course_id, notes):
        
         self.student_collection.update_one(

@@ -93,8 +93,31 @@ def deregister(id):
     return response
 
 # !!! Not-completed Don't use this route
-# @maps.route("/update_course_status/<int:id>", methods=["POST"])
-# def update_course_status(id):
+@maps.route("/update_course_status/<string:course_id>", methods=["POST"])
+def update_course_status(course_id):
+
+    #  if the course is not in the student's course list, return error message
+    present_course = None
+    for course in session["user"]["course_list"]:
+        if course["course_id"] == course_id:
+            present_course = course
+            break
+    
+    if present_course == None :
+        return "The Course " + course_id + " is not registered to mark as complete"
+    
+    #  if the course is in the student's course list, update the course status
+    status = request.form.get("status")
+    response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status)
+
+    if response == "Success":
+        result = next((course.update({"course_status": status}) for course in session["user"]["course_list"] if course["course_id"] == course_id), None)
+        if result == None:
+            return "Course status update failed or possibly none of the courses were updated"
+        return "Course status updated successfully"
+    
+    return response
+
 
 #     if not any( course["course_id"] == id for course in session["user"]["course_list"]) :
 #         return "The Course " + id + " is not registered to mark as complete"
