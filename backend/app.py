@@ -3,9 +3,11 @@ import authentication
 import admin
 from werkzeug.utils import import_string
 from maps.maps import maps
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = "secret-key"
+CORS(app,supports_credentials=True)
 
 # The url's whose prefix starts with authentication, goes to this authentication.py
 app.register_blueprint(authentication.authentication)
