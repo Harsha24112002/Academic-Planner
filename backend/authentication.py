@@ -11,18 +11,27 @@ from db_connection import database
 authentication = Blueprint("authentication", __name__, url_prefix="/authentication/")
 
 # code to take in user details and add user to database
-@authentication.route("/get_details/student", methods=["POST"])
+@authentication.route("/get_details/student", methods=["POST","GET"])
 def get_details():
-	if not session.get("user"):
-		return "Not logged in"
+	if request.method == "POST":
+		if not session.get("user"):
+			return "Not logged in"
 
-	stud = Student(**session["user"])
-	req = request.json
-	stud.update_metadata(**req)
-	database.studentOperations.update(session["user"]["email"], stud.dict())
-	session["user"] = stud.dict()
-	return "User added successfully"
+		stud = Student(**session["user"])
+		req = request.json
+		stud.update_metadata(**req)
+		database.studentOperations.update(session["user"]["email"], stud.dict())
+		session["user"] = stud.dict()
+		return "User added successfully"
+	elif request.method == "GET":
+		
+		###!!! TO BE CHANGED AFTER LOGIN
+		session['user'] = database.studentOperations.get_user_by_username("Geetha")
+		session["user"].pop('_id')
 
+		if not session.get("user"):
+			return "Not logged in"
+		return session["user"]
 # code to signup user
 @authentication.route("/signup/student", methods=["POST"])
 def signup():

@@ -2,6 +2,7 @@ from flask import request, session, Blueprint
 from db_connection import database
 from Models.models import StudentCourseSpecification
 import threading
+# from bson.json_utils import dumps
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
@@ -138,11 +139,16 @@ def update_course_status(course_id):
 
 @maps.route("/get_registered_courses", methods = ["GET"])
 def get_registered_courses():
-    if session.get("user") is None:
-        return "Not logged in"
+    # if session.get("user") is None:
+    #     return "Not logged in"
     
-    if len(session["user"]["course_list"]) == 0:
-        return []
+    # if len(session["user"]["course_list"]) == 0:
+    #     return []
+
+    ###!!! TO BE CHANGED AFTER LOGIN
+    session['user'] = database.studentOperations.get_user_by_username("Geetha")
+    session["user"].pop('_id')
+
     
     course_ids = [course["course_id"] for course in session["user"]["course_list"]]
     return course_ids
@@ -153,6 +159,5 @@ def get_courses(query):
     if session.get("user") is None:
         return "Not logged in"
     
-    print(query)
     return database.studentOperations.get_courses(query)
 
