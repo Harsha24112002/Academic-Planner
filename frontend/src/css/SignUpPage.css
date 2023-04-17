@@ -1,0 +1,124 @@
+body {
+	background: #bdc3c7; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+	  to right,
+	  #2c3e50,
+	  #bdc3c7
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+	  to right,
+	  #2c3e50,
+	  #bdc3c7
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	
+	/* MODs below */
+	text-align: center;
+}
+  
+.form {
+	background-color: white;
+	border-radius: 10px;
+	width: 40%;
+	margin-top: 10%;
+	margin-left: 30%;
+	padding: 20px;
+	display: block;
+  
+}
+  
+.form-body {
+	text-align: left;
+	padding: 20px 10px;
+}
+  
+.form-body > * {
+	padding: 5px;
+}
+  
+.form__label {
+	width: 40%;
+}
+  
+.form_input {
+	width: 60%;
+}
+  
+.footer {
+	text-align: center;
+}
+  
+  
+  /* --- MODs below --- */
+.form {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+  
+  /* Make sure labels and input fields
+	 are side-by-side */
+.form-body label,.form-body input {
+	display: inline-block;
+}
+  
+/* Prettify the labels */
+.form-body label {
+	color: rgb(0,0,0,.7);
+	font-family: sans-serif;
+	margin-right: 0.5em;
+	text-align: top;
+}
+  
+/* Prettify the input fields */
+.form-body input {
+	border: 1px solid rgb(0,0,0,0.2);
+	border-radius: 0.25em;
+	color: rgb(0,0,0,0.7);
+	outline: none;
+	padding: 0.4em;
+	transition: border 300ms;
+}
+  
+/* Animate input hover */
+.form-body input:hover {
+	border: 1px solid rgb(0,0,0,0.5);
+}
+  
+/* Upload file */
+.uploadfile {
+	border-top: 1px solid rgb(0,0,0,.2);
+	margin-top: 0.5em;
+	padding-top: 0.5em;
+}
+  
+/* Prettify the registration button */
+.form .footer button {
+	background-color: #538cc6;
+	border: 1px solid rgb(0,0,0,0.1);
+	border-radius: 0.25em;
+	box-shadow: 0 0 0.3em rgb(0,0,0,0.45);
+	color: #FFFFFF;
+	letter-spacing: 0.1em;
+	outline: none;
+	padding: 0.5em;
+	text-transform: uppercase;
+	transition: background-color 300ms;
+}
+  
+/* Hover */
+
+/* button {
+	background: #0563b4 !important;
+} */
+
+.form .footer button:hover {
+	/* background: #0563b4 !important; */
+
+	background-color: #79a6d2;
+	cursor: pointer;
+}
+
+p {
+	color: red;
+}

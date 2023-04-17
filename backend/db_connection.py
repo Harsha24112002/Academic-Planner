@@ -236,8 +236,8 @@ class StudentDBOperations(UserDBOperations):
 
         # update the student collection course details
         # !!! nothing to do with id as it is session id?
-        filter = {"courses.course_id": course_id}
-        update = {"$set": {"courses.$.status": status}}
+        filter = {"id": id, "course_list.course_id": course_id}
+        update = {"$set": {"course_list.$.course_status": status}}
         result = self.user_collection.update_one(filter, update)
 
         return "Success" if result.modified_count == 1 else "Failed"
