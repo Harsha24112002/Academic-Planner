@@ -12,7 +12,6 @@ const columns = [
   { id: 'ID', label: 'Course ID', minWidth: 100 },
   { id: 'Name', label: 'Course Name', minWidth: 170 },
   { id: 'Grade', label: 'Grade', minWidth: 50 },
-
 ];
 
 function createData(info) {
@@ -20,11 +19,7 @@ function createData(info) {
 }
 
 
-
-
-
-
-export default function StickyHeadTable({courseInfo}) {
+export default function PaginationTable({courseInfo}) {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

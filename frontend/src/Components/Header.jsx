@@ -4,16 +4,16 @@ import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
+// const pages = ["profile", "maps", "specialization paths", "logout"];
+// const tos = {
+//   profile: "/student/profile",
+//   "specialization paths": "/student/spPaths",
+//   maps: "/student/maps",
+// };
 
-const pages = ["profile", "maps", "specialization paths", "logout"];
-const tos = {
-  profile: "/profile",
-  "specialization paths": "spPaths",
-  maps: "/maps",
-};
-
-function Header() {
+function Header({pages,tos}) {
   const [anchorElNav, setAnchorElNav] = useState(null)
 
   const handleCloseNavMenu = (event) => {
@@ -25,6 +25,7 @@ function Header() {
     setAnchorElNav(event.currentTarget);
   };
   return (
+    <>
     <AppBar position='static'>
         <Container sx={{bgcolor:'black'}}>
            <Box sx={{ flexGrow: 1,justifyContent:'space-between', display: { xs: 'flex', md: 'none' } }}>
@@ -104,6 +105,8 @@ function Header() {
           </Box>
         </Container>
     </AppBar>
+    <Outlet />
+    </>
   )
 }
 
