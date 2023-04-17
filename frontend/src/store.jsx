@@ -2,12 +2,14 @@ import { applyMiddleware, combineReducers, configureStore } from "@reduxjs/toolk
 import tmpreducer from "./Reducers/tmpreducer";
 import detailsReducer from "./Reducers/DetailsReducer";
 import courseDetailsReducer from "./Reducers/CourseDetailsReducer";
+import authReducer from "./features/auth/authSlice"
 import thunk from "redux-thunk";
 
 const reducers = {
     studentDetails : detailsReducer,
     tmpreducer : tmpreducer,
-    courseDetails : courseDetailsReducer
+    courseDetails : courseDetailsReducer,
+    auth: authReducer,
 }
 const rootreducer = combineReducers(
     reducers
