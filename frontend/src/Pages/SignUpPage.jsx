@@ -1,6 +1,7 @@
 import React, { useState, setState, useEffect } from "react";
 import "../css/SignUpPage.css";
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpPage() {
 	const [name, setFirstName] = useState("");
@@ -68,6 +69,8 @@ export default function SignUpPage() {
             .then((Response) => console.log(Response.data))
             .then((data) => console.log(data))
             .catch((error) => console.log(error));
+
+            nav("/student/signin")
 		}
 
 	}, [formErrors, isSubmit]);
