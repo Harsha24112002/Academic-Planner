@@ -39,7 +39,6 @@ function ProfilePage() {
         <CircularProgress />
       ) : (
         <Container>
-          <Header />
           <Grid container spacing={2} columns={12} marginTop={1}>
             <Grid item xs={3}>
               <Box>
@@ -54,17 +53,17 @@ function ProfilePage() {
                     <List>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
-                          Name
+                          {details["username"]}
                         </Typography>
                       </ListItem>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
-                          Email
+                          {details["email"]}
                         </Typography>
                       </ListItem>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
-                          Roll Number
+                        {details["id"]}
                         </Typography>
                       </ListItem>
                     </List>

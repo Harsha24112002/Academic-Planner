@@ -4,11 +4,14 @@ import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {NavLink} from 'react-router-dom'
 
-
-const pages = ["profile", "maps", "specialization paths" ,"logout"]
-
+const pages = ["profile", "maps", "specialization paths", "logout"];
+const tos = {
+  profile: "/profile",
+  "specialization paths": "spPaths",
+  maps: "/maps",
+};
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState(null)
@@ -75,11 +78,24 @@ function Header() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                
-                sx={{ ':hover': {
-                  bgcolor: 'royalblue',
-                  color: 'white',
-                },my: 2, fontSize:'10px', bgcolor: 'grey', margin:'5px', color: 'white', display: 'ruby' }}
+                LinkComponent={NavLink}
+                to={tos[page]}
+                sx={{
+                  ":hover": {
+                    bgcolor: "royalblue",
+                    color: "white",
+                  },
+                  "&.active": {
+                    bgcolor: "royalblue",
+                    color: "white",
+                  },
+                  my: 2,
+                  fontSize: "10px",
+                  bgcolor: "grey",
+                  margin: "5px",
+                  color: "white",
+                  display: "ruby",
+                }}
               >
                 {page}
               </Button>

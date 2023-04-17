@@ -1,21 +1,21 @@
-import './App.css';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Header from './Components/Header';
-import ProfilePage from './Pages/ProfilePage';
-import CourseList from './Components/CourseList';
-import { Provider } from 'react-redux';
-import store from './store';
-
+import "./App.css";
+import React from "react";
+import ProfilePage from "./Pages/ProfilePage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SpecializationPathsPage from "./Pages/SpecializationPathsPage";
+import Header from "./Components/Header";
 
 function App() {
-
   return (
-    <Provider store={store}>
+    <BrowserRouter>
       <div className="App">
-        <ProfilePage />
+        <Header />
+        <Routes>
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/spPaths" element={<SpecializationPathsPage />} />
+        </Routes>
       </div>
-    </Provider>
+    </BrowserRouter>
   );
 }
 
