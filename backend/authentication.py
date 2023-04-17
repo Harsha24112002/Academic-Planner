@@ -1,8 +1,6 @@
 from flask import request, session, Blueprint
 from passlib.hash import pbkdf2_sha256 as sha256
-from Models.models import  Student, StudentCourseSpecification
-from pydantic import parse_obj_as
-from typing import List
+from Models.models import  Student
 
 from db_connection import database
 
@@ -28,6 +26,7 @@ def get_details():
 		###!!! TO BE CHANGED AFTER LOGIN
 		session['user'] = database.studentOperations.get_user_by_username("Geetha")
 		session["user"].pop('_id')
+		session["user"]['type'] = "student"
 
 		if not session.get("user"):
 			return "Not logged in"

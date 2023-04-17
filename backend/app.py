@@ -1,7 +1,6 @@
 from flask import Flask, Blueprint
 import authentication
 import admin
-from werkzeug.utils import import_string
 from maps.maps import maps
 from flask_cors import CORS
 

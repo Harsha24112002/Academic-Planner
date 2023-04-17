@@ -8,14 +8,19 @@ maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
 from .notes import *
 
-@maps.route("/get_course_details", methods=["GET"])
-def get_course_details():
+@maps.route("/get_course_details/<string:id>", methods=["GET"])
+def get_course_details(id):
+    # if session.get("user") is None:
+    #     return "Not Logged In"
 
+    details = database.courseOperations.get_course_details(id)
     # !!! Add Courses collection to DB
     # and return courses based on search filters
     # that will be given as args/forms/...
-
-    return "Course Details will be returned"
+    details.pop('_id')
+    print(details)
+        
+    return details
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 def register(id):
@@ -30,7 +35,7 @@ def register(id):
     course_dict = request.form.to_dict()
     course_dict["course_id"] = id
 
-    prereq_list = database.studentOperations.get_prerequisites_of_course(id)
+    prereq_list = database.courseOperations.get_prerequisites_of_course(id)
     if prereq_list == None :
         return "The Course " + id + " is not available"
 
@@ -156,8 +161,8 @@ def get_registered_courses():
 
 @maps.route("/get_courses/<string:query>", methods = ["GET"])
 def get_courses(query):
-    if session.get("user") is None:
-        return "Not logged in"
+    # if session.get("user") is None:
+    #     return "Not logged in"
     
-    return database.studentOperations.get_courses(query)
+    return database.courseOperations.get_courses(query)
 

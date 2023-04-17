@@ -1,15 +1,12 @@
-from flask import request, session, Blueprint
-
+from flask import request, session
 from db_connection import database
-from Models.models import Student
-from Models.models import StudentCourseSpecification, Notes
+from Models.models import  Notes
 from .maps import maps
 
 @maps.route("/addnotes/<string:id>", methods=["POST"])
 def addnotes(id): # updatenotes = addnotes
     if session.get("user") is None:
         return "Login first!!!" ##############
-    
     
     req = request.json
     notes = Notes(**req)
