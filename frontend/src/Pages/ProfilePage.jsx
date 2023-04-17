@@ -15,10 +15,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Edit from "@mui/icons-material/Edit";
-import ProfilePageTabs from "../Components/ProfilePageTabs";
+import ProfilePageTabs from "../Components/Tabs";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchDetails, fetchEditDetails } from "../Actions/StudentDetailsActions";
+import GPATrends from "../Components/GPATrends";
+import CourseList from "../Components/CourseList";
+
+
+const components = [<GPATrends />, <CourseList />];
+const labels = ["GPA trends", "My Courses"]
+
 
 function ProfilePage() {
   const { details, loading, error } = useSelector((state) => ({
@@ -46,7 +53,7 @@ function ProfilePage() {
                   <CardMedia
                     component="img"
                     sx={{ height: "10", width: "150px", margin: "auto" }}
-                    image="Images/ProfilePic.png"
+                    image="../Images/ProfilePic.png"
                     alt="DP"
                   />
                   <CardContent>
@@ -101,7 +108,7 @@ function ProfilePage() {
                 </Box>
               </Box>
               <Box>
-                <ProfilePageTabs></ProfilePageTabs>
+                <ProfilePageTabs components={components} labels={labels} />
               </Box>
             </Grid>
           </Grid>
