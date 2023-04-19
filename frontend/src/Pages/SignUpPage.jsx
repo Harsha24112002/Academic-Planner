@@ -1,5 +1,5 @@
 import React, { useState, setState, useEffect } from "react";
-import "../css/SignUpPage.css";
+// import "../css/SignUpPage.css";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,8 @@ export default function SignUpPage() {
 	const [formErrors, setFormErrors] = useState({});
 	const [isSubmit, setIsSubmit] = useState(false);
 	const fileTypes = ["image/png", "image/jpeg", "image/jpg"];
+
+	const nav = useNavigate();
 
 	const handleInputChange = (e) => {
 		const { id, value } = e.target;
