@@ -1,0 +1,44 @@
+.circle3 {
+  display: flex;
+  width: 100px;
+  height: 40px;
+  background-color: lightgoldenrodyellow;
+  border-color: purple;
+  border-width: 3pt;
+  border-radius: 50%;
+  text-align: center;
+  margin: 0px 0px 20px 0px
+}
+
+.circle2 {
+  display: flex;
+  width: 66px;
+  height: 66px;
+  background-color: gray;
+  border-color: purple;
+  border-width: 3pt;
+  border-radius: 50%;
+  text-align: center;
+}
+.circle1 {
+  display: flex;
+  width: 33px;
+  height: 33px;
+  background-color: gray;
+  border-color: purple;
+  border-width: 3pt;
+  border-radius: 92%;
+  text-align: center;
+}
+.text {
+  margin: auto;
+}
+
+.hgrid {
+    width: '100px';
+    height: '100px';
+    background-color: aqua;
+    /* overflowX: 'scroll';*/
+    overflow-x: 'auto'; 
+    white-space: 'no-wrap';
+}

@@ -1,21 +1,27 @@
-import { applyMiddleware, combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  applyMiddleware,
+  combineReducers,
+  configureStore,
+} from "@reduxjs/toolkit";
 import tmpreducer from "./Reducers/tmpreducer";
 import detailsReducer from "./Reducers/DetailsReducer";
-import courseDetailsReducer from "./Reducers/CourseDetailsReducer";
-import authReducer from "./features/auth/authSlice"
+import coursesSearchReducer from "./Reducers/CoursesSearchReducer";
+import studentCourseReducer from "./Reducers/StudentCoursesReducer";
+import authReducer from "./features/auth/authSlice";
+import courseDetailsReducer from "./features/courseDetailsSlice";
 import thunk from "redux-thunk";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
 const reducers = {
-    studentDetails : detailsReducer,
-    tmpreducer : tmpreducer,
-    courseDetails : courseDetailsReducer,
-    auth: authReducer,
-}
-const rootreducer = combineReducers(
-    reducers
-)
+  studentDetails: detailsReducer,
+  tmpreducer: tmpreducer,
+  coursesSearch: coursesSearchReducer,
+  studentCourses: studentCourseReducer,
+  auth: authReducer,
+  courseDetails: courseDetailsReducer,
+};
+const rootreducer = combineReducers(reducers);
 
 const persistConfig = {
     key: 'root',
