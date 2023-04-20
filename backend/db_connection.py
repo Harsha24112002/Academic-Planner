@@ -123,7 +123,7 @@ class CourseDBOperations:
             },
             {
                 '$lookup': {
-                    'from' : 'course',
+                    'from' : 'course_collection',
                     'localField': 'course_prerequisites',
                     'foreignField': 'course_id',
                     'as': 'prerequisite_courses'
@@ -133,7 +133,6 @@ class CourseDBOperations:
         try:
             for doc in self.course_collection.aggregate(pipeline):
                 for prerequisite in doc.get('prerequisite_courses', []):
-                    print(course,prerequisite)
                     if prerequisite['course_id'] in visited:
                         return True  # cycle detected!
                     elif self.find_cycles(prerequisite['course_id'], visited):

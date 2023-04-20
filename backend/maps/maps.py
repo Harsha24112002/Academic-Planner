@@ -8,7 +8,7 @@ maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
 from .notes import *
 
-@maps.route("/get_course_details/<string:id>", methods=["GET"])
+@maps.route("/get_course_details/<string:id>", methods=["GET","POST"])
 def get_course_details(id):
     # if session.get("user") is None:
     #     return "Not Logged In"
@@ -21,6 +21,23 @@ def get_course_details(id):
     print(details)
         
     return details
+
+@maps.route("/get_multiple_courses/",methods=["POST"])
+def get_many_courses_details():
+    # if session.get("user") is None:
+    #     return "Not Logged In"
+    courses_info = {}
+    req = request.json
+    for course in req["courses"]:
+        details = database.courseOperations.get_course_details(course)
+        details.pop('_id')
+        courses_info[course] = details
+
+    # !!! Add Courses collection to DB
+    # and return courses based on search filters
+    # that will be given as args/forms/...
+        
+    return courses_info
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 def register(id):
