@@ -1,29 +1,29 @@
 const initialState = {
-  courseDetails: [],
+  coursesSearch: [],
   loading: true,
   error: null,
 };
 
-const courseDetailsReducer = (state = initialState, action) => {
+const coursesSearchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "COURSE_DETAILS_REQUEST":
+    case "COURSES_SEARCH_REQUEST":
       return { ...state, loading: true, error: null };
-    case "COURSE_DETAILS_SUCCESS": {
+    case "COURSES_SEARCH_SUCCESS": {
       console.log("Payload", action.payload);
       return {
         ...state,
-        courseDetails: action.payload,
+        coursesSearch: action.payload,
         loading: false,
         error: null,
       };
     }
-    case "COURSE_DETAILS_FAILURE":
+    case "COURSES_SEARCH_FAILURE":
       return { ...state, loading: false, error: action.payload };
-    case "COURSE_DETAILS_DELETE":
+    case "COURSES_SEARCH_DELETE":
       return initialState;
     default:
       return state;
   }
 };
 
-export default courseDetailsReducer;
+export default coursesSearchReducer;

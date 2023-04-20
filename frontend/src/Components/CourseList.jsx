@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import PaginationTable from "./Table";
 import { CircularProgress } from "@mui/material";
-import { fetchCourseDetails } from "../Actions/StudentDetailsActions";
+import { fetchcoursesSearch } from "../Actions/StudentDetailsActions";
 
 function CourseList() {
     const { details, loading, error } = useSelector((state) => ({

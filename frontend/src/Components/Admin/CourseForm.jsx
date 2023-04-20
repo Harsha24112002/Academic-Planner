@@ -10,7 +10,7 @@ import { Input } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { FormHelperText } from "@mui/material";
 
-function AddCourse({ courseDetails, type }) {
+function CourseForm({ courseDetails, type }) {
   const [CourseName, setCourseName] = useState(
     courseDetails ? courseDetails.course_name : ""
   );
@@ -260,4 +260,4 @@ function AddCourse({ courseDetails, type }) {
   );
 }
 
-export default AddCourse;
+export default CourseForm;
