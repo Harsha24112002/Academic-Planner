@@ -28,11 +28,13 @@ const labels = ["GPA trends", "My Courses"]
 
 
 function ProfilePage() {
-  const { details, loading, error } = useSelector((state) => ({
+  const { details, loading, error } = useSelector((state) => {
+    console.log(state.studentDetails)
+    return ({
     details: state.studentDetails.details,
     loading: state.studentDetails.loading,
     error: state.studentDetails.error,
-  }));
+  })});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,10 +54,11 @@ function ProfilePage() {
                 <Card>
                   <CardMedia
                     component="img"
-                    sx={{ height: "10", width: "150px", margin: "auto" }}
-                    image="../Images/ProfilePic.png"
+                    sx={{ 'object-fit': 'fill'}}
+                    image={`data:image/png;base64,${details['photo']}`}
                     alt="DP"
                   />
+
                   <CardContent>
                     <List>
                       <ListItem>

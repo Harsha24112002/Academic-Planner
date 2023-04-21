@@ -4,6 +4,7 @@ configurations = {
         'username' : None ,
         'password' : None ,
         'dbname' : 'NEW1' ,
+        'pictures' : 'student_profile_pictures',
         'student_collection' : 'student_collection',
         'course_collection' : 'course_collection',
         'admin_collection' : None,

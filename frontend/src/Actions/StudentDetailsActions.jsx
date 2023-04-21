@@ -19,7 +19,7 @@ export const fetchDetails = () => {
     axios
       .get("http://localhost:5000/authentication/get_details/student")
       .then(response => {
-        // console.log(response.data)
+        console.log(response.data)
         const studentDetails = response.data;
         dispatch(fetchDetailsSuccess(studentDetails))
       })

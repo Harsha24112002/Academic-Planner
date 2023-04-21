@@ -19,7 +19,7 @@ export default function SignInPage({role}) {
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        if (role == "student") {
+        if (role === "student") {
             const formData = new FormData();
             formData.append('email', email);
             formData.append('password',password);
@@ -39,7 +39,7 @@ export default function SignInPage({role}) {
                 }
             })
             console.log("Student logged in Successfully for now")
-        } else if (role == "admin") {
+        } else if (role === "admin") {
             // call to /admin/login
             console.log("Admin logged in Successfully for now")
         } else {
@@ -74,7 +74,7 @@ export default function SignInPage({role}) {
                 </label>
                 <input type="submit" value="Sign In"/>
             </form>
-            {role=="student" && 
+            {role==="student" && 
                 <Link to="/student/signup">
                     New User?
                 </Link>

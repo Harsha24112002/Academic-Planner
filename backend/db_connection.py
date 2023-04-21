@@ -86,9 +86,6 @@ class UserDBOperations:
         self.user_collection.update_one({"email":email}, new_q)
         return "Success"
 
-
-    
-
 class CourseDBOperations:
     def __init__(self,course_collection) -> None:
         self.course_collection = course_collection

@@ -1,6 +1,6 @@
 import React, { useState, setState, useEffect } from "react";
-// import "../css/SignUpPage.css";
-import axios from "axios";
+import "../css/SignUpPage.css";
+import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
@@ -10,13 +10,13 @@ export default function SignUpPage() {
 	const [department, setDepartment] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [file, setFile] = useState();
+	const [file, setFile] = useState([]);
 	const [formErrors, setFormErrors] = useState({});
 	const [isSubmit, setIsSubmit] = useState(false);
 	const fileTypes = ["image/png", "image/jpeg", "image/jpg"];
 
-  const nav = useNavigate();
-  const handleInputChange = (e) => {
+ 	const nav = useNavigate();
+  	const handleInputChange = (e) => {
     const { id, value } = e.target;
     // const selectedFile = e.target.files[0];
 
@@ -62,19 +62,21 @@ export default function SignUpPage() {
       formData.append("password", password);
       formData.append("photo", file, file.name);
 
-      axios
-        .post("http://127.0.0.1:5000/authentication/signup/student", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data", // set content type header
-          },
-        })
-        .then((Response) => console.log(Response.data))
-        .then((data) => console.log(data))
-        .catch((error) => console.log(error));
+			console.log(formData);
 
-      nav("/student/signin");
-    }
-  }, [formErrors, isSubmit]);
+			axios.post("http://127.0.0.1:5000/authentication/signup/student", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data" // set content type header
+				}
+			})
+            .then((Response) => console.log(Response.data))
+            .then((data) => console.log(data))
+            .catch((error) => console.log(error));
+
+            nav("/student/signin");
+		}
+	}
+  )
 
   const validate = () => {
     const errors = {};
@@ -161,22 +163,20 @@ export default function SignUpPage() {
           />
         </div>
 
-        {formErrors.name && <p>{formErrors.name}</p>}
-
-        <div className="username">
-          <label className="form__label" htmlFor="username">
-            username
-          </label>
-          <input
-            type="text"
-            name=""
-            id="username"
-            value={username}
-            className="form__input"
-            onChange={(e) => handleInputChange(e)}
-          />
-        </div>
-        {formErrors.username && <p>{formErrors.username}</p>}
+			<div className="username">
+				<label className="form__label" htmlFor="username">
+					Username
+				</label>
+				<input
+					type="text"
+					name=""
+					id="username"
+					value={username}
+					className="form__input"
+					onChange={(e) => handleInputChange(e)}
+				/>
+			</div>
+			{formErrors.username && <p>{formErrors.username}</p>}
 
         <div className="email">
           <label className="form__label" htmlFor="email">
@@ -235,18 +235,24 @@ export default function SignUpPage() {
         </div>
         {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
 
-        <div className="uploadfile">
-          <label htmlFor="fileInput">Choose a file:</label>
-          <input
-            type="file"
-            id="fileInput"
-            onChange={(e) => handleInputChange(e)}
-          />
-        </div>
-        {formErrors.file && <p>{formErrors.file}</p>}
-      </div>
+			<div className="uploadfile">
+				<label htmlFor="fileInput">Choose a file(max 10mb):</label>
+				<input
+					type="file"
+					id="fileInput"
+					onChange={(e) => handleInputChange(e)}
+				/>
+			</div>
+			{formErrors.file && <p>{formErrors.file}</p>}
+		{/* </div> */}
 
-      <div className="footer">
+		{/* <div className="footer"> */}
+			<button className="button-three" onClick={() => handleSubmit()} type="submit">
+				Register
+			</button>
+		{/* </div> */}
+
+      {/* <div className="footer">
         <button
           className="fluid ui button blue"
           onClick={() => handleSubmit()}
@@ -254,8 +260,8 @@ export default function SignUpPage() {
           class="btn"
         >
           Register
-        </button>
+        </button> */}
       </div>
     </div>
   );
-}
+};
