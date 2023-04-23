@@ -57,7 +57,7 @@ def updateCourse(id):
     course = Course(**coursedb)
     course.updateCourse(**req)
     response = database.courseOperations.update_course(course.dict())
-    return {"success":"true"}
+    return {"success":True}
    
 
 ### Add Path to DataBase by ADMIN

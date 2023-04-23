@@ -95,6 +95,16 @@ class CourseDBOperations:
         print(course_details)
         return course_details
     
+    def get_multiple_courses_prerequisites(self,course_ids):
+        query = { 'course_id': { '$in': course_ids } }
+        projection = { 'course_id':1, 'course_prerequisites':1}
+        courses = self.course_collection.find(query,projection)
+        courses_dict = {}
+        for course in courses:
+            courses_dict[course['course_id']] = course['course_prerequisites']
+
+        return courses_dict
+    
     def get_courses(self,query):
         pattern = '.*'+str(query)+'.*'
         courses = self.course_collection.find({"course_id": {"$regex": pattern, "$options":"i"}})
@@ -207,6 +217,18 @@ class StudentDBOperations(UserDBOperations):
         # !!! add try cache block and return the error message
         # return "Internal Server Error! Please Try Later"
         return "Success"
+    
+    def update_course_list(self,email, updated_course_list):
+        for course_info in updated_course_list:
+            self.user_collection.update_one(
+                { "email" : email, "course_list.course_id" : course_info[0] }, 
+                { "$set" : {"course_list.$.incomplete_prerequisites" : course_info[1],
+                            "course_list.$.met_prerequisite_flag" : course_info[2]}}
+            )
+            # self.user_collection.update_one(
+            #     { "email" : email }, 
+            #     { "$addToSet" : { "course_list" : updated_course_list}}
+            # )
 
     def delete_course(self, id, course_id):
         self.user_collection.update_one(

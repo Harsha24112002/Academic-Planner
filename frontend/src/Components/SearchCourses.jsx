@@ -26,7 +26,6 @@ function SearchCourses() {
   const [selectedValue, setSelectedValue] = useState("Enter Query");
   const dispatch = useDispatch();
   const { coursesSearch, loading, error } = useSelector((state) => {
-    console.log("AA",state.coursesSearch.coursesSearch)
     return {
       coursesSearch: state.coursesSearch.coursesSearch,
       loading: state.coursesSearch.loading,
@@ -55,17 +54,28 @@ function SearchCourses() {
   };
   const handleListItemButtonClick = (event) => {
     setSelectedValue(event.target.textContent);
+    setSearchQuery(event.target.textContent)
     setOpen(false);
     dispatch(fetchcoursesSearchDelete());
 
     axios
       .get(`http://localhost:5000/maps/get_course_details/${event.target.textContent}`)
       .then((response) => {
+        // console.log("repsonse",response.data.course_id)
         dispatch(saveDetails(response.data))
       })
       .catch((error) => {
         console.log(error.msg);
       });
+    // data = {
+    //   course_id: event.target.textContent,
+    //   registered_sem : 3
+    //   elective : Optional[str]
+    //   met_prerequisite_flag : bool
+    //   # note : Optional[Notes]
+    //   note : Optional[Notes]
+    // }
+    // axios.post(`http://localhost:5000/maps/register/${event.target.textContent}`,data)
   };
   return (
     <Box onSubmit={handleSearchSubmit} component="form">
@@ -79,9 +89,9 @@ function SearchCourses() {
       <IconButton type="submit" aria-label="Search">
         <SearchIcon />
       </IconButton>
-      <Typography variant="subtitle1" component="div">
+      {/* <Typography variant="subtitle1" component="div">
         Selected: {selectedValue}
-      </Typography>
+      </Typography> */}
       <br />
 
       <Dialog

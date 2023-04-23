@@ -43,8 +43,8 @@ class StudentCourseSpecification(BaseModel):
     registered_sem : int
     elective : Optional[str]
     met_prerequisite_flag : bool
-    # note : Optional[Notes]
     note : Optional[Notes]
+    incomplete_prerequisites: List[str] = []
 
     # def JSONify(self):
     #     return json.dumps(self.__dict__,object_hook=lambda d: d.dict())
@@ -64,7 +64,7 @@ class User(BaseModel):
 class Student(User,BaseModel):
     department : str
     cgpa : Optional[float]
-    course_list : Optional[List[StudentCourseSpecification]]
+    course_list : Optional[List[StudentCourseSpecification]] = []
 
     def JSONify(self):
         return json.dumps(self.__dict__)

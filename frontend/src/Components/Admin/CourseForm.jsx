@@ -149,8 +149,6 @@ function CourseForm({ courseDetails, type }) {
       // console.log(data);
       if (data.success) {
         // Redirect to the success page
-        
-        console.log("AAAAAAAAAAAA",data)
       } else {
         // console.log("AAAAAAAAAAAA",data)
         setErrors(data.errors);
@@ -182,6 +180,9 @@ function CourseForm({ courseDetails, type }) {
         error={CourseNameError}
         helperText={CourseNameError ? "This field is required" : ""}
         defaultValue={CourseName}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
       <TextField
         id="ID"
@@ -193,6 +194,9 @@ function CourseForm({ courseDetails, type }) {
         error={CourseIdError}
         helperText={CourseIdError ? "This field is required" : ""}
         defaultValue={CourseId}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
       <br></br>
       <TextField
@@ -205,6 +209,9 @@ function CourseForm({ courseDetails, type }) {
         error={CourseInstructorError}
         helperText={CourseInstructorError ? "This field is required" : ""}
         defaultValue={CourseInstructor}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
 
       <TextField
@@ -217,6 +224,9 @@ function CourseForm({ courseDetails, type }) {
         error={CourseSlotError}
         helperText={CourseSlotError ? "This field is required" : ""}
         defaultValue={CourseSlot}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
       <br></br>
       <TextField
@@ -229,6 +239,9 @@ function CourseForm({ courseDetails, type }) {
         error={CourseSemError}
         helperText={CourseSemError ? "This field is required" : ""}
         defaultValue={CourseSem}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
 
       <TextField
@@ -241,6 +254,9 @@ function CourseForm({ courseDetails, type }) {
         error={CoreElectiveError}
         helperText={CoreElectiveError ? "This field is required" : ""}
         defaultValue={CoreElective}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
       <br></br>
       <TextField
@@ -251,11 +267,18 @@ function CourseForm({ courseDetails, type }) {
         onChange={handleCoursePrerequisitesChange}
         helperText="Enter prerequisites in multiple lines"
         defaultValue={CoursePrerequisites.join("\r\n")}
+        InputProps={{
+          readOnly: type == "see",
+        }}
       />
       <br></br>
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Submit
-      </Button>
+      {type != "see" ? (
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
