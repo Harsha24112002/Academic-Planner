@@ -6,7 +6,6 @@ import {
 import tmpreducer from "./Reducers/tmpreducer";
 import detailsReducer from "./Reducers/DetailsReducer";
 import coursesSearchReducer from "./Reducers/CoursesSearchReducer";
-import studentCourseReducer from "./Reducers/StudentCoursesReducer";
 import authReducer from "./features/auth/authSlice";
 import courseDetailsReducer from "./features/courseDetailsSlice";
 import thunk from "redux-thunk";
@@ -17,7 +16,6 @@ const reducers = {
   studentDetails: detailsReducer,
   tmpreducer: tmpreducer,
   coursesSearch: coursesSearchReducer,
-  studentCourses: studentCourseReducer,
   auth: authReducer,
   courseDetails: courseDetailsReducer,
 };
