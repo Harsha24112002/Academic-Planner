@@ -2,41 +2,41 @@ import React from "react";
 import "../css/Shapes.css";
 import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
 import Draggable from "react-draggable";
-import { Box, Container, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-
+import { Box, CircularProgress, Container, Typography, Button, Tooltip } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { detailsDelete, StudentDetailsDelete } from "../Actions/StudentDetailsActions";
 const boxStyle = {
   border: "grey solid 2px",
   borderRadius: "10px",
   padding: "5px",
 };
 
-// const DraggableBox = ({ id, classname }) => {
-//   const updateXarrow = useXarrow();
-//   return (
-//     <Draggable onDrag={updateXarrow} onStop={updateXarrow}>
-//       <div id={id} className={classname}>
-//         <div className="text">{id}</div>
-//       </div>
-//     </Draggable>
-//   );
-// };
-
 function SemBox({ sem }) {
   const {details} = useSelector((state) => ({
     details: state.studentDetails.details,
   }));
-
+  const dispatch = useDispatch();
+  const handleDeregister = async (e) => {
+    const id = e.target.id;
+    const response = axios.delete(
+      `http://localhost:5000/maps/deregister/${id}`
+    );
+    const data = (await response).data;
+    alert(data);
+    dispatch(detailsDelete(id));
+  }
   function getCoursesBySemester(sem) {
     var ret = [];
-    console.log(details,sem)
     if (!details.course_list) {
       return ret;
     }
     const sz = details.course_list.length;
     for (let i = 0; i < sz; i++) {
       if (details.course_list[i].registered_sem == sem) {
-        ret.push(details.course_list[i].course_id);
+        console.log("DETAILSSSSS",details.course_list[i]);
+        ret.push([details.course_list[i].course_id,details.course_list[i].met_prerequisite_flag,
+          "Incomplete Prerquisites: "+details.course_list[i].incomplete_prerequisites.join(", ")]);
       }
     }
     return ret;
@@ -67,12 +67,23 @@ function SemBox({ sem }) {
           {details
           ?
           <>          
-          {getCoursesBySemester(sem).map((course) => {
+          {getCoursesBySemester(sem).map((obj) => {
+            if(obj[1]){
             return (
-              <div className="circle3" id={course}>
-                <div className="text">{course}</div>
-              </div>
+              <button className="circle3 text" id={obj[0]} onClick={handleDeregister}>
+                {obj[0]}
+              </button>
             );
+            }
+            else{
+              return (
+                <Tooltip title={obj[2]}>
+                <button className="circle3 error text" id={obj[0]} onClick={handleDeregister}>
+                  {obj[0]}
+                </button>
+              </Tooltip>
+              );
+            }
           })}
           </>
           :
@@ -80,6 +91,7 @@ function SemBox({ sem }) {
         }
         </Xwrapper>
       </div>
+      
     </Container>
   );
 }

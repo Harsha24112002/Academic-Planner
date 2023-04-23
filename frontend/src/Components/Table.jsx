@@ -38,7 +38,7 @@ export default function PaginationTable({courseInfo}) {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" >
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -46,6 +46,7 @@ export default function PaginationTable({courseInfo}) {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  sx={{bgcolor:"lightgrey"}}
                 >
                   {column.label}
                 </TableCell>

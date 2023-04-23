@@ -48,7 +48,6 @@ export default function ProfilePageTabs({components, labels}) {
     setValue(newValue);
   };
   const widthpertab = `${100/labels.length}%`
-  console.log(widthpertab)
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

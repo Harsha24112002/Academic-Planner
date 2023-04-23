@@ -2,6 +2,7 @@ from flask import request, session, Blueprint
 from db_connection import database
 from Models.models import StudentCourseSpecification
 import threading
+from pydantic import ValidationError
 # from bson.json_utils import dumps
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
@@ -41,27 +42,30 @@ def get_many_courses_details():
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 def register(id):
+    session['user'] = database.studentOperations.get_user_by_username("Harsha")
+    session["user"].pop('_id')
+    session["user"]['type'] = "student"
     if session.get("user") is None:
         return "Not logged in"
     
     if session["user"]["course_list"] is None:
         session["user"]["course_list"] = []
     if any( course["course_id"] == id for course in session["user"]["course_list"]) :
-        return "The Course " + id + " is already registered"
+        return {"success":False, "msg": f"The Course {id} is already registered"}
 
-    course_dict = request.form.to_dict()
+    course_dict = request.json
     course_dict["course_id"] = id
 
     prereq_list = database.courseOperations.get_prerequisites_of_course(id)
     if prereq_list == None :
-        return "The Course " + id + " is not available"
+        return {"success": False,"msg": "The Course " + id + " is not available"}
 
     student_has_this_prereq = { course:False for course in prereq_list }
     student_registered_courses = session["user"]["course_list"]
 
     def is_prerequisite_completed(course_id):
         for course in student_registered_courses :
-            if course["course_id"] == course_id :
+            if course["course_id"] == course_id and course["registered_sem"] < course_dict["registered_sem"]:
                 student_has_this_prereq[course_id] = True
                 break
 
@@ -79,28 +83,52 @@ def register(id):
         if not flag :
             course_dict["met_prerequisite_flag"] = False
             break
+    try:
+        registeringCourse =  StudentCourseSpecification(**course_dict)    
+    except ValidationError as e:
+        return {"success":False, "msg": e.errors()}
     
-    registeringCourse =  StudentCourseSpecification(**course_dict)    
-
+    data = [course for course in student_has_this_prereq.keys() if student_has_this_prereq[course]==False]
+    registeringCourse.incomplete_prerequisites = data
     response = database.studentOperations.add_course(session["user"]["email"], registeringCourse.dict())
     # !!! add a try cache block if DB operations fail
     # ==> add in the studentDBOperations class not here
 
     if response == "Success" :
+        ### Check if this course is prerequisite to another 
         session["user"]["course_list"].append(registeringCourse.dict())
-        session.modified = True
+        
+        ### 
+        updated_courses = []
+        for course in session["user"]["course_list"]:
+            print("Course: ",course)
+            if registeringCourse.course_id in course["incomplete_prerequisites"] and course["registered_sem"] > registeringCourse.registered_sem:
+                print("Course: ",course)
+                course["incomplete_prerequisites"].remove(registeringCourse.course_id)
+                
+                if len(course["incomplete_prerequisites"])==0:
+                    course["met_prerequisite_flag"] = True
 
-        # return message when the course is registered with all its prerequisites fulfilled
-        response = "Course " + str(id) + " is successfully registered"
+                updated_courses.append([course["course_id"],course["incomplete_prerequisites"],course["met_prerequisite_flag"]])
+                
+        database.studentOperations.update_course_list(session["user"]["email"],updated_courses)
+
+        session.modified = True
 
         # when all the prerequisites are not met, a dict of prerequisite courses showing course-completion boolean is sent
         if course_dict["met_prerequisite_flag"] == False :
-            response = student_has_this_prereq
+            return {"success":True,"msg":"Prerequisites are not met" ,"data":data}
+
+        # return message when the course is registered with all its prerequisites fulfilled
+        return {"success":True, "msg":"Course " + str(id) + " is successfully registered", "data":[]}
 
     return response
 
 @maps.route("/deregister/<string:id>", methods=["DELETE"])
 def deregister(id):
+    session['user'] = database.studentOperations.get_user_by_username("Harsha")
+    session["user"].pop('_id')
+    session["user"]['type'] = "student"
     if session.get("user") is None:
         return "Not logged in"
     if not any( course["course_id"] == id for course in session["user"]["course_list"]) :
@@ -110,8 +138,22 @@ def deregister(id):
 
     if response == "Success" :
         session["user"]["course_list"].remove(next(course for course in session["user"]["course_list"] if course["course_id"] == id))
-        return "Successfully Deregistered"
+        course_ids = [course["course_id"] for course in session["user"]["course_list"]]
+        courses = database.courseOperations.get_multiple_courses_prerequisites(course_ids=course_ids)
+        print(courses)
+        updated_courses = []
+        for course in session["user"]["course_list"]:
+            if id in courses[course["course_id"]]:
+                course["met_prerequisite_flag"] = False
+                course["incomplete_prerequisites"].append(id)
+                updated_courses.append([course["course_id"],course["incomplete_prerequisites"],course["met_prerequisite_flag"]])
+    
+        database.studentOperations.update_course_list(session["user"]["email"],updated_courses)
+        session.modified = True
 
+    
+        return "Successfully Deregistered"
+    
     # !!! Return proper? error messages or Internal Server Error
     return response
 
@@ -168,7 +210,7 @@ def get_registered_courses():
     #     return []
 
     ###!!! TO BE CHANGED AFTER LOGIN
-    session['user'] = database.studentOperations.get_user_by_username("Geetha")
+    session['user'] = database.studentOperations.get_user_by_username("Harsha")
     session["user"].pop('_id')
 
     

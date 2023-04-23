@@ -8,6 +8,7 @@ import ProfilePage from '../Pages/ProfilePage';
 import SpecializationPathsPage from '../Pages/Admin/SpecializationPathsPage';
 import NotFoundPage from '../Pages/NotFoundPage';
 import Header from '../Components/Header';
+import MapsPage from '../Pages/MapsPage';
 
 
 
@@ -26,6 +27,7 @@ export default function StudentRoutes() {
                 <Route path="/"  element={<Header pages={studentPages} tos={studentLinks}/>}>
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="spPaths" element={<SpecializationPathsPage />} />
+                    <Route path="maps" element={<MapsPage />} />
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
             </Routes>
