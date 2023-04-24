@@ -25,7 +25,7 @@ class Database:
                 self.client = pymongo.MongoClient(self.host, 27017)
             else:
                 # connect to remote database
-                self.client = pymongo.MongoClient(f"mongodb+srv://{self.username}:{self.password}@{self.dbname}.*******.mongodb.net/?retryWrites=true&w=majority")
+                self.client = pymongo.MongoClient(f"mongodb+srv://{self.username}:{self.password}@{self.dbname}.rtlx9sz.mongodb.net/?retryWrites=true&w=majority")
         
             # getting the database cluster
             self.cluster = self.client[self.dbname]
@@ -239,23 +239,15 @@ class StudentDBOperations(UserDBOperations):
         # return "Internal Server Error! Please Try Later"
         return "Success"
 
-    # def update_course_status(self, id, course_id, status):
-    #     self.user_collection.update_one(
-    #         { "id" : id , "course_list.course_id" },
-    #         { "$set" : { "course_list.$[course].status" : status }},
-    #         { arrayFilters: [
-    #             { "course.course_id" : course_id }
-    #         ]}
-    #     )
-
-    def update_course_status(self, id, course_id, status):
+    def update_course_status(self, id, course_id, status, grade):
 
         # !!! add try and cache blocks for error handling
 
         # update the student collection course details
         # !!! nothing to do with id as it is session id?
-        filter = {"id": id, "course_list.course_id": course_id}
-        update = {"$set": {"course_list.$.course_status": status}}
+        filter = { "id": id, "course_list.course_id": course_id }
+        update = { "$set": { "course_list.$.course_status": status,
+                             "course_list.$.course_grade" : grade }}
         result = self.user_collection.update_one(filter, update)
 
         return "Success" if result.modified_count == 1 else "Failed"

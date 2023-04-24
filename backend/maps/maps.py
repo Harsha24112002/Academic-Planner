@@ -175,14 +175,33 @@ def update_course_status(course_id):
             break
     
     if present_course == None :
-        return "The Course " + course_id + " is not registered to mark as complete"
+        return "The Course " + course_id + " is not registered to update it's status"
     
     #  if the course is in the student's course list, update the course status
-    status = request.form.get("status")
-    response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status)
+    status = request.form.get("course_status")
 
+    # if status is "completed", check for GPA score
+    grade = None 
+    if status == "completed" :
+        if request.form.get("course_grade") is None :
+            return "Cant mark as completed without a grade"
+        else :
+            grade = request.form.get("course_grade")
+
+    response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status, grade)
     if response == "Success":
-        result = next((course.update({"course_status": status}) for course in session["user"]["course_list"] if course["course_id"] == course_id), None)
+        result = None
+        for course in session["user"]["course_list"]:
+            if course["course_id"] == course_id :
+                course.update({ "course_status" : status,
+                                "course_grade" : grade })
+                result = True
+
+
+        # The belowl line should do the functionality of above for loop,
+        # but its not workingdont know why!?
+        # result = next((course.update({"course_status": status, "course_grade":grade}) for course in session["user"]["course_list"] if course["course_id"] == course_id), None)
+
         if result == None:
             return "Course status update failed or possibly none of the courses were updated"
         return "Course status updated successfully"
