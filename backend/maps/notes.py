@@ -2,8 +2,10 @@ from flask import request, session
 from db_connection import database
 from Models.models import  Notes
 from .maps import maps
+from authentication import login_required
 
 @maps.route("/addnotes/<string:id>", methods=["POST"])
+@login_required("student")
 def addnotes(id): # updatenotes = addnotes
     if session.get("user") is None:
         return "Login first!!!" ##############
@@ -23,6 +25,7 @@ def addnotes(id): # updatenotes = addnotes
     
     
 @maps.route("/deletenotes/<string:id>", methods=["DELETE"])
+@login_required(["student"])
 def deletenotes(id):
     if session.get("user") is None:
         return "Login first!!!" ##############

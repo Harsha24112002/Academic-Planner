@@ -30,7 +30,7 @@ admin = Blueprint("admin",__name__, url_prefix="/admin/")
 
 ### Add Course to DataBase by ADMIN
 @admin.route("/addcourse",methods=["POST"])
-@login_required("admin")
+@login_required(["admin"])
 def addCourse():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -50,7 +50,7 @@ def addCourse():
 ### Update Course by ID in DataBase by ADMIN
 # !!! Assumed Course ID cannot be updated, should confirm with others
 @admin.route("/updatecourse/<string:id>",methods=["PUT"])
-@login_required("admin")
+@login_required(["admin"])
 def updateCourse(id):
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -64,7 +64,7 @@ def updateCourse(id):
     return {"success":True}
    
 @admin.route("/uploadfile", methods=["POST"])
-@login_required("admin")
+@login_required(["admin"])
 def readFile():
     # !!! appropiate error handling while returning
     file = request.files['file']
@@ -85,7 +85,7 @@ def readFile():
 
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])
-@login_required("admin")
+@login_required(["admin"])
 def addPath():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -102,7 +102,7 @@ def addPath():
 
 ### Update Path by ID in DataBase by ADMIN
 @admin.route("/updatepath/<string:name>",methods=["PUT"])
-@login_required("admin")
+@login_required(["admin"])
 def updatePath(name):
     if session.get("user") is None:
         return "Not logged in"
@@ -118,7 +118,7 @@ def updatePath(name):
 
 ### Delete Path by ID in DataBase by ADMIN
 @admin.route("/deletepath/<string:name>",methods=["DELETE"])
-@login_required("admin")
+@login_required(["admin"])
 def deletePath(name):
     if session.get("user") is None:
         return "Not logged in"

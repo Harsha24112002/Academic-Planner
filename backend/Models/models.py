@@ -18,6 +18,9 @@ class Course(BaseModel):
     course_instructor : str
     course_slot : str
     course_sem : str
+    course_credits : int
+    course_start_segment : Optional[int]
+    course_end_segment : Optional[int]
     core_elective : str
     course_prerequisites : List[str] = []
  

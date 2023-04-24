@@ -14,6 +14,20 @@ from flask import redirect, url_for
 folder = os.path.join('uploads_server') # Assigns upload path to variable
 os.makedirs(folder, exist_ok=True)
 
+def login_required(allowed_roles):
+	def wrapper(f):
+		@wraps(f)
+		def decorated_function(*args, **kwargs):
+			if 'user' not in session :
+				return {"message": "redirect to Home Page"}
+			if 'role' not in session["user"] :
+				return {"message": "Error Occurred while handling role in session! Please report"}
+			if session["user"]["role"] not in allowed_roles :
+				return {"message": "You are not allowed to access this route"}
+			return f(*args, **kwargs)
+		return decorated_function
+	return wrapper
+
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
 authentication = Blueprint("authentication", __name__, url_prefix="/authentication/")
@@ -22,6 +36,7 @@ fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
 
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST","GET"])
+@login_required(["student"])
 def get_details():
 	if request.method == "POST":
 		if not session.get("user"):
@@ -53,6 +68,7 @@ def get_details():
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])
+@login_required(["admin", "student"])
 def get_profile_picture():
 	file_contents = fs.get(session["user"]['photo_url']).read()
 	image = Image.open(io.BytesIO(file_contents))
@@ -110,6 +126,7 @@ def login():
 
 # code to logout user
 @authentication.route("/logout/", methods=["GET"])
+@login_required(["admin","student"])
 def logout():
 	# check if user session exists
 	if session.get("user"):
@@ -118,14 +135,3 @@ def logout():
 
 	# !!! redirect to login page
 	return "Already logged out"
-
-
-def login_required(role):
-	def wrapper(f):
-		@wraps(f)
-		def decorated_function(*args, **kwargs):
-			if 'user' not in session or session['user']['role'] != role:
-				return {"message": "redirect to Home Page"}
-			return f(*args, **kwargs)
-		return decorated_function
-	return wrapper
