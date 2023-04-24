@@ -21,6 +21,8 @@ import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
 import SearchCourses from "../Components/SearchCourses";
 import CourseForm from "../Components/Admin/CourseForm";
 import CourseRegistrationDialog from "../Components/CourseRegistrationDialog";
+import CreditsCount from "../Components/CreditsCount";
+
 function MapsPage() {
   const { details, loading, error } = useSelector((state) => ({
     details: state.studentDetails.details,
@@ -135,6 +137,7 @@ function MapsPage() {
         </div>
       )}
       <div>
+        <CreditsCount/>
         <p>
           {" "}
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,
