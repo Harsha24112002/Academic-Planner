@@ -28,8 +28,7 @@ export default function SignInPage({role}) {
                 method: "POST",
                 url: "http://127.0.0.1:5000/authentication/login/student",
                 data: formData
-            })
-            .then((response) => {
+            }).then((response) => {
                 console.log(response)
             }).catch((error) => {
                 if(error.response) {
@@ -47,9 +46,7 @@ export default function SignInPage({role}) {
         }
         
         nav("/");
-        dispatch(signin({
-            isSignedIn: true
-        }));
+        dispatch(signin());
     };
 
     return (

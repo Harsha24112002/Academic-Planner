@@ -11,7 +11,7 @@ import NotFoundPage from '../Pages/NotFoundPage';
 
 export default function AdminRoutes() {
 
-    const adminPages = ["courses", "specialization paths", "logout"];
+    const adminPages = ["courses", "specialization paths"];
     const adminLinks = {
         "courses": "/courses",
         "specialization paths": "/spPaths",

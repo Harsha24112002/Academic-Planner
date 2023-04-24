@@ -14,7 +14,7 @@ import MapsPage from '../Pages/MapsPage';
 
 export default function StudentRoutes() {
 
-    const studentPages = ["profile", "maps", "specialization paths", "logout"];
+    const studentPages = ["profile", "maps", "specialization paths"];
     const studentLinks = {
         "profile": "/profile",
         "specialization paths": "/spPaths",
@@ -31,7 +31,6 @@ export default function StudentRoutes() {
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
             </Routes>
-            
         </Router>
     )
 };

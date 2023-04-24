@@ -10,7 +10,7 @@ export const authSlice = createSlice({
         updaterole: (state, action) => {
             state.userRole = action.payload.role;
         },
-        signin: (state, action) => {
+        signin: (state) => {
             state.isSignedIn = true;
         },
         signout: (state) => {
