@@ -58,7 +58,7 @@ class User(BaseModel):
     email : str
     photo_url : Optional[str]
     id : Optional[str]
-    # type : str
+    role : Optional[str]
     
 
 class Student(User,BaseModel):

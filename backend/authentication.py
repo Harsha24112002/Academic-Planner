@@ -8,6 +8,8 @@ from db_connection import database
 import io
 import PIL.Image as Image
 import base64
+from functools import wraps
+from flask import redirect, url_for
 
 folder = os.path.join('uploads_server') # Assigns upload path to variable
 os.makedirs(folder, exist_ok=True)
@@ -41,7 +43,7 @@ def get_details():
 		stud = Student(**response)
 		# print("ok1")
 		session["user"] = stud.dict()
-		session["user"]['type'] = "student"
+		session["user"]["role"] = "student"
 
 		if not session.get("user"):
 			return "Not logged in"
@@ -97,6 +99,7 @@ def login():
 		if sha256.verify(request.form.get("password"), _user["password"]):
 			stud = Student(**database.studentOperations.get_user(email))
 			session["user"] = stud.dict()
+			session["user"]["role"] = "student"
 			return "Logged in successfully"
 		else:
 			return "Incorrect password"
@@ -115,3 +118,14 @@ def logout():
 
 	# !!! redirect to login page
 	return "Already logged out"
+
+
+def login_required(role):
+	def wrapper(f):
+		@wraps(f)
+		def decorated_function(*args, **kwargs):
+			if 'user' not in session or session['user']['role'] != role:
+				return {"message": "redirect to Home Page"}
+			return f(*args, **kwargs)
+		return decorated_function
+	return wrapper
