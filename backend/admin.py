@@ -4,6 +4,8 @@ from db_connection import database
 from Models.models import Course, SpecializationPath
 from Models.models import StudentCourseSpecification
 from pydantic import ValidationError
+import pandas as pd
+
 
 admin = Blueprint("admin",__name__, url_prefix="/admin/")
 
@@ -59,6 +61,24 @@ def updateCourse(id):
     response = database.courseOperations.update_course(course.dict())
     return {"success":True}
    
+@admin.route("/uploadfile", methods=["POST"])
+def readFile():
+    # !!! appropiate error handling while returning
+    file = request.files['file']
+    course_details = pd.read_excel(file)
+    course_details.swapaxes("index", "columns")
+
+    for i in range(len(course_details)):
+        frame = course_details.iloc[i]
+        pre_req=[]
+
+        if isinstance(frame['course_prerequisites'], str):
+            pre_req = frame['course_prerequisites'].split(',')
+
+        course = Course(course_name=frame['course_name'], course_id=frame['course_id'], course_instructor=frame['course_instructor'], course_slot=str(frame['course_slot']), course_sem=str(frame['course_sem']), core_elective=frame['core_elective'], course_prerequisites = pre_req)
+        database.courseOperations.add_course(course.dict())
+
+    return {"success":True}
 
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])
