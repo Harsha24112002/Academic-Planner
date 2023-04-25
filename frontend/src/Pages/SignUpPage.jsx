@@ -18,7 +18,6 @@ export default function SignUpPage() {
  	const nav = useNavigate();
   	const handleInputChange = (e) => {
     const { id, value } = e.target;
-    // const selectedFile = e.target.files[0];
 
     if (id === "name") {
       setFirstName(value);
@@ -81,6 +80,7 @@ export default function SignUpPage() {
   const validate = () => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const domain_regex = /iith\.ac\.in/gm;
 
     if (!name) {
       errors.name = "First Name is required *";
@@ -96,6 +96,10 @@ export default function SignUpPage() {
 
     if (!regex.test(email)) {
       errors.email = "Invalid email address !";
+    }
+
+    if(!domain_regex.test(email)){
+      errors.email = "Email must be an iith.ac.in domain !";
     }
 
     if (!department) {

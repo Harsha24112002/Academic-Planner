@@ -11,22 +11,22 @@ import base64
 from functools import wraps
 from flask import redirect, url_for
 
-folder = os.path.join('uploads_server') # Assigns upload path to variable
-os.makedirs(folder, exist_ok=True)
+# folder = os.path.join('uploads_server') # Assigns upload path to variable
+# os.makedirs(folder, exist_ok=True)
 
-def login_required(allowed_roles):
-	def wrapper(f):
-		@wraps(f)
-		def decorated_function(*args, **kwargs):
-			if 'user' not in session :
-				return {"message": "redirect to Home Page"}
-			if 'role' not in session["user"] :
-				return {"message": "Error Occurred while handling role in session! Please report"}
-			if session["user"]["role"] not in allowed_roles :
-				return {"message": "You are not allowed to access this route"}
-			return f(*args, **kwargs)
-		return decorated_function
-	return wrapper
+# def login_required(allowed_roles):
+# 	def wrapper(f):
+# 		@wraps(f)
+# 		def decorated_function(*args, **kwargs):
+# 			if 'user' not in session :
+# 				return {"message": "redirect to Home Page"}
+# 			if 'role' not in session["user"] :
+# 				return {"message": "Error Occurred while handling role in session! Please report"}
+# 			if session["user"]["role"] not in allowed_roles :
+# 				return {"message": "You are not allowed to access this route"}
+# 			return f(*args, **kwargs)
+# 		return decorated_function
+# 	return wrapper
 
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
@@ -36,7 +36,7 @@ fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
 
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST","GET"])
-@login_required(["student"])
+# @login_required(["student"])
 def get_details():
 	if request.method == "POST":
 		if not session.get("user"):
@@ -68,7 +68,7 @@ def get_details():
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])
-@login_required(["admin", "student"])
+# @login_required(["admin", "student"])
 def get_profile_picture():
 	file_contents = fs.get(session["user"]['photo_url']).read()
 	image = Image.open(io.BytesIO(file_contents))
@@ -85,6 +85,9 @@ def signup():
 		return "Email already exists"
 	if database.studentOperations.check_username(request.form.get("username")):
 		return "Username already exists"
+
+	if email.split('@')[1] != database.cluster['database']['domain_name']:
+		return "Email not from IITH domain"
 
 	user_dict = request.form.to_dict()
 	file = request.files["photo"]
@@ -126,7 +129,7 @@ def login():
 
 # code to logout user
 @authentication.route("/logout/", methods=["GET"])
-@login_required(["admin","student"])
+# @login_required(["admin","student"])
 def logout():
 	# check if user session exists
 	if session.get("user"):

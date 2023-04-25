@@ -67,7 +67,7 @@ function ProfilePage() {
                         </Typography>
                       </ListItem>
                       <ListItem>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h7" component="div">
                           {details["email"]}
                         </Typography>
                       </ListItem>

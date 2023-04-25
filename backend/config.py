@@ -9,6 +9,7 @@ configurations = {
         'course_collection' : 'course_collection',
         'admin_collection' : None,
         'path_collection' : 'path_collection',
-        'admin_collection' : 'admin_collection'
+        'admin_collection' : 'admin_collection',
+        'domain_name' : 'iith.ac.in',
     }
 }

@@ -2,4 +2,5 @@
 /backend/Models/__pycache__
 /backend/maps/__pycache__
 Pipfile
+/frontend/package-lock.json
 /frontendtemp

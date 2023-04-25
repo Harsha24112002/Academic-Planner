@@ -5,7 +5,7 @@ from Models.models import Course, SpecializationPath
 from Models.models import StudentCourseSpecification
 from pydantic import ValidationError
 import pandas as pd
-from authentication import login_required
+# from authentication import login_required
 
 admin = Blueprint("admin",__name__, url_prefix="/admin/")
 
@@ -30,7 +30,7 @@ admin = Blueprint("admin",__name__, url_prefix="/admin/")
 
 ### Add Course to DataBase by ADMIN
 @admin.route("/addcourse",methods=["POST"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def addCourse():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -50,7 +50,7 @@ def addCourse():
 ### Update Course by ID in DataBase by ADMIN
 # !!! Assumed Course ID cannot be updated, should confirm with others
 @admin.route("/updatecourse/<string:id>",methods=["PUT"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def updateCourse(id):
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -64,12 +64,14 @@ def updateCourse(id):
     return {"success":True}
    
 @admin.route("/uploadfile", methods=["POST"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def readFile():
     # !!! appropiate error handling while returning
     file = request.files['file']
     course_details = pd.read_excel(file)
     course_details.swapaxes("index", "columns")
+
+    failed_additions = []
 
     for i in range(len(course_details)):
         frame = course_details.iloc[i]
@@ -78,14 +80,18 @@ def readFile():
         if isinstance(frame['course_prerequisites'], str):
             pre_req = frame['course_prerequisites'].split(',')
 
-        course = Course(course_name=frame['course_name'], course_id=frame['course_id'], course_instructor=frame['course_instructor'], course_slot=str(frame['course_slot']), course_sem=str(frame['course_sem']), core_elective=frame['core_elective'], course_prerequisites = pre_req)
-        database.courseOperations.add_course(course.dict())
+        try:
+            course = Course(course_name=frame['course_name'], course_id=frame['course_id'], course_instructor=frame['course_instructor'], course_slot=str(frame['course_slot']), course_sem=str(frame['course_sem']), core_elective=frame['core_elective'], course_prerequisites = pre_req)
+            database.courseOperations.add_course(course.dict())
+        except:
+            failed_additions.append(i+1)
 
+    # !!! Add good returns, send failed additions to frontend
     return {"success":True}
 
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def addPath():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -102,7 +108,7 @@ def addPath():
 
 ### Update Path by ID in DataBase by ADMIN
 @admin.route("/updatepath/<string:name>",methods=["PUT"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def updatePath(name):
     if session.get("user") is None:
         return "Not logged in"
@@ -118,7 +124,7 @@ def updatePath(name):
 
 ### Delete Path by ID in DataBase by ADMIN
 @admin.route("/deletepath/<string:name>",methods=["DELETE"])
-@login_required(["admin"])
+# @login_required(["admin"])
 def deletePath(name):
     if session.get("user") is None:
         return "Not logged in"
