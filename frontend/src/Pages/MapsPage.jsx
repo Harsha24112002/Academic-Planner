@@ -87,7 +87,7 @@ function MapsPage() {
   const sems = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
-    <div style={{ overflowX: "hidden", padding: "20px 0px 0px 0px" }}>
+    <div style={{ padding: "20px 0px 0px 0px" }}>
       <SearchCourses />
       <Button onClick={handleOpen}>Register</Button>
       <CourseRegistrationDialog open={open} handleClose={handleClose}/>   
@@ -100,10 +100,10 @@ function MapsPage() {
             direction="row"
             wrap="nowrap"
             spacing={10}
-            overflowX="auto"
+            // overflowX="auto"
             padding={"0px 100px 0px 25px"}
             maxWidth={"false"}
-            style={{ overflowX: "auto" }}
+            // style={{ overflowX: "auto" }}
           >
             {sems.map((sem) => {
               return (

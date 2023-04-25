@@ -28,7 +28,9 @@ export const fetchDetails = () => {
   return (dispatch) => {
     dispatch(fetchDetailsRequest());
     axios
-      .get("http://localhost:5000/authentication/get_details/student")
+      .get("http://localhost:5000/authentication/get_details/student",
+            { "withCredentials" : true }
+      )
       .then((response) => {
         // console.log(response.data)
         const studentDetails = response.data;

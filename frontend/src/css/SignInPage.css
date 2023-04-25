@@ -1,0 +1,90 @@
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.signin-page-container{
+    position: relative;
+    height: 100vh;
+    background-image: url('../assets/logging-pages-image.png');
+    background-size: cover;
+}
+
+.signin-page-background-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25, 30, 34, 0.5);
+}
+
+.signin-page-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 40px;
+    background-color: royalblue;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    /* color: #fff; */
+}
+
+.signin-page-box h3 {
+    color: white;
+    text-align: left;
+}
+
+.signin-page-form {
+    color: white;
+    padding: 20px;
+}
+
+.signin-page-form label {
+    font-size: small;
+}
+
+.signin-page-form-details input {
+    border: 1px solid rgb(0,0,0,0.2);
+	border-radius: 0.25em;
+	color: rgb(0,0,0,0.7);
+	outline: none;
+	padding: 0.4em;
+	transition: border 300ms;
+    margin: 5px;
+}
+
+.signin-page-form-details input:hover{
+    border: 2px solid black;
+	/* margin-top: 0.5em;
+	padding-top: 0.5em; */
+}
+
+.signin-page-form-submit input[type="submit"] {
+    background-color: black;
+    color: white;
+    margin: 10px;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.signin-page-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between ;
+    margin: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.signin-page-error-box {
+    margin: 10px;
+}

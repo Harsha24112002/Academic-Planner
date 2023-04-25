@@ -20,7 +20,9 @@ export const fetchcoursesSearch = (searchQuery) => {
   return (dispatch) => {
     dispatch(fetchcoursesSearchRequest());
     axios
-      .get(`http://localhost:5000/maps/get_courses/${searchQuery}`)
+      .get(`http://localhost:5000/maps/get_courses/${searchQuery}`,
+            { "withCredentials" : true }
+      )
       .then((response) => {
         console.log(response.data)
         const data = response.data;

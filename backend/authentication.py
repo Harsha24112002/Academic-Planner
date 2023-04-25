@@ -19,11 +19,21 @@ from flask import redirect, url_for
 # 		@wraps(f)
 # 		def decorated_function(*args, **kwargs):
 # 			if 'user' not in session :
-# 				return {"message": "redirect to Home Page"}
+# 				return {
+# 					"status" : "error",
+# 					"message": "redirect to Home Page, Login to Access",
+# 				}, 401 #Unauthorized
 # 			if 'role' not in session["user"] :
-# 				return {"message": "Error Occurred while handling role in session! Please report"}
+# 				return {
+# 					"status" : "error",
+# 					"message": "An unexpected error occurred! Please try again later. Report if this occurs continously",
+# 				}, 500 #Internal Error
 # 			if session["user"]["role"] not in allowed_roles :
-# 				return {"message": "You are not allowed to access this route"}
+# 				return {
+# 					"status" : "error",
+# 					"message": "You are not allowed to access this route"
+# 				}, 403 #Forbidden
+# 			print(session["_id"], " is sucesssful")
 # 			return f(*args, **kwargs)
 # 		return decorated_function
 # 	return wrapper
@@ -36,7 +46,7 @@ fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
 
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST","GET"])
-# @login_required(["student"])
+# # @login_required(["student"])
 def get_details():
 	if request.method == "POST":
 		if not session.get("user"):
@@ -52,7 +62,7 @@ def get_details():
 	elif request.method == "GET":
 		
 		###!!! TO BE CHANGED AFTER LOGIN
-		response = database.studentOperations.get_user_by_username('gp101')
+		response = database.studentOperations.get_user_by_username('johndoe')
 		# print('respomse:', resp)
 		# session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
 		stud = Student(**response)
@@ -64,7 +74,7 @@ def get_details():
 			return "Not logged in"
 		
 		response = session['user'].copy()
-		response['photo'] = get_profile_picture()
+		# response['photo'] = get_profile_picture()
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])
@@ -82,9 +92,15 @@ def signup():
 	# check if user already exists
 	email = request.form.get("email")
 	if database.studentOperations.check_email(email):
-		return "Email already exists"
+		return {
+			"status" : "error",
+			"message" : "Email already exists",			
+		}, 400 #Bad request
 	if database.studentOperations.check_username(request.form.get("username")):
-		return "Username already exists"
+		return { 
+			"status" : "error",
+			"message" : "Username already exists"
+		}, 409 # Conflict
 
 	if email.split('@')[1] != database.cluster['database']['domain_name']:
 		return "Email not from IITH domain"
@@ -99,14 +115,20 @@ def signup():
 	user = Student(**user_dict, type="student") # For pydantic check
 	
 	database.studentOperations.add_user(user.dict())
-	return "User Added successfully"
+	return {
+		"status" : "success",
+		"message" : "User Added successfully"
+	}, 200 #OK
 
 # code to login user
 @authentication.route("/login/student", methods=["POST"])
 def login():
 	# check if user session exists
 	if session.get("user"):
-		return "Already logged in"
+		return { 
+			"status" : "success",
+			"message" : "Already logged in" 
+		}, 200 #OK
 	
 	# get user from database from the email provided
 	email = request.form.get("email")
@@ -119,13 +141,22 @@ def login():
 			stud = Student(**database.studentOperations.get_user(email))
 			session["user"] = stud.dict()
 			session["user"]["role"] = "student"
-			return "Logged in successfully"
+			return {
+				"status" : "success",
+				"message" : "Logged in Successfully",
+			}, 200 #OK
 		else:
-			return "Incorrect password"
+			return {
+				"status" : "error",
+				"message" : "Incorrect password"
+			}, 401 #UnAuthorized
 
 	# user does not exist
 	# !!! redirect to signup page
-	return "User does not exist"
+	return {
+		"status" : "error",
+		"message" : "User does not exist"
+	}, 404 #NotFound
 
 # code to logout user
 @authentication.route("/logout/", methods=["GET"])
@@ -134,7 +165,13 @@ def logout():
 	# check if user session exists
 	if session.get("user"):
 		session.pop("user")
-		return "Logged out successfully"
+		return { 
+			"status" : "success",
+			"message" : "Logged out successfully" 
+		}, 200 #OK
 
 	# !!! redirect to login page
-	return "Already logged out"
+	return {  # code flow must not reach here, since @login_required() checks whether session has "user"
+		"status" : "error",
+		"message" : "Server Error" 
+	}, 500 #server error
