@@ -38,19 +38,21 @@ function Header({ pages, tos }) {
   };
 
   const handleLogOut = () => {
-    // axios({
-    //     method: "GET",
-    //     url: "http://127.0.0.1:5000/authentication/logout",
-    // }).then((response) => {
-    //     console.log(response)
-    // }).catch((error) => {
-    //     if(error.response) {
-    //         console.log(error.response)
-    //         console.log(error.response.status)
-    //         console.log(error.response.headers)
-    //     }
-    // })
-
+    axios({
+        method: "GET",
+        url: "http://127.0.0.1:5000/authentication/logout",
+        withCredentials: true
+    }).then((response) => {
+        console.log(response);
+        dispatch(signout());
+        nav('/'); // redirects to HomePage after signout
+    }).catch((error) => {
+        if(error.response) {
+            console.log(error.response)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+        }
+    });
     dispatch(signout());
     nav('/'); // redirects to HomePage after signout
   }

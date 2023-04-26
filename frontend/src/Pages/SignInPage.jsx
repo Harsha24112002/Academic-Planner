@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { signin, updaterole } from '../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Button, Typography, TextField } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import '../css/SignInPage.css'
 
 export default function SignInPage({role}) {
@@ -30,7 +30,8 @@ export default function SignInPage({role}) {
         axios({
             method: "POST",
             url: `http://127.0.0.1:5000/authentication/login/${role}`,
-            data: formData
+            data: formData,
+            withCredentials: true
         }).then((response) => {
             console.log(response);
             nav("/");
@@ -38,7 +39,11 @@ export default function SignInPage({role}) {
         }).catch((error) => {
             if(error.response) {
                 setError(true);
-                setErrorMessage(error.response.data.message);
+                if(error.response.data && error.response.data.message){
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setErrorMessage("Server Error")
+                }
                 // console.log("ok1",error.response)
                 // console.log("ok2",error.response.status)
                 // console.log("ok3",error.response.headers)

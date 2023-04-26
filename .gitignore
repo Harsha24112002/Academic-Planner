@@ -4,3 +4,4 @@
 Pipfile
 /frontend/package-lock.json
 /frontendtemp
+/backend/flask_session

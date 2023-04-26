@@ -120,9 +120,9 @@ def signup():
 		"message" : "User Added successfully"
 	}, 200 #OK
 
-# code to login user
-@authentication.route("/login/student", methods=["POST"])
-def login():
+# code to login users
+@authentication.route("/login/<string:role>", methods=["POST"])
+def login(role):
 	# check if user session exists
 	if session.get("user"):
 		return { 
@@ -132,15 +132,26 @@ def login():
 	
 	# get user from database from the email provided
 	email = request.form.get("email")
-	_user = database.studentOperations.get_user(email)
+	if role == "student" :
+		dbOperations = database.studentOperations
+	elif role == "admin" :
+		dbOperations = database.adminOperations
+	else :
+		return {
+			"status" : "error",
+			"message" : "No such access available"
+		}, 400 # Bad request
+
+	_user = dbOperations.get_user(email)
 
 	# check if user exists
 	if _user:
 		# check if password is correct
 		if sha256.verify(request.form.get("password"), _user["password"]):
-			stud = Student(**database.studentOperations.get_user(email))
-			session["user"] = stud.dict()
-			session["user"]["role"] = "student"
+			user = Student(**dbOperations.get_user(email))
+			session["user"] = user.dict()
+			session["user"]["role"] = role
+			session.modified = True
 			return {
 				"status" : "success",
 				"message" : "Logged in Successfully",
