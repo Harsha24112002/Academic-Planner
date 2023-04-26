@@ -96,7 +96,7 @@ export default function SignInPage({role}) {
                     </div>
                 </form>
                 <div className='signin-page-links'>
-                    <Link to="" style={{color:'black'}}>
+                    <Link to="/forgot_password" style={{color:'black'}}>
                         Forgot Password?
                     </Link>
                     {role==="student" && 

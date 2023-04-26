@@ -85,6 +85,12 @@ class UserDBOperations:
         new_q = {"$set" : newvalues}       
         self.user_collection.update_one({"email":email}, new_q)
         return "Success"
+    
+    def update_password(self, email, new_password):
+        # update the password
+        new_q = {"$set" : {"password": new_password}}
+        
+
 
 class CourseDBOperations:
     def __init__(self,course_collection) -> None:

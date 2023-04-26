@@ -72,6 +72,7 @@ export default function SignUpPage() {
             .then((data) => console.log(data))
             .catch((error) => console.log(error));
 
+            // !!! TODO: Redirect to login page after successful signup 
             nav("/student/signin");
 		}
 	}
@@ -80,6 +81,7 @@ export default function SignUpPage() {
   const validate = () => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const domain = "iith.ac.in"
     const domain_regex = /iith\.ac\.in/gm;
 
     if (!name) {
@@ -98,7 +100,7 @@ export default function SignUpPage() {
       errors.email = "Invalid email address !";
     }
 
-    if(!domain_regex.test(email)){
+    if(!domain_regex.test(email) || !email.includes(domain)){
       errors.email = "Email must be an iith.ac.in domain !";
     }
 

@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux';
 import { selectIsSignedIn, selectUserRole } from './features/auth/authSlice';
 
 function App() {
-  // const {details,loading,error} = useSelector((state)=>({
-  //   details:state.studentDetails.details,
-  //   laoding:state.studentDetails.loading,
-  //   error:state.studentDetails.error
-  // }))
+  const {details,loading,error} = useSelector((state)=>({
+    details:state.studentDetails.details,
+    laoding:state.studentDetails.loading,
+    error:state.studentDetails.error
+  }))
 
   const isSignedIn = useSelector(selectIsSignedIn);
   const userRole = useSelector(selectUserRole);

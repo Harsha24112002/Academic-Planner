@@ -2,17 +2,17 @@ from flask import request, session, Blueprint
 from passlib.hash import pbkdf2_sha256 as sha256
 from Models.models import  Student
 import gridfs
-import os
-from werkzeug.utils import secure_filename
 from db_connection import database
 import io
 import PIL.Image as Image
 import base64
 from functools import wraps
 from flask import redirect, url_for
+import random as random
+import string as string
+from email_service.sender import send_email
 
-# folder = os.path.join('uploads_server') # Assigns upload path to variable
-# os.makedirs(folder, exist_ok=True)
+cache = {}
 
 # def login_required(allowed_roles):
 # 	def wrapper(f):
@@ -41,7 +41,6 @@ from flask import redirect, url_for
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
 authentication = Blueprint("authentication", __name__, url_prefix="/authentication/")
-
 fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
 
 # code to take in user details and add user to database
@@ -74,7 +73,7 @@ def get_details():
 			return "Not logged in"
 		
 		response = session['user'].copy()
-		# response['photo'] = get_profile_picture()
+		response['photo'] = get_profile_picture()
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])
@@ -102,8 +101,8 @@ def signup():
 			"message" : "Username already exists"
 		}, 409 # Conflict
 
-	if email.split('@')[1] != database.cluster['database']['domain_name']:
-		return "Email not from IITH domain"
+	# if email.split('@')[1] != database.cluster['database']['domain_name']:
+	# 	return "Email not from IITH domain"
 
 	user_dict = request.form.to_dict()
 	file = request.files["photo"]
@@ -120,9 +119,94 @@ def signup():
 		"message" : "User Added successfully"
 	}, 200 #OK
 
+
+# code to get otp, new password
+@authentication.route("/student/forgot_password/new_details", methods=["POST"])
+def get_new_details():
+
+	# print details from request
+	print(request.form)
+
+	email = request.form.get("email")
+	otp = cache[email]
+	form_otp = request.form.get("otp")
+
+	print(f'otp: {otp} email: {email}')
+	form_otp = request.form.get("otp")
+	form_password = request.form.get("password")
+	
+	# check if otp is correct
+	if otp != form_otp:
+		return {
+			"status" : "error",
+			"message" : "Incorrect OTP"
+		}, 400
+	
+	# update the password in database
+	# get user with email
+	_user = database.studentOperations.get_user(email)
+	# update password
+	_user["password"] = sha256.encrypt(form_password)
+	# update user in database
+
+	try:
+		database.studentOperations.update(email, _user)
+		return {
+			"status" : "success",
+			"message" : "Password updated successfully"
+		}, 200
+	
+	except:
+		return {
+			"status" : "error",
+			"message" : "An unexpected error occurred! Please try again later. Report if this occurs continously"
+		}, 500
+
+# code to reset password
+@authentication.route("/student/forgot_password", methods=["POST"])
+def reset_password():
+	# from email_util import send_email
+
+	email = request.form.get("email")
+	# check if user exists
+	if not database.studentOperations.check_email(email):
+		return {
+			"status" : "error",
+			"message" : "Email does not exist"
+		}, 400
+
+	else:
+		# generate a random string of length 6
+		otp = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 6))
+		# send otp to email
+		# if successful then ask for otp, new password and confirm password
+		# else return error
+		try:
+			send_email(email, "OTP for password reset", 
+	     			f'Your OTP for password reset is {otp}\nIt is valid for 10 minutes')
+			print(f'Mail sent to {email}')
+			cache[f'{email}'] = otp
+			# session['user']['otp'] = otp
+			# return get_new_details(email, otp)
+
+			return {
+				"status" : "success",
+				"message" : "OTP sent successfully"
+			}, 200
+
+		except:
+			return {
+				"status" : "error",
+				"message" : "Error sending email"
+			}, 500
+		# update password in database
+
 # code to login users
 @authentication.route("/login/<string:role>", methods=["POST"])
 def login(role):
+# # code to login user
+# @authentication.route("/login/student", methods=["POST"])
+# def login():
 	# check if user session exists
 	if session.get("user"):
 		return { 
@@ -152,6 +236,15 @@ def login(role):
 			session["user"] = user.dict()
 			session["user"]["role"] = role
 			session.modified = True
+
+			# stud = Student(**database.studentOperations.get_user(email))
+			# session["user"] = stud.dict()
+			# session["user"]["role"] = "student"
+
+			# if cache contains email, remove the entry from cache
+			if cache.get(email):
+				cache.pop(email)
+				
 			return {
 				"status" : "success",
 				"message" : "Logged in Successfully",
