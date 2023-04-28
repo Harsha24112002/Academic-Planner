@@ -8,7 +8,7 @@ configurations = {
         'student_collection' : 'Students',
         'course_collection' : 'Courses',
         'path_collection' : 'SpPaths',
-        'admin_collection' : 'Admin'
+        'admin_collection' : 'Admin',
         'domain_name' : 'iith.ac.in',
     },
     'mail' : {

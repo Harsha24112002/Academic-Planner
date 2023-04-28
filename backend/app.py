@@ -35,6 +35,12 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # allow cross-site requests
 mail = Mail(app)
 Session(app)
 
+# test route
+@app.route('/')
+def home():
+	# test response
+	return {'status': 200, 'message': 'Welcome to the backend of Academic Planner'}
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
