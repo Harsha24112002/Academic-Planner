@@ -1,6 +1,7 @@
 import React, { useState, setState, useEffect } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import '../css/ConfirmationPage.css'
 
 export default function ConfirmationPage() {
 
@@ -132,8 +133,9 @@ export default function ConfirmationPage() {
 				<br></br>
 				{formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
 
+				<br></br>
 				<button type="submit" onClick={(event) => handleSubmit(event)}>Submit</button>
-				<p class="message">Not registered? <a href="#">Create an account</a></p>
+				<p class="message">Not registered? <a href="/student/signup">Create an account</a></p>
 				</form>
 			</div>
 		</div>

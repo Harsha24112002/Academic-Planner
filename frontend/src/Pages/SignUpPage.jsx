@@ -154,9 +154,13 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="form">
+    <div className="signupform">
       <div className="form-body">
+
+        <h2 className="heading">Registration Form</h2>
         <div className="name">
+
+
           <label className="form__label" htmlFor="name">
             Name
           </label>
@@ -166,6 +170,7 @@ export default function SignUpPage() {
             id="name"
             value={name}
             onChange={(e) => handleInputChange(e)}
+            placeholder="Enter your name"
           />
         </div>
 
@@ -180,6 +185,7 @@ export default function SignUpPage() {
 					value={username}
 					className="form__input"
 					onChange={(e) => handleInputChange(e)}
+          placeholder="Enter your username"
 				/>
 			</div>
 			{formErrors.username && <p>{formErrors.username}</p>}
@@ -194,6 +200,7 @@ export default function SignUpPage() {
             className="form__input"
             value={email}
             onChange={(e) => handleInputChange(e)}
+            placeholder="Enter your email"
           />
         </div>
         {formErrors.email && <p>{formErrors.email}</p>}
@@ -208,7 +215,7 @@ export default function SignUpPage() {
             className="form__input"
             value={department}
             onChange={(e) => handleInputChange(e)}
-            // placeholder="Department"
+            placeholder="Enter your Department"
           />
         </div>
         {formErrors.department && <p>{formErrors.department}</p>}
@@ -223,6 +230,7 @@ export default function SignUpPage() {
             id="password"
             value={password}
             onChange={(e) => handleInputChange(e)}
+            placeholder="Enter your password"
           />
         </div>
         {formErrors.password && <p>{formErrors.password}</p>}
@@ -237,6 +245,7 @@ export default function SignUpPage() {
             id="confirmPassword"
             value={confirmPassword}
             onChange={(e) => handleInputChange(e)}
+            placeholder="Confirm your password"
           />
         </div>
         {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
@@ -252,11 +261,11 @@ export default function SignUpPage() {
 			{formErrors.file && <p>{formErrors.file}</p>}
 		{/* </div> */}
 
-		{/* <div className="footer"> */}
+		<div className="footer">
 			<button className="button-three" onClick={() => handleSubmit()} type="submit">
 				Register
 			</button>
-		{/* </div> */}
+		</div>
 
       {/* <div className="footer">
         <button

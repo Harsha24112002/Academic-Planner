@@ -72,7 +72,8 @@ export default function ForgotPassword() {
 	}
 
 	return (
-		<div>
+		<div className="forgotpassword">
+			<div className="subforgotpassword">
 			<h1>Forgot your password?</h1>
       			<hr></hr>
       			<h3>Enter your registered email address to reset your password</h3>
@@ -86,6 +87,7 @@ export default function ForgotPassword() {
       				<button type="submit" onClick={(event) => handleSubmit(event)}>Submit</button>
   					{/* <span id="nameError">There was an error with your email</span> */}
       			</form>  
+			</div>
 		</div>
 	)
 }
