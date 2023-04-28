@@ -8,87 +8,10 @@ import CircularCreditProgressBar from './CircularCreditProgressBar';
 // with details/course_list as props...
 function CreditsCount({ details }) {
 
-    // const course_list = details.course_list;
-    const course_list = [
-        {
-            "course_id" : "CS1010",
-            "elective" : "Departmental Core Theory",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "MA1020",
-            "elective" : "Basic Sciences",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "MA1010",
-            "elective" : "Basic Sciences",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "EE1001",
-            "elective" : "Basic Sciences",
-            "course_credits" : 3
-        },
-        {
-          "course_id" : "EE1001",
-          "elective" : "Basic Sciences",
-          "course_credits" : 3
-        },
-        {
-            "course_id" : "CS2010",
-            "elective" : "Departmental Core Theory",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "CS2100",
-            "elective" : "Departmental Core Lab",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        },
-        {
-            "course_id" : "LA1020",
-            "elective" : "Liberal/Creative Arts Elective",
-            "course_credits" : 3
-        }
-    ]
+    const course_list = details.course_list;
 
-    // get from backend only once
-    // use useEffect
+    // get from backend?  only once
+    // use useEffect // or just place hardcoded config file :-)
     const course_types = {
         "Departmental Core Theory" : 20,
         "Departmental Core Lab" : 10,

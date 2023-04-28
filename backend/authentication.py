@@ -14,29 +14,29 @@ from email_service.sender import send_email
 
 cache = {}
 
-# def login_required(allowed_roles):
-# 	def wrapper(f):
-# 		@wraps(f)
-# 		def decorated_function(*args, **kwargs):
-# 			if 'user' not in session :
-# 				return {
-# 					"status" : "error",
-# 					"message": "redirect to Home Page, Login to Access",
-# 				}, 401 #Unauthorized
-# 			if 'role' not in session["user"] :
-# 				return {
-# 					"status" : "error",
-# 					"message": "An unexpected error occurred! Please try again later. Report if this occurs continously",
-# 				}, 500 #Internal Error
-# 			if session["user"]["role"] not in allowed_roles :
-# 				return {
-# 					"status" : "error",
-# 					"message": "You are not allowed to access this route"
-# 				}, 403 #Forbidden
-# 			print(session["_id"], " is sucesssful")
-# 			return f(*args, **kwargs)
-# 		return decorated_function
-# 	return wrapper
+def login_required(allowed_roles):
+	def wrapper(f):
+		@wraps(f)
+		def decorated_function(*args, **kwargs):
+			# print(f, " session here : ", session)
+			if 'user' not in session :
+				return {
+					"status" : "error",
+					"message": "redirect to Home Page, Login to Access",
+				}, 401 #Unauthorized
+			if 'role' not in session["user"] :
+				return {
+					"status" : "error",
+					"message": "An unexpected error occurred! Please try again later. Report if this occurs continously",
+				}, 500 #Internal Error
+			if session["user"]["role"] not in allowed_roles :
+				return {
+					"status" : "error",
+					"message": "You are not allowed to access this route"
+				}, 403 #Forbidden
+			return f(*args, **kwargs)
+		return decorated_function
+	return wrapper
 
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
@@ -45,8 +45,9 @@ fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
 
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST","GET"])
-# # @login_required(["student"])
+@login_required(["student"])
 def get_details():
+	print("get_details/student : ", session["user"]["email"])
 	if request.method == "POST":
 		if not session.get("user"):
 			return "Not logged in"
@@ -59,13 +60,12 @@ def get_details():
 		return "User added successfully"
 	
 	elif request.method == "GET":
-		
+
 		###!!! TO BE CHANGED AFTER LOGIN
-		response = database.studentOperations.get_user_by_username('johndoe')
+		response = database.studentOperations.get_user(session['user']['email'])
 		# print('respomse:', resp)
 		# session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
 		stud = Student(**response)
-		# print("ok1")
 		session["user"] = stud.dict()
 		session["user"]["role"] = "student"
 
@@ -73,11 +73,11 @@ def get_details():
 			return "Not logged in"
 		
 		response = session['user'].copy()
-		response['photo'] = get_profile_picture()
+		# response['photo'] = get_profile_picture()
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])
-# @login_required(["admin", "student"])
+@login_required(["admin", "student"])
 def get_profile_picture():
 	file_contents = fs.get(session["user"]['photo_url']).read()
 	image = Image.open(io.BytesIO(file_contents))
@@ -204,9 +204,6 @@ def reset_password():
 # code to login users
 @authentication.route("/login/<string:role>", methods=["POST"])
 def login(role):
-# # code to login user
-# @authentication.route("/login/student", methods=["POST"])
-# def login():
 	# check if user session exists
 	if session.get("user"):
 		return { 
@@ -264,7 +261,7 @@ def login(role):
 
 # code to logout user
 @authentication.route("/logout/", methods=["GET"])
-# @login_required(["admin","student"])
+@login_required(["admin","student"])
 def logout():
 	# check if user session exists
 	if session.get("user"):
@@ -277,5 +274,5 @@ def logout():
 	# !!! redirect to login page
 	return {  # code flow must not reach here, since @login_required() checks whether session has "user"
 		"status" : "error",
-		"message" : "Server Error" 
+		"message" : "Already Logged Out" 
 	}, 500 #server error

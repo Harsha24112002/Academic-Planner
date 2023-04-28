@@ -19,19 +19,33 @@ export const fetchcoursesSearchDelete = () => ({
 export const fetchcoursesSearch = (searchQuery) => {
   return (dispatch) => {
     dispatch(fetchcoursesSearchRequest());
-    axios
-      .get(`http://localhost:5000/maps/get_courses/${searchQuery}`,
-            { "withCredentials" : true }
-      )
-      .then((response) => {
+    // axios
+    //   .get(`http://localhost:5000/maps/get_courses/${searchQuery}`,
+    //         { "withCredentials" : true }
+    //   )
+    //   .then((response) => {
+    //     console.log(response.data)
+    //     const data = response.data;
+    //     dispatch(fetchcoursesSearchSuccess(data));
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     const errorMsg = error.message;
+    //     dispatch(fetchcoursesSearchFailure(errorMsg));
+    //   });
+
+    axios({
+        method: "GET",
+        url: `http://127.0.0.1:5000/maps/get_courses/${searchQuery}`,
+        withCredentials: true
+    }).then((response) => {
         console.log(response.data)
         const data = response.data;
         dispatch(fetchcoursesSearchSuccess(data));
-      })
-      .catch((error) => {
+    }).catch((error) => {
         console.log(error);
         const errorMsg = error.message;
         dispatch(fetchcoursesSearchFailure(errorMsg));
-      });
+    });
   };
 };

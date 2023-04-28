@@ -44,7 +44,8 @@ export default function ForgotPassword() {
 			axios.post("http://127.0.0.1:5000/authentication/student/forgot_password", formData, {
 				headers: {
 					"Content-Type": "multipart/form-data" // set content type header
-				}
+				},
+				withCredentials: true
 			})
 				.then((Response) => {
 					console.log(Response)

@@ -3,7 +3,7 @@ from db_connection import database
 from Models.models import StudentCourseSpecification
 import threading
 from pydantic import ValidationError
-# from authentication import login_required
+from authentication import login_required
 # from bson.json_utils import dumps
 
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
@@ -11,7 +11,7 @@ maps = Blueprint("maps",__name__, url_prefix="/maps/")
 from .notes import *
 
 @maps.route("/get_course_details/<string:id>", methods=["GET","POST"])
-# @login_required(["student"])
+@login_required(["student"])
 def get_course_details(id):
     # if session.get("user") is None:
     #     return "Not Logged In"
@@ -21,12 +21,12 @@ def get_course_details(id):
     # and return courses based on search filters
     # that will be given as args/forms/...
     details.pop('_id')
-    print(details)
+    # print(details)
         
     return details
 
 @maps.route("/get_multiple_courses/",methods=["POST"])
-# @login_required(["student"])
+@login_required(["student"])
 def get_many_courses_details():
     # if session.get("user") is None:
     #     return "Not Logged In"
@@ -44,11 +44,11 @@ def get_many_courses_details():
     return courses_info
 
 @maps.route("/register/<string:id>", methods=["POST","GET"])
-# @login_required(["student"])
+@login_required(["student"])
 def register(id):
-    session['user'] = database.studentOperations.get_user_by_username("Harsha")
-    session["user"].pop('_id')
-    session["user"]['type'] = "student"
+    # session['user'] = database.studentOperations.get_user_by_username("Harsha")
+    # session["user"].pop('_id')
+    # session["user"]['type'] = "student"
     if session.get("user") is None:
         return "Not logged in"
     
@@ -105,9 +105,9 @@ def register(id):
         ### 
         updated_courses = []
         for course in session["user"]["course_list"]:
-            print("Course: ",course)
+            # print("Course: ",course)
             if registeringCourse.course_id in course["incomplete_prerequisites"] and course["registered_sem"] > registeringCourse.registered_sem:
-                print("Course: ",course)
+                # print("Course: ",course)
                 course["incomplete_prerequisites"].remove(registeringCourse.course_id)
                 
                 if len(course["incomplete_prerequisites"])==0:
@@ -129,11 +129,11 @@ def register(id):
     return response
 
 @maps.route("/deregister/<string:id>", methods=["DELETE"])
-# @login_required(["student"])
+@login_required(["student"])
 def deregister(id):
-    session['user'] = database.studentOperations.get_user_by_username("Harsha")
-    session["user"].pop('_id')
-    session["user"]['type'] = "student"
+    # session['user'] = database.studentOperations.get_user_by_username("Harsha")
+    # session["user"].pop('_id')
+    # session["user"]['type'] = "student"
     if session.get("user") is None:
         return "Not logged in"
     if not any( course["course_id"] == id for course in session["user"]["course_list"]) :
@@ -145,7 +145,7 @@ def deregister(id):
         session["user"]["course_list"].remove(next(course for course in session["user"]["course_list"] if course["course_id"] == id))
         course_ids = [course["course_id"] for course in session["user"]["course_list"]]
         courses = database.courseOperations.get_multiple_courses_prerequisites(course_ids=course_ids)
-        print(courses)
+        # print(courses)
         updated_courses = []
         for course in session["user"]["course_list"]:
             if id in courses[course["course_id"]]:
@@ -164,7 +164,7 @@ def deregister(id):
 
 # !!! Not-completed Don't use this route
 @maps.route("/update_course_status/<string:course_id>", methods=["POST"])
-# @login_required(["student"])
+@login_required(["student"])
 def update_course_status(course_id):
 
     #  if the course is not in the student's course list, return error message
@@ -227,7 +227,7 @@ def update_course_status(course_id):
 #     return response
 
 @maps.route("/get_registered_courses", methods = ["GET"])
-# @login_required(["student"])
+@login_required(["student"])
 def get_registered_courses():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -245,7 +245,7 @@ def get_registered_courses():
     
 
 @maps.route("/get_courses/<string:query>", methods = ["GET"])
-# @login_required(["student"])
+@login_required(["student"])
 def get_courses(query):
     # if session.get("user") is None:
     #     return "Not logged in"

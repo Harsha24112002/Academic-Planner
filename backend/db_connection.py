@@ -98,7 +98,7 @@ class CourseDBOperations:
         
     def get_course_details(self,query):
         course_details = self.course_collection.find_one({"course_id":query})
-        print(course_details)
+        # print(course_details)
         return course_details
     
     def get_multiple_courses_prerequisites(self,course_ids):

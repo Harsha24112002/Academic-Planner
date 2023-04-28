@@ -38,8 +38,9 @@ const AddSpPath = () => {
       };
 
       const response = axios.post(
-        "http://localhost:5000/admin/addpath",
-        formdata
+        "http://127.0.0.1:5000/admin/addpath",
+        formdata,
+        { withCredentials : true }
       );
 
       const data = (await response).data;

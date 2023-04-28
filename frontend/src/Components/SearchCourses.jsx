@@ -58,15 +58,19 @@ function SearchCourses() {
     setOpen(false);
     dispatch(fetchcoursesSearchDelete());
 
-    axios
-      .get(`http://localhost:5000/maps/get_course_details/${event.target.textContent}`)
-      .then((response) => {
-        // console.log("repsonse",response.data.course_id)
-        dispatch(saveDetails(response.data))
-      })
-      .catch((error) => {
-        console.log(error.msg);
-      });
+    axios({
+        method: "GET",
+        url: `http://127.0.0.1:5000/maps/get_course_details/${event.target.textContent}`,
+        withCredentials: true
+    })
+    .then((response) => {
+      // console.log("repsonse",response.data.course_id)
+      dispatch(saveDetails(response.data))
+    })
+    .catch((error) => {
+      console.log(error.msg);
+    });
+    
     // data = {
     //   course_id: event.target.textContent,
     //   registered_sem : 3

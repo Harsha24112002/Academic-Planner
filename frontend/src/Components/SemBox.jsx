@@ -19,9 +19,17 @@ function SemBox({ sem }) {
   const dispatch = useDispatch();
   const handleDeregister = async (e) => {
     const id = e.target.id;
-    const response = axios.delete(
-      `http://localhost:5000/maps/deregister/${id}`
-    );
+    // const response = axios.delete(
+    //   `http://127.0.0.1:5000/maps/deregister/${id}`,
+    //   { withCredentials: true }
+    // );
+
+    const response = axios({
+      method: "DELETE",
+      url: `http://127.0.0.1:5000/maps/deregister/${id}`,
+      withCredentials: true
+    });
+
     const data = (await response).data;
     alert(data);
     dispatch(detailsDelete(id));

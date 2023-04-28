@@ -134,10 +134,10 @@ function MapsPage() {
               </>
             )}
           </Grid>
+          <CreditsCount details={details}/>
         </div>
       )}
       <div>
-        <CreditsCount/>
         <p>
           {" "}
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,

@@ -7,12 +7,8 @@ from flask_session import Session
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
-app.secret_key = "secret-key"
+app.secret_key = "random-secret-key"
 CORS(app,supports_credentials=True)
-
-# Configure session to use filesystem
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
 
 # The url's whose prefix starts with authentication, goes to this authentication.py
 app.register_blueprint(authentication.authentication)
@@ -27,7 +23,18 @@ app.config['MAIL_USERNAME'] = 'panthergolden68@gmail.com'
 app.config['MAIL_PASSWORD'] = 'evyozlcqbxmpnvbg'
 app.config['MAIL_DEFAULT_SENDER'] = 'panthergolden68@gmail.com'
 
+# Configure session to use filesystem
+app.config['SESSION_TYPE'] = 'filesystem'
+
+# Configure the session to use cookies
+app.config['SESSION_COOKIE_NAME'] = 'session'
+app.config['SESSION_COOKIE_SECURE'] = True  # ensure the cookie is sent over HTTPS only
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # allow cross-site requests
+
 mail = Mail(app)
+Session(app)
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
