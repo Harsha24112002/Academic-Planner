@@ -52,7 +52,7 @@ function CourseRegistrationDialog({ open, handleClose }) {
         elective: elective,
       };
       // const response = axios.post(
-      //   `http://localhost:5000/maps/register/${reg_course_details.course_id}`,
+      //   `http://127.0.0.1:5000/maps/register/${reg_course_details.course_id}`,
       //   formdata
       // );
       const response = axios({method:"POST",

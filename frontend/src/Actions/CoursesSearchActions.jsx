@@ -20,7 +20,7 @@ export const fetchcoursesSearch = (searchQuery) => {
   return (dispatch) => {
     dispatch(fetchcoursesSearchRequest());
     // axios
-    //   .get(`http://localhost:5000/maps/get_courses/${searchQuery}`,
+    //   .get(`http://127.0.0.1:5000/maps/get_courses/${searchQuery}`,
     //         { "withCredentials" : true }
     //   )
     //   .then((response) => {

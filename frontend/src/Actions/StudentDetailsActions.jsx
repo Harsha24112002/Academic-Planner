@@ -34,7 +34,7 @@ export const fetchDetails = () => {
   return (dispatch) => {
     dispatch(fetchDetailsRequest());
     // axios
-    //   .get("http://localhost:5000/authentication/get_details/student",
+    //   .get("http://127.0.0.1:5000/authentication/get_details/student",
     //         { "withCredentials" : true }
     //   )
     //   .then((response) => {
@@ -100,7 +100,7 @@ export const fetchStudentCourses = (data) => {
   return (dispatch) => {
     dispatch(fetchStudentCoursesRequest());
     // axios
-    //   .post(`http://localhost:5000/maps/get_multiple_courses/`,data)
+    //   .post(`http://127.0.0.1:5000/maps/get_multiple_courses/`,data)
     //   .then((response) => {
     //     // console.log(response.data)
     //     const data = response.data;

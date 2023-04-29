@@ -47,7 +47,7 @@ export default function ConfirmationPage() {
 
 			axios({
 				method:"POST",
-				url : "http://localhost:5000/authentication/student/forgot_password/new_details", 
+				url : "http://127.0.0.1:5000/authentication/student/forgot_password/new_details", 
 				data : formData, 
 				headers: {
 					'Content-Type': 'multipart/form-data'

@@ -158,7 +158,7 @@ function CourseForm({ courseDetails, type }) {
 				formData.append("file", file);
 				response = axios({
 					method:"POST",
-					url:`http://localhost:5000/admin/uploadfile/${CourseId}`,
+					url:`http://127.0.0.1:5000/admin/uploadfile/${CourseId}`,
 					data:formData,
 					withCredentials:true
 				});
@@ -167,13 +167,13 @@ function CourseForm({ courseDetails, type }) {
 				type == "add"
 				? axios({
 					method:"POST",
-					url:"http://localhost:5000/admin/addcourse",
+					url:"http://127.0.0.1:5000/admin/addcourse",
 					data:formdata,
 					withCredentials:true
 				})
 				: axios({
 					method:"PUT",
-					url:`http://localhost:5000/admin/updatecourse/${formdata.course_id}`,
+					url:`http://127.0.0.1:5000/admin/updatecourse/${formdata.course_id}`,
 					data:formdata,
 					withCredentials:true
 				});

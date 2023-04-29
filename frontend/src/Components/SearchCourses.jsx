@@ -79,7 +79,7 @@ function SearchCourses() {
     //   # note : Optional[Notes]
     //   note : Optional[Notes]
     // }
-    // axios.post(`http://localhost:5000/maps/register/${event.target.textContent}`,data)
+    // axios.post(`http://127.0.0.1:5000/maps/register/${event.target.textContent}`,data)
   };
   return (
     <Box onSubmit={handleSearchSubmit} component="form">

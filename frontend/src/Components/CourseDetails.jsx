@@ -23,7 +23,7 @@ const EditableTextBox = ({ course_id, initialValue }) => {
   const onSave = (value, course_id) => {
     axios({
       method:"POST",
-      url:`http://localhost:5000/maps/addnotes/${course_id}`, 
+      url:`http://127.0.0.1:5000/maps/addnotes/${course_id}`, 
       data : {'note':value}, 
       withCredentials:true
     }).then(
@@ -97,7 +97,7 @@ function CourseDetails({ course_id, open, handleClose }) {
     const id = course_id;
     const response = axios({
       method:"DELETE",
-      url:`http://localhost:5000/maps/deregister/${id}`,
+      url:`http://127.0.0.1:5000/maps/deregister/${id}`,
       withCredentials:true
     });
     const data = (await response).data;
