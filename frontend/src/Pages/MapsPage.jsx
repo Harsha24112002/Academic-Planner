@@ -29,7 +29,7 @@ function MapsPage() {
     loading: state.studentDetails.details_loading,
     error: state.studentDetails.error
   }));
-
+  const [mode,setmode] = useState(false)
   const reg_course_details = useSelector((state) => {
     return state.courseDetails.details;
   });
@@ -38,6 +38,20 @@ function MapsPage() {
     studentCourses: state.studentDetails.course_details,
     loading2: state.studentDetails.course_details_loading,
   }));
+
+  const { weightedsum, creds_count} = useSelector((state) => {
+    return {
+    weightedsum: state.gpaCourses.weightedsum,
+    creds_count: state.gpaCourses.total_creds
+  }})
+  const handleModeChange = () => {
+    if(mode){
+      setmode(false);
+    }
+    else{
+      setmode(true);
+    }
+  }
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -50,7 +64,6 @@ function MapsPage() {
       dispatch(fetchStudentCourses({ courses: course_ids }));
     }
   }, [loading]);
-
   function getCoursesBySemester(id) {
     var ret = [];
     const sz = details.course_list.length;
@@ -91,6 +104,8 @@ function MapsPage() {
       <SearchCourses />
       <Button onClick={handleOpen}>Register</Button>
       <CourseRegistrationDialog open={open} handleClose={handleClose}/>   
+      {mode?(<div>{creds_count!=0?weightedsum/creds_count:"NA"}</div>):(<></>)}
+      <Button onClick={handleModeChange}> {!mode?"GPA calculation":"View Courses"} </Button>
       {loading ? (
         <h1>Loading{console.log("laoding2")}</h1>
       ) : (
@@ -105,13 +120,22 @@ function MapsPage() {
             maxWidth={"false"}
             // style={{ overflowX: "auto" }}
           >
-            {sems.map((sem) => {
+            {!mode?
+            sems.map((sem) => {
               return (
                 <Grid item>
                   <SemBox sem={sem} />
                 </Grid>
               );
-            })}
+            }):
+            sems.map((sem)=> {
+              return (
+                <Grid item>
+                  <SemBox mode={mode} sem={sem} />
+                </Grid>
+              );
+            })
+          }
             {loading2 ? (
               <></>
             ) : (

@@ -48,3 +48,7 @@
     overflow-x: 'auto'; 
     white-space: 'no-wrap';
 }
+
+.selected {
+  border-color: green;
+}

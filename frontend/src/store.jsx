@@ -8,6 +8,7 @@ import detailsReducer from "./Reducers/DetailsReducer";
 import coursesSearchReducer from "./Reducers/CoursesSearchReducer";
 import authReducer from "./features/auth/authSlice";
 import courseDetailsReducer from "./features/courseDetailsSlice";
+import GPAcourses from "./features/GPAcourses";
 import thunk from "redux-thunk";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -22,6 +23,7 @@ const reducers = {
   auth: authReducer,
   pathDetails: pathDetailsReducer,
   courseDetails: courseDetailsReducer,
+  gpaCourses: GPAcourses
 };
 const rootreducer = combineReducers(reducers);
 

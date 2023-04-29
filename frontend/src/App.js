@@ -9,7 +9,7 @@ import { selectIsSignedIn, selectUserRole } from './features/auth/authSlice';
 function App() {
   const {details,loading,error} = useSelector((state)=>({
     details:state.studentDetails.details,
-    laoding:state.studentDetails.loading,
+    loading:state.studentDetails.loading,
     error:state.studentDetails.error
   }))
 
