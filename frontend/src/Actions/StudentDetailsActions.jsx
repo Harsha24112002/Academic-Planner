@@ -1,5 +1,4 @@
 import axios from "axios";
-import store from "../store";
 
 export const fetchDetailsRequest = () => ({
   type: "STUDENT_DETAILS_REQUEST",
@@ -8,6 +7,13 @@ export const fetchDetailsRequest = () => ({
 export const fetchDetailsSuccess = (Details) => ({
   type: "STUDENT_DETAILS_SUCCESS",
   payload: Details,
+});
+
+export const editNotes = (course_id, notes) =>
+({
+  type: "STUDENT_NOTES_UPDATE",
+  course_id: course_id,
+  payload: notes
 });
 
 export const fetchDetailsFailure = (error) => ({

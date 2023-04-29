@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/Shapes.css";
 import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
 import Draggable from "react-draggable";
@@ -6,6 +6,7 @@ import { Box, CircularProgress, Container, Typography, Button, Tooltip } from "@
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { detailsDelete, StudentDetailsDelete } from "../Actions/StudentDetailsActions";
+import CourseDetails from "./CourseDetails";
 const boxStyle = {
   border: "grey solid 2px",
   borderRadius: "10px",
@@ -13,27 +14,21 @@ const boxStyle = {
 };
 
 function SemBox({ sem }) {
-  const {details} = useSelector((state) => ({
+  const {details,loading2} = useSelector((state) => ({
     details: state.studentDetails.details,
+    loading2: state.studentDetails.loading2
   }));
   const dispatch = useDispatch();
-  const handleDeregister = async (e) => {
-    const id = e.target.id;
-    // const response = axios.delete(
-    //   `http://127.0.0.1:5000/maps/deregister/${id}`,
-    //   { withCredentials: true }
-    // );
-
-    const response = axios({
-      method: "DELETE",
-      url: `http://127.0.0.1:5000/maps/deregister/${id}`,
-      withCredentials: true
-    });
-
-    const data = (await response).data;
-    alert(data);
-    dispatch(detailsDelete(id));
+  const [open,setopen] = useState(false)
+  const [courseId,setcourseId] = useState("");
+  const handleopen = (e) => {
+    setcourseId(e.target.textContent)
+    setopen(true);
   }
+  const handleclose = () => {
+    setopen(false);
+  }
+  
   function getCoursesBySemester(sem) {
     var ret = [];
     if (!details.course_list) {
@@ -78,7 +73,7 @@ function SemBox({ sem }) {
           {getCoursesBySemester(sem).map((obj) => {
             if(obj[1]){
             return (
-              <button className="circle3 text" id={obj[0]} onClick={handleDeregister}>
+              <button className="circle3 text" id={obj[0]} onClick={handleopen}>
                 {obj[0]}
               </button>
             );
@@ -86,13 +81,16 @@ function SemBox({ sem }) {
             else{
               return (
                 <Tooltip title={obj[2]}>
-                <button className="circle3 error text" id={obj[0]} onClick={handleDeregister}>
+                <button className="circle3 error text" id={obj[0]} onClick={handleopen}>
                   {obj[0]}
                 </button>
               </Tooltip>
               );
             }
           })}
+          {
+          open?(<CourseDetails open={open} course_id={courseId} handleClose={handleclose}/>):(<></>)
+          }
           </>
           :
           (<h1>Hello</h1>)

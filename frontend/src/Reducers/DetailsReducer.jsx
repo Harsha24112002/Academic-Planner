@@ -1,4 +1,3 @@
-import store from "../store";
 const initialState = {
   details: {},
   course_details: {},
@@ -117,7 +116,18 @@ const detailsReducer = (state = initialState, action) => {
         ...state,
         course_details: { ...state.course_details, ...action.payload },
       };
-
+    case "STUDENT_NOTES_UPDATE":
+      {
+        let updated_state = JSON.parse(JSON.stringify(state))
+        updated_state.details.course_list = updated_state.details.course_list.map((course) => {
+          if(course.course_id == action.course_id){
+            course.note = {"note":action.payload}
+          }  
+          return course;
+        })
+        console.log("updated_state",updated_state)
+        return updated_state;
+      }
     default:
       return state;
   }

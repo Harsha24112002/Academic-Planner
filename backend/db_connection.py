@@ -261,7 +261,7 @@ class StudentDBOperations(UserDBOperations):
     def add_notes(self, email, course_id, notes):
         self.user_collection.update_one(
             {"email" : email, "course_list.course_id" : course_id},
-            { "$set" : {"course_list.$.note" : notes.note}}
+            { "$set" : {"course_list.$.note" : notes.dict()}}
         )
         return "Success"
 
