@@ -88,11 +88,10 @@ def get_details():
 	elif request.method == "GET":
 
 		###!!! TO BE CHANGED AFTER LOGIN
-		# response = database.studentOperations.get_user(session['user']['email'])
-		# # print('respomse:', resp)
-		# # session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
-		# stud = Student(**response)
-		# session["user"] = stud.dict()
+		response = database.studentOperations.get_user(session['user']['email'])
+		# session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
+		stud = Student(**response)
+		session["user"] = stud.dict()
 		session["user"]["role"] = "student"
 
 		if not session.get("user"):
@@ -129,21 +128,29 @@ def signup():
 
 	# if email.split('@')[1] != database.cluster['database']['domain_name']:
 	# 	return "Email not from IITH domain"
-
-	user_dict = request.form.to_dict()
-	file = request.files["photo"]
-	file_name = email #+ '-' + file.filename
-	file_contents = file.read()
-
-	user_dict["photo_url"] = photo_fs.put(file_contents, _id = file_name)
-	user_dict["password"] = sha256.encrypt(user_dict["password"])
-	user = Student(**user_dict, type="student") # For pydantic check
+	try:
+		user_dict = request.form.to_dict()
+		try:
+			file = request.files["photo"]
+			file_name = email #+ '-' + file.filename
+			file_contents = file.read()
+			user_dict["photo_url"] = photo_fs.put(file_contents, _id = file_name)
+		except Exception as e:
+			pass
+		user_dict["password"] = sha256.hash(user_dict["password"])
+		user = Student(**user_dict, type="student") # For pydantic check
+		# user = None
+		database.studentOperations.add_user(user.dict())
+		return {
+			"status" : "success",
+			"message" : "User Added successfully"
+		}, 200 #OK
 	
-	database.studentOperations.add_user(user.dict())
-	return {
-		"status" : "success",
-		"message" : "User Added successfully"
-	}, 200 #OK
+	except:
+		return {
+			"status" : "error",
+			"message" : "Unexpected error occured while reading contents of response. Please insert proper data"
+		}, 500 #Internal Server Error
 
 
 # code to get otp, new password
@@ -161,6 +168,8 @@ def get_new_details():
 	form_otp = request.form.get("otp")
 	form_password = request.form.get("password")
 	
+	print(f'otp : {otp} form_otp : {form_otp}')
+
 	# check if otp is correct
 	if otp != form_otp:
 		return {
@@ -259,7 +268,6 @@ def login(role):
 			session["user"] = user.dict()
 			session["user"]["role"] = role
 			session.modified = True
-
 			# stud = Student(**database.studentOperations.get_user(email))
 			# session["user"] = stud.dict()
 			# session["user"]["role"] = "student"
@@ -277,7 +285,7 @@ def login(role):
 				"status" : "error",
 				"message" : "Incorrect password"
 			}, 401 #UnAuthorized
-
+	
 	# user does not exist
 	# !!! redirect to signup page
 	return {

@@ -330,6 +330,5 @@ class PathDBOperations:
                 return "Path doesn't exists"
         except Exception as e:
             return e
-        
 
 database = Database()
