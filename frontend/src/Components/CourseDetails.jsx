@@ -21,7 +21,11 @@ const EditableTextBox = ({ course_id, initialValue }) => {
   const dispatch = useDispatch()
   
   const onSave = (value, course_id) => {
-    axios.post(`http://localhost:5000/maps/addnotes/${course_id}`, {'note':value}, {
+    axios({
+      method:"POST",
+      url:`http://localhost:5000/maps/addnotes/${course_id}`, 
+      data : {'note':value}, 
+      withCredentials:true
     }).then(
       dispatch(editNotes(course_id,value))
       )
@@ -91,10 +95,11 @@ function CourseDetails({ course_id, open, handleClose }) {
   const handleDeregister = async (e) => {
     handleClose();
     const id = course_id;
-    const response = axios.delete(
-      `http://localhost:5000/maps/deregister/${id}`, {
-      }
-    );
+    const response = axios({
+      method:"DELETE",
+      url:`http://localhost:5000/maps/deregister/${id}`,
+      withCredentials:true
+    });
     const data = (await response).data;
     alert(data);
     dispatch(detailsDelete(id));
@@ -163,7 +168,7 @@ function CourseDetails({ course_id, open, handleClose }) {
                   <div>
                     <EditableTextBox
                       course_id = {course_id}
-                      initialValue={student_course_details.note.note ? student_course_details.note.note : "Enter notes here"}
+                      initialValue={student_course_details.note ? (student_course_details.note.note ? student_course_details.note.note : "Enter Notes Here" ) : "Enter notes here"}
                     ></EditableTextBox>
                   </div>
                 </Grid>

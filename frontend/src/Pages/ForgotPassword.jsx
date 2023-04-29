@@ -41,7 +41,10 @@ export default function ForgotPassword() {
 	
 			console.log(formData);
 	
-			axios.post("http://127.0.0.1:5000/authentication/student/forgot_password", formData, {
+			axios({
+				method:"POST",
+				url:"http://127.0.0.1:5000/authentication/student/forgot_password", 
+				data:formData, 
 				headers: {
 					"Content-Type": "multipart/form-data" // set content type header
 				},
@@ -75,15 +78,15 @@ export default function ForgotPassword() {
 		<div className="forgotpassword">
 			<div className="subforgotpassword">
 			<h1>Forgot your password?</h1>
-      			<hr></hr>
+      			<hr/>
       			<h3>Enter your registered email address to reset your password</h3>
       
       			<form className="forgotPasswordForm">
         			<label for="mail">Email</label>
         			<input className="forgotPasswordInput" type="email" id="name" name="name" placeholder="Enter your email address" onChange={(event) => handleInputChange(event)}/>   
-					<br></br>
+					<br/>
 					{formErrors.mail_error && <span id="nameError">{formErrors.mail_error}</span>}
-					<br></br>
+					<br/>
       				<button type="submit" onClick={(event) => handleSubmit(event)}>Submit</button>
   					{/* <span id="nameError">There was an error with your email</span> */}
       			</form>  

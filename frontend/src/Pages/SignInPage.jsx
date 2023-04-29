@@ -60,6 +60,7 @@ export default function SignInPage({role}) {
                 <form 
                     onSubmit={handleSubmit}
                     className='signin-page-form'
+                    autoComplete='true'
                 >   
                     <div
                         className='signin-page-form-details'

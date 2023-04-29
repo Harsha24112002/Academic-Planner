@@ -156,18 +156,27 @@ function CourseForm({ courseDetails, type }) {
 			if(fieldsAreEmpty) {
 				const formData = new FormData();
 				formData.append("file", file);
-				response = axios.post(
-					`http://localhost:5000/admin/uploadfile/${CourseId}`,
-					formData
-				);
+				response = axios({
+					method:"POST",
+					url:`http://localhost:5000/admin/uploadfile/${CourseId}`,
+					data:formData,
+					withCredentials:true
+				});
 			} else {
 				response =
 				type == "add"
-				? axios.post("http://localhost:5000/admin/addcourse", formdata)
-				: axios.put(
-					`http://localhost:5000/admin/updatecourse/${formdata.course_id}`,
-					formdata
-					);
+				? axios({
+					method:"POST",
+					url:"http://localhost:5000/admin/addcourse",
+					data:formdata,
+					withCredentials:true
+				})
+				: axios({
+					method:"PUT",
+					url:`http://localhost:5000/admin/updatecourse/${formdata.course_id}`,
+					data:formdata,
+					withCredentials:true
+				});
 			}
 
 			const data = (await response).data;
@@ -219,7 +228,7 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseIdError ? "This field is required" : ""}
 					defaultValue={CourseId}
 				/>
-				<br></br>
+				<br/>
 				<TextField
 					id="Instructor"
 					label="Course Instructor"
@@ -243,7 +252,7 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseSlotError ? "This field is required" : ""}
 					defaultValue={CourseSlot}
 				/>
-				<br></br>
+				<br/>
 				<TextField
 					id="Course Sem"
 					label="Course Sem"
@@ -267,7 +276,7 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CoreElectiveError ? "This field is required" : ""}
 					defaultValue={CoreElective}
 				/>
-				<br></br>
+				<br/>
 				<TextField
 					multiline
 					id="Course Prerequisites"
@@ -277,7 +286,7 @@ function CourseForm({ courseDetails, type }) {
 					helperText="Enter prerequisites in multiple lines"
 					defaultValue={CoursePrerequisites.join("\r\n")}
 				/>
-				<br></br>
+				<br/>
 
 				<div className="uploadfile">
 					<label htmlFor="fileInput">Too many courses? Add an excel/csv file here:</label>
@@ -291,8 +300,8 @@ function CourseForm({ courseDetails, type }) {
 
 			</Box>
 			
-			<br> </br>
-			<br> </br>
+			<br/>
+			<br/>
 
 			<Button variant="contained" color="primary" onClick={handleSubmit}>
 				Submit

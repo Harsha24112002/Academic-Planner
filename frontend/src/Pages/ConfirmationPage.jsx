@@ -45,10 +45,14 @@ export default function ConfirmationPage() {
 			formData.append("otp", otp);
 			formData.append("password", password);
 
-			axios.post("http://localhost:5000/authentication/student/forgot_password/new_details", formData, {
+			axios({
+				method:"POST",
+				url : "http://localhost:5000/authentication/student/forgot_password/new_details", 
+				data : formData, 
 				headers: {
 					'Content-Type': 'multipart/form-data'
-				}
+				},
+				withCredentials:true
 			})
 			.then((response) => {
 				console.log(response);
@@ -114,26 +118,26 @@ export default function ConfirmationPage() {
 				{/* <input type="text" placeholder="OTP"/> */}
 				<label for="email">Email</label>
 				<input className="email" type="text" id="email" name="email" placeholder="Enter EMAIL" onChange={(event) => handleInputChange(event)}/>   
-				<br></br>
+				<br/>
 				{formErrors.mail_error && <p>{formErrors.mail_error}</p>}
 			
 
 				<label for="otp">OTP</label>
 				<input className="otp" type="text" id="otp" name="otp" placeholder="Enter OTP" onChange={(event) => handleInputChange(event)}/>   
-				<br></br>
+				<br/>
 				{formErrors.otp && <p>{formErrors.otp}</p>}
 			
 				<label for="password">Password</label>
 				<input className="password" type="password" id="password" name="pasword" placeholder="New Password" onChange={(event) => handleInputChange(event)}/>   
-				<br></br>
+				<br/>
 				{formErrors.password && <p>{formErrors.password}</p>}
 
 				<label for="confirm password">Confirm Password</label>
 				<input className="password" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" onChange={(event) => handleInputChange(event)}/>   
-				<br></br>
+				<br/>
 				{formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
 
-				<br></br>
+				<br/>
 				<button type="submit" onClick={(event) => handleSubmit(event)}>Submit</button>
 				<p class="message">Not registered? <a href="/student/signup">Create an account</a></p>
 				</form>

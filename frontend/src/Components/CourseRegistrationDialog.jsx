@@ -55,10 +55,9 @@ function CourseRegistrationDialog({ open, handleClose }) {
       //   `http://localhost:5000/maps/register/${reg_course_details.course_id}`,
       //   formdata
       // );
-      const response = axios({
-        method: "POST",
-        url: `http://127.0.0.1:5000/maps/register/${reg_course_details.course_id}`,
-        data: formdata,
+      const response = axios({method:"POST",
+       url:`http://127.0.0.1:5000/maps/register/${reg_course_details.course_id}`,
+       data:formdata,
         withCredentials: true
       })
       const data = (await response).data;

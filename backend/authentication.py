@@ -62,18 +62,18 @@ def get_details():
 	elif request.method == "GET":
 
 		###!!! TO BE CHANGED AFTER LOGIN
-		response = database.studentOperations.get_user(session['user']['email'])
-		# print('respomse:', resp)
-		# session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
-		stud = Student(**response)
-		session["user"] = stud.dict()
+		# response = database.studentOperations.get_user(session['user']['email'])
+		# # print('respomse:', resp)
+		# # session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
+		# stud = Student(**response)
+		# session["user"] = stud.dict()
 		session["user"]["role"] = "student"
 
 		if not session.get("user"):
 			return "Not logged in"
 		
 		response = session['user'].copy()
-		# response['photo'] = get_profile_picture()
+		response['photo'] = get_profile_picture()
 		return response
 
 @authentication.route("/get_profile_picture/", methods=["POST"])

@@ -3,7 +3,7 @@ from typing import Optional,List
 import json
 
 class Notes(BaseModel):
-    note : str
+    note : str = ""
    
     def add_note():
         pass
@@ -46,7 +46,7 @@ class StudentCourseSpecification(BaseModel):
     registered_sem : int
     elective : Optional[str]
     met_prerequisite_flag : bool
-    note : Optional[Notes]
+    note : Optional[Notes] = Notes()
     incomplete_prerequisites: List[str] = []
 
     # def JSONify(self):

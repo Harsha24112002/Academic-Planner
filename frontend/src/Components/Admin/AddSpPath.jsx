@@ -37,11 +37,12 @@ const AddSpPath = () => {
         path_url: "https://google.com",
       };
 
-      const response = axios.post(
-        "http://127.0.0.1:5000/admin/addpath",
-        formdata,
-        { withCredentials : true }
-      );
+      const response = axios({
+        method:"POST",
+        url:"http://127.0.0.1:5000/admin/addpath",
+        data:formdata,
+        withCredentials : true 
+    });
 
       const data = (await response).data;
       console.log(data);
