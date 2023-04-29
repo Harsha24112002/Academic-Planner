@@ -331,4 +331,19 @@ class PathDBOperations:
         except Exception as e:
             return e
 
+        
+    def get_all_paths(self):
+        try:
+            paths = self.pathCollection.find({"name":"Hi"})
+            return paths
+        except Exception as e:
+            return e
+        
+    def get_paths_by_query(self,query):
+        pattern = '.*'+str(query)+'.*'
+        paths = self.pathCollection.find({"name": {"$regex": pattern, "$options":"i"}})
+        path_names = [path["name"] for path in paths]
+        return path_names
+        
+
 database = Database()
