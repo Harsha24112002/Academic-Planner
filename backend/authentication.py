@@ -41,7 +41,29 @@ def login_required(allowed_roles):
 # creating Blueprint
 # The url's whose prefix starts with authentication, comes to this Blueprint
 authentication = Blueprint("authentication", __name__, url_prefix="/authentication/")
-fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
+photo_fs = gridfs.GridFS(database.cluster, collection="student_profile_pictures")
+
+
+@authentication.route("/edit_profile_photo/student", methods=["POST"])
+@login_required(["student"])
+def edit_profile_photo():
+	file = request.files["photo"]
+	file_name = session["user"]["email"] #+ '-' + file.filename
+	file_contents = file.read()
+	file = photo_fs.get(file_name)
+
+	# Delete the existing chunks
+	photo_fs.delete(file_name)
+	req = {}
+	req['photo_url']  = photo_fs.put(file_contents, _id = file_name)
+ 
+	# photo_fs.update(file_contents, _id = file_name)
+	# req['photo_url'] = photo_fs.get( _id = file_name)
+	database.studentOperations.update(session["user"]["email"], req)
+ 
+	return req["photo_url"]
+ 
+	
 
 # code to take in user details and add user to database
 @authentication.route("/get_details/student", methods=["POST","GET"])
@@ -54,6 +76,10 @@ def get_details():
 
 		stud = Student(**session["user"])
 		req = request.json
+		print(req)
+
+  
+		
 		stud.update_metadata(**req)
 		database.studentOperations.update(session["user"]["email"], stud.dict())
 		session["user"] = stud.dict()
@@ -79,7 +105,7 @@ def get_details():
 @authentication.route("/get_profile_picture/", methods=["POST"])
 @login_required(["admin", "student"])
 def get_profile_picture():
-	file_contents = fs.get(session["user"]['photo_url']).read()
+	file_contents = photo_fs.get(session["user"]['photo_url']).read()
 	image = Image.open(io.BytesIO(file_contents))
 	img_byte_arr = io.BytesIO()
 	image.save(img_byte_arr, format='PNG')
@@ -109,7 +135,7 @@ def signup():
 	file_name = email #+ '-' + file.filename
 	file_contents = file.read()
 
-	user_dict["photo_url"] = fs.put(file_contents, _id = file_name)
+	user_dict["photo_url"] = photo_fs.put(file_contents, _id = file_name)
 	user_dict["password"] = sha256.encrypt(user_dict["password"])
 	user = Student(**user_dict, type="student") # For pydantic check
 	

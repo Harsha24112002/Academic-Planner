@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Header from "../Components/Header";
 import {
   Container,
@@ -31,7 +31,7 @@ const labels = ["GPA trends", "My Courses"]
 
 
 const EditableTextBox = ({ initialValue }) => {
-  
+
   const [value, setValue] = useState(initialValue);
   const [editing, setEditing] = useState(false);
   const dispatch = useDispatch()
@@ -43,7 +43,7 @@ const EditableTextBox = ({ initialValue }) => {
       data: { 'first_name': value },
       withCredentials: true
     }).then(
-      dispatch(editDetails({"first_name":value}))
+      dispatch(editDetails({ "first_name": value }))
     )
   }
 
@@ -123,6 +123,43 @@ function ProfilePage() {
     dispatch(fetchDetails());
   }, []);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileInputChange = event => {
+    event.preventDefault();
+    const file = event.target.files[0]
+    console.log("sffgf", file)
+    setSelectedFile(file);
+    const formData = new FormData();
+    formData.append("photo", file, file.name);
+    console.log("fgh", formData)
+
+    axios({
+      method: "POST",
+      url: "http://127.0.0.1:5000/authentication/edit_profile_photo/student",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data" // set content type header
+      },
+      withCredentials: true
+    });
+
+    axios({
+      method: "POST",
+      url: "http://127.0.0.1:5000/authentication/get_profile_picture",
+      withCredentials: true
+    }).then((response) => {
+      const photo_url = response.data;
+      dispatch(editDetails({ 'photo': photo_url }));
+    });
+
+
+  };
+
+  const handleChangeProfile = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <div>
@@ -136,9 +173,16 @@ function ProfilePage() {
                 <Card>
                   <CardMedia
                     component="img"
-                    sx={{ 'object-fit': 'fill' }}
+                    sx={{ 'object-fit': 'fill', "cursor": "pointer" }}
                     image={`data:image/png;base64,${details['photo']}`}
                     alt="DP"
+                    onClick={handleChangeProfile}
+                  />
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileInputChange}
                   />
 
                   <CardContent>
@@ -175,8 +219,8 @@ function ProfilePage() {
                     <ListItem>
                       <Typography gutterBottom variant="h5" component="div">
                         Welcome, <EditableTextBox
-                          initialValue={details["first_name"]?details["first_name"]:"first name"}
-                         ></EditableTextBox>
+                          initialValue={details["first_name"] ? details["first_name"] : "first name"}
+                        ></EditableTextBox>
 
                       </Typography>
 
