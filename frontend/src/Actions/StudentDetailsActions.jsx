@@ -16,6 +16,12 @@ export const editNotes = (course_id, notes) =>
   payload: notes
 });
 
+export const editDetails = (details) =>
+({
+  type: "STUDENT_DETAILS_UPDATE",
+  payload: details
+});
+
 export const fetchDetailsFailure = (error) => ({
   type: "STUDENT_DETAILS_FAILURE",
   payload: error,

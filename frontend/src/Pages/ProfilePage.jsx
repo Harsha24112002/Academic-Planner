@@ -13,28 +13,110 @@ import {
   Icon,
   IconButton,
   CircularProgress,
+  TextField,
+  Button,
 } from "@mui/material";
 import Edit from "@mui/icons-material/Edit";
 import ProfilePageTabs from "../Components/Tabs";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchDetails, fetchEditDetails } from "../Actions/StudentDetailsActions";
+import { editDetails, fetchDetails, fetchEditDetails } from "../Actions/StudentDetailsActions";
 import GPATrends from "../Components/GPATrends";
 import CourseList from "../Components/CourseList";
-
+import { useState } from 'react';
+import axios from "axios";
 
 const components = [<GPATrends />, <CourseList />];
 const labels = ["GPA trends", "My Courses"]
 
 
+const EditableTextBox = ({ initialValue }) => {
+  
+  const [value, setValue] = useState(initialValue);
+  const [editing, setEditing] = useState(false);
+  const dispatch = useDispatch()
+
+  const onSave = (value) => {
+    axios({
+      method: "POST",
+      url: `http://127.0.0.1:5000/authentication/get_details/student`,
+      data: { 'first_name': value },
+      withCredentials: true
+    }).then(
+      dispatch(editDetails({"first_name":value}))
+    )
+  }
+
+  const onCancel = () => {
+
+  }
+  const handleSave = () => {
+    onSave(value);
+    setEditing(false);
+  };
+
+  const handleCancel = () => {
+    setValue(initialValue);
+    setEditing(false);
+    onCancel();
+  };
+
+  const handleEdit = () => {
+    setEditing(true);
+  };
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <div>
+      {editing ? (
+        <>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div>
+              <TextField
+                id="outlined-multiline-flexible"
+                // label="Notes"
+                multiline
+                maxRows={4}
+                defaultValue={initialValue}
+                onChange={handleChange}
+              />
+            </div>
+          </Box>
+          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
+        </>
+      ) : (
+        <>
+          <span>{value}</span>
+          <IconButton>
+            <Edit onClick={handleEdit} />
+          </IconButton>
+        </>
+      )}
+    </div>
+  );
+};
+
 function ProfilePage() {
+  const [editingProfile, setEditingProfile] = useState(false)
   const { details, loading, error } = useSelector((state) => {
     console.log(state.studentDetails)
     return ({
-    details: state.studentDetails.details,
-    loading: state.studentDetails.loading,
-    error: state.studentDetails.error,
-  })});
+      details: state.studentDetails.details,
+      loading: state.studentDetails.loading,
+      error: state.studentDetails.error,
+    })
+  });
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,12 +136,13 @@ function ProfilePage() {
                 <Card>
                   <CardMedia
                     component="img"
-                    sx={{ 'object-fit': 'fill'}}
+                    sx={{ 'object-fit': 'fill' }}
                     image={`data:image/png;base64,${details['photo']}`}
                     alt="DP"
                   />
 
                   <CardContent>
+
                     <List>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
@@ -73,7 +156,7 @@ function ProfilePage() {
                       </ListItem>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
-                        {details["id"]}
+                          {details["id"]}
                         </Typography>
                       </ListItem>
                     </List>
@@ -91,8 +174,12 @@ function ProfilePage() {
                   <List>
                     <ListItem>
                       <Typography gutterBottom variant="h5" component="div">
-                        Welcome, {details["username"]}
+                        Welcome, <EditableTextBox
+                          initialValue={details["first_name"]?details["first_name"]:"first name"}
+                         ></EditableTextBox>
+
                       </Typography>
+
                     </ListItem>
                     <ListItem>
                       <Typography gutterBottom variant="h5" component="div">
@@ -105,9 +192,7 @@ function ProfilePage() {
                   <Typography>CGPA : {details["cgpa"]}</Typography>
                 </Box>
                 <Box sx={{ alignSelf: "flex-end" }}>
-                  <IconButton>
-                    <Edit />
-                  </IconButton>
+
                 </Box>
               </Box>
               <Box>

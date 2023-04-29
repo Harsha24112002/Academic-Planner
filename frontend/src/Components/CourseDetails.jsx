@@ -168,8 +168,10 @@ function CourseDetails({ course_id, open, handleClose }) {
                   <div>
                     <EditableTextBox
                       course_id = {course_id}
-                      initialValue={student_course_details.note ? (student_course_details.note.note ? student_course_details.note.note : "Enter Notes Here" ) : "Enter notes here"}
-                    ></EditableTextBox>
+                      initialValue={student_course_details.note.note ? student_course_details.note.note : "Enter notes here"}
+                    >
+                      {console.log(student_course_details["note"])}
+                    </EditableTextBox>
                   </div>
                 </Grid>
                 {/* <Grid item xs={8}>

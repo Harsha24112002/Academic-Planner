@@ -54,7 +54,7 @@ export default function SignUpPage() {
       console.log("Form is valid");
 
       const formData = new FormData();
-      formData.append("name", name);
+      formData.append("first_name", name);
       formData.append("username", username);
       formData.append("email", email);
       formData.append("department", department);

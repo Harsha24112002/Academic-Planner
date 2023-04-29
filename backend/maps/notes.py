@@ -19,7 +19,7 @@ def addnotes(id): # updatenotes = addnotes
     if len(course_id) == 0:
         return "No such course"
     course_id = course_id[0]
-    session["user"]["course_list"][course_id]["note"] = notes.dict()["note"]
+    session["user"]["course_list"][course_id]["note"] = notes.dict()
     if response == "Success":
         return "Success"
     

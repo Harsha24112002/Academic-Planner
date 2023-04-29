@@ -40,9 +40,9 @@ const detailsReducer = (state = initialState, action) => {
             course.incomplete_prerequisites.filter((course_id) => {
               return course_id != action.payload.course_id;
             });
-          course.incomplete_prerequisites = incomplete_prerequisites  
+          course.incomplete_prerequisites = incomplete_prerequisites
         }
-        
+
         if (course.incomplete_prerequisites.length === 0) {
           course.met_prerequisite_flag = true;
         }
@@ -54,6 +54,13 @@ const detailsReducer = (state = initialState, action) => {
     }
     case "STUDENT_COURSE_DELETE": {
       const id = action.payload;
+
+      // let updated_state = JSON.parse(JSON.stringify(state))
+      // updated_state.details.course_list = updated_state.details.course_list.filter((course)=>course.course_id != id)
+
+      // console.log("updated_state", updated_state)
+      // return updated_state;
+
       let updated_state = {
         ...state,
       };
@@ -89,7 +96,7 @@ const detailsReducer = (state = initialState, action) => {
             course.incomplete_prerequisites = dup_incomplete_prerequisites;
           }
         }
-      
+
         updated_details_course_list.push(course)
       }
 
@@ -116,16 +123,22 @@ const detailsReducer = (state = initialState, action) => {
         ...state,
         course_details: { ...state.course_details, ...action.payload },
       };
+
+    case "STUDENT_DETAILS_UPDATE":
+      return {
+        ...state,
+        details : {...state.details, ...action.payload}
+      }
     case "STUDENT_NOTES_UPDATE":
       {
         let updated_state = JSON.parse(JSON.stringify(state))
         updated_state.details.course_list = updated_state.details.course_list.map((course) => {
-          if(course.course_id == action.course_id){
-            course.note = {"note":action.payload}
-          }  
+          if (course.course_id == action.course_id) {
+            course.note = { "note": action.payload }
+          }
           return course;
         })
-        console.log("updated_state",updated_state)
+        console.log("updated_state", updated_state)
         return updated_state;
       }
     default:
