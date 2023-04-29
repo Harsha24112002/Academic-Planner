@@ -1,6 +1,6 @@
 from flask import request, session, Blueprint
 from passlib.hash import pbkdf2_sha256 as sha256
-from Models.models import  Student
+from Models.models import  Student, Admin
 import gridfs
 from db_connection import database
 import io
@@ -53,8 +53,8 @@ def edit_profile_photo():
 	file = photo_fs.get(file_name)
 
 	# Delete the existing chunks
-	photo_fs.delete(file_name)
 	req = {}
+	photo_fs.delete(file_name)
 	req['photo_url']  = photo_fs.put(file_contents, _id = file_name)
  
 	# photo_fs.update(file_contents, _id = file_name)
@@ -263,6 +263,21 @@ def login(role):
 	# check if user exists
 	if _user:
 		# check if password is correct
+		if role == "admin":
+			user = Admin(**dbOperations.get_user(email))
+			session["user"] = user.dict()
+			session["user"]["role"] = role
+			session.modified = True
+
+			# if cache contains email, remove the entry from cache
+			if cache.get(email):
+				cache.pop(email)
+    
+			return {
+				"status" : "success",
+				"message" : "Logged in Successfully",
+			}, 200 #OK
+
 		if sha256.verify(request.form.get("password"), _user["password"]):
 			user = Student(**dbOperations.get_user(email))
 			session["user"] = user.dict()

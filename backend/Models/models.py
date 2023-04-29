@@ -31,6 +31,7 @@ class Course(BaseModel):
         self.course_sem = details.get("course_sem",self.course_sem)
         self.core_elective = details.get("core_elective",self.core_elective)
         self.course_slot = details.get("course_slot",self.course_slot)
+        self.course_credits = details.get("course_credits",self.course_credits)
 
     def JSONify(self):
         return json.dumps(self.__dict__,object_hook=lambda d: d.dict())

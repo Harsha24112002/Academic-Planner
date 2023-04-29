@@ -25,6 +25,7 @@ import GPATrends from "../Components/GPATrends";
 import CourseList from "../Components/CourseList";
 import { useState } from 'react';
 import axios from "axios";
+import { fetchPaths } from "../features/pathDetailsSlice";
 
 const components = [<GPATrends />, <CourseList />];
 const labels = ["GPA trends", "My Courses"]
@@ -108,7 +109,12 @@ const EditableTextBox = ({ initialValue }) => {
 };
 
 function ProfilePage() {
-  const [editingProfile, setEditingProfile] = useState(false)
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDetails());
+  }, []);
+
   const { details, loading, error } = useSelector((state) => {
     console.log(state.studentDetails)
     return ({
@@ -117,11 +123,7 @@ function ProfilePage() {
       error: state.studentDetails.error,
     })
   });
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchDetails());
-  }, []);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -171,6 +173,7 @@ function ProfilePage() {
             <Grid item xs={3}>
               <Box>
                 <Card>
+                  {/* {console.log('dp ',details['photo'])} */}
                   <CardMedia
                     component="img"
                     sx={{ 'object-fit': 'fill', "cursor": "pointer" }}

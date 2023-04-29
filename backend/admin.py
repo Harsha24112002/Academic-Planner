@@ -1,13 +1,15 @@
 from flask import request, session, Blueprint
-
+import gridfs
 from db_connection import database
 from Models.models import Course, SpecializationPath
 from Models.models import StudentCourseSpecification
 from pydantic import ValidationError
 import pandas as pd
-# from authentication import login_required
+from authentication import login_required
 
 admin = Blueprint("admin",__name__, url_prefix="/admin/")
+
+path_fs = gridfs.GridFS(database.cluster, collection="path_collection_pictures")
 
 ### ! Should add some type attribute in User class to differentiate student and admin
 ### and every endpoint in this file should check for type == admin in session object
@@ -30,7 +32,7 @@ admin = Blueprint("admin",__name__, url_prefix="/admin/")
 
 ### Add Course to DataBase by ADMIN
 @admin.route("/addcourse",methods=["POST"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def addCourse():
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -50,7 +52,7 @@ def addCourse():
 ### Update Course by ID in DataBase by ADMIN
 # !!! Assumed Course ID cannot be updated, should confirm with others
 @admin.route("/updatecourse/<string:id>",methods=["PUT"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def updateCourse(id):
     # if session.get("user") is None:
     #     return "Not logged in"
@@ -64,7 +66,7 @@ def updateCourse(id):
     return {"success":True}
    
 @admin.route("/uploadfile", methods=["POST"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def readFile():
     # !!! appropiate error handling while returning
     file = request.files['file']
@@ -91,13 +93,21 @@ def readFile():
 
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def addPath():
     # if session.get("user") is None:
     #     return "Not logged in"
     # if session["user"]["type"] == "student":
     #     return "Permission denied for student"
-    req = request.json
+    req = request.form
+    file = request.files["photo"]
+    file_name = req["name"]
+    file_contents = file.read()
+    path_url = path_fs.put(file_contents, _id = file_name)
+    req = {}
+    req["name"] = file_name
+    req["path_url"] = path_url
+
     try:
         new_course = SpecializationPath(**req)
     except ValidationError as e:
@@ -108,7 +118,7 @@ def addPath():
 
 ### Update Path by ID in DataBase by ADMIN
 @admin.route("/updatepath/<string:name>",methods=["PUT"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def updatePath(name):
     if session.get("user") is None:
         return "Not logged in"
@@ -124,7 +134,7 @@ def updatePath(name):
 
 ### Delete Path by ID in DataBase by ADMIN
 @admin.route("/deletepath/<string:name>",methods=["DELETE"])
-# @login_required(["admin"])
+@login_required(["admin"])
 def deletePath(name):
     if session.get("user") is None:
         return "Not logged in"

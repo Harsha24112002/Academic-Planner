@@ -9,9 +9,10 @@ from authentication import login_required
 maps = Blueprint("maps",__name__, url_prefix="/maps/")
 
 from .notes import *
+from .paths import *
 
 @maps.route("/get_course_details/<string:id>", methods=["GET","POST"])
-@login_required(["student"])
+@login_required(["student","admin"])
 def get_course_details(id):
     # if session.get("user") is None:
     #     return "Not Logged In"
@@ -245,7 +246,7 @@ def get_registered_courses():
     
 
 @maps.route("/get_courses/<string:query>", methods = ["GET"])
-@login_required(["student"])
+@login_required(["student","admin"])
 def get_courses(query):
     # if session.get("user") is None:
     #     return "Not logged in"

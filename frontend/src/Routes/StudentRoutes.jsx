@@ -5,7 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 import ProfilePage from '../Pages/ProfilePage';
-import SpecializationPathsPage from '../Pages/Admin/SpecializationPathsPage';
+import SpecializationPathsPage from '../Pages/SpecializationPathsPage';
 import NotFoundPage from '../Pages/NotFoundPage';
 import Header from '../Components/Header';
 import MapsPage from '../Pages/MapsPage';

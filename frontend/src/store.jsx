@@ -11,12 +11,16 @@ import courseDetailsReducer from "./features/courseDetailsSlice";
 import thunk from "redux-thunk";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
+import pathDetailsReducer from "./features/pathDetailsSlice";
+import pathsSearchReducer from "./Reducers/PathsSearchReducer";
 
 const reducers = {
   studentDetails: detailsReducer,
   tmpreducer: tmpreducer,
   coursesSearch: coursesSearchReducer,
+  pathsSearch: pathsSearchReducer,
   auth: authReducer,
+  pathDetails: pathDetailsReducer,
   courseDetails: courseDetailsReducer,
 };
 const rootreducer = combineReducers(reducers);

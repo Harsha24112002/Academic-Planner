@@ -93,7 +93,7 @@ function SemBox({ sem }) {
           }
           </>
           :
-          (<h1>Hello</h1>)
+          (<></>)
         }
         </Xwrapper>
       </div>
