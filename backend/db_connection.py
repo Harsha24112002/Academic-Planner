@@ -272,6 +272,14 @@ class StudentDBOperations(UserDBOperations):
         )
         return "Success"
    
+    def update_grade(self, email, course_id, grade):
+        print("Inside",type(grade),course_id)
+      
+        self.user_collection.update_one(
+            {"email" : email, "course_list.course_id" : course_id},
+            { "$set" : {"course_list.$.course_grade" : grade}}
+        )
+        return "Success"
 class AdminDBOperations(UserDBOperations):
     def __init__(self, user_collection) -> None:
         super().__init__(user_collection)

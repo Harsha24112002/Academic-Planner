@@ -12,8 +12,10 @@ export const fetchDetailsSuccess = (Details) => ({
 export const editNotes = (course_id, notes) =>
 ({
   type: "STUDENT_NOTES_UPDATE",
-  course_id: course_id,
-  payload: notes
+  payload: {
+    "course_id":course_id,
+    "notes": notes
+  }
 });
 
 export const editDetails = (details) =>
@@ -22,6 +24,22 @@ export const editDetails = (details) =>
   payload: details
 });
 
+export const editGrade = (course_id, grade) => ({
+  type: "STUDENT_GRADE_UPDATE",
+  payload: {
+    "course_id":course_id,
+    "grade":grade
+  }
+})
+
+export const editCourseStatus = (course_id, course_status,grade) => ({
+  type: "STUDENT_COURSE_STATUS_UPDATE",
+  payload: {
+    "course_id":course_id,
+    "course_status":course_status,
+    "grade":grade
+  }
+})
 export const fetchDetailsFailure = (error) => ({
   type: "STUDENT_DETAILS_FAILURE",
   payload: error,
@@ -39,27 +57,11 @@ export const StudentDetailsDelete = (payload) => ({
 export const fetchDetails = () => {
   return (dispatch) => {
     dispatch(fetchDetailsRequest());
-    // axios
-    //   .get("http://127.0.0.1:5000/authentication/get_details/student",
-    //         { "withCredentials" : true }
-    //   )
-    //   .then((response) => {
-    //     // console.log(response.data)
-    //     const studentDetails = response.data;
-    //     dispatch(fetchDetailsSuccess(studentDetails));
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     const errorMsg = error.message;
-    //     dispatch(fetchDetailsFailure(errorMsg));
-    //   });
-
       axios({
           method: "GET",
           url: "http://127.0.0.1:5000/authentication/get_details/student",
           withCredentials: true
       }).then((response) => {
-          // console.log(response.data)
           const studentDetails = response.data;
           dispatch(fetchDetailsSuccess(studentDetails));
       }).catch((error) => {
@@ -72,14 +74,7 @@ export const fetchDetails = () => {
 
 export const detailsDelete = (id) => {
   return (dispatch) => {
-    // const course_details = store.getState().studentCourses.details;
-    // const payload = {
-    //   "course_id":id,
-    //   "courses": course_details
-    // }
-    // console.log("RBRB",course_details)
     dispatch(StudentDetailsDelete(id))
-
   }
 }
 

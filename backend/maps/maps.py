@@ -179,15 +179,25 @@ def update_course_status(course_id):
         return "The Course " + course_id + " is not registered to update it's status"
     
     #  if the course is in the student's course list, update the course status
-    status = request.form.get("course_status")
-
+    req =request.json
+    status = req["course_status"]
+    grade = req["grade"]
+    course_idx = [i for i,course in enumerate(session["user"]["course_list"]) if course["course_id"] == course_id][0]
     # if status is "completed", check for GPA score
-    grade = None 
     if status == "completed" :
-        if request.form.get("course_grade") is None :
+        if grade is None :
             return "Cant mark as completed without a grade"
-        else :
-            grade = request.form.get("course_grade")
+        if not len(session["user"]["course_list"][course_idx]["incomplete_prerequisites"]) == 0:
+            return {"data":"Failure","msg":"Prerequisites Not Registered"}
+        prereqs = database.courseOperations.get_prerequisites_of_course(course_id)
+        for course in prereqs:
+            index = [i for i,c in enumerate(session["user"]["course_list"]) if c["course_id"] == course]
+            if not len(index):
+                continue
+            index = index[0]
+            if not session["user"]["course_list"][index]["course_status"] == "completed":
+                return {"data":"Failure","msg":f"Prerequisites {course} Not Completed"}
+
 
     response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status, grade)
     if response == "Success":
@@ -205,7 +215,7 @@ def update_course_status(course_id):
 
         if result == None:
             return "Course status update failed or possibly none of the courses were updated"
-        return "Course status updated successfully"
+        return {"data":"Success","msg":"Course status updated successfully"}
     
     return response
 
@@ -253,3 +263,19 @@ def get_courses(query):
     
     return database.courseOperations.get_courses(query)
 
+@maps.route("/update_grade/<string:course_id>",methods=["POST"])
+# @login_required(["student"])
+def update_grade(course_id):
+    if session.get("user") is None:
+        return "Login first!!!" ##############
+    req = request.json
+    print("Grade",req["grade"],course_id)
+    response = database.studentOperations.update_grade(session["user"]["email"],course_id,req["grade"])
+    course_id = [i for i,course in enumerate(session["user"]["course_list"]) if course["course_id"] == id]
+    if len(course_id) == 0:
+        return "No such course"
+    course_id = course_id[0]
+    session["user"]["course_list"][course_id]["course_grade"] = req["grade"]
+    if response == "Success":
+        return "Success"
+    
