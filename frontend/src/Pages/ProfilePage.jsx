@@ -20,37 +20,35 @@ import Edit from "@mui/icons-material/Edit";
 import ProfilePageTabs from "../Components/Tabs";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { editDetails, fetchDetails, fetchEditDetails } from "../Actions/StudentDetailsActions";
+import {
+  editDetails,
+  fetchDetails,
+  fetchEditDetails,
+} from "../Actions/StudentDetailsActions";
 import GPATrends from "../Components/GPATrends";
 import CourseList from "../Components/CourseList";
-import { useState } from 'react';
+import { useState } from "react";
 import axios from "axios";
 import { fetchPaths } from "../features/pathDetailsSlice";
-
+import { grades } from "../features/GPAcourses";
 const components = [<GPATrends />, <CourseList />];
-const labels = ["GPA trends", "My Courses"]
-
+const labels = ["GPA trends", "My Courses"];
 
 const EditableTextBox = ({ initialValue }) => {
-
   const [value, setValue] = useState(initialValue);
   const [editing, setEditing] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onSave = (value) => {
     axios({
       method: "POST",
       url: `http://127.0.0.1:5000/authentication/get_details/student`,
-      data: { 'first_name': value },
-      withCredentials: true
-    }).then(
-      dispatch(editDetails({ "first_name": value }))
-    )
-  }
+      data: { first_name: value },
+      withCredentials: true,
+    }).then(dispatch(editDetails({ first_name: value })));
+  };
 
-  const onCancel = () => {
-
-  }
+  const onCancel = () => {};
   const handleSave = () => {
     onSave(value);
     setEditing(false);
@@ -109,54 +107,70 @@ const EditableTextBox = ({ initialValue }) => {
 };
 
 function ProfilePage() {
-  
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchDetails());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchDetails());
+  // }, []);
 
-  const { details, loading, error } = useSelector((state) => {
-    console.log(state.studentDetails)
-    return ({
+  const { details, courseDetails, loading, error } = useSelector((state) => {
+    console.log(state.studentDetails);
+    return {
       details: state.studentDetails.details,
+      courseDetails: state.studentDetails.course_details,
       loading: state.studentDetails.loading,
       error: state.studentDetails.error,
-    })
+    };
   });
+  const calculateCGPA = () => {
+    var num = 0, den = 0;
+    const tmp = details.course_list
+      ? details.course_list.map((course) => {
 
-
+          if (course.course_grade) {
+            var cred = 0;
+            (cred = courseDetails ? courseDetails[course.course_id].course_credits : null);
+            (num += grades[course.course_grade]*cred);
+            (den += cred);
+          }
+        }
+        )
+      : 0;
+    if (num && den) {
+      return num/den;
+    } else {
+      return "NA";
+    }
+  };
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleFileInputChange = event => {
+  const handleFileInputChange = (event) => {
     event.preventDefault();
-    const file = event.target.files[0]
-    console.log("sffgf", file)
+    const file = event.target.files[0];
+    console.log("sffgf", file);
     setSelectedFile(file);
     const formData = new FormData();
     formData.append("photo", file, file.name);
-    console.log("fgh", formData)
+    console.log("fgh", formData);
 
     axios({
       method: "POST",
       url: "http://127.0.0.1:5000/authentication/edit_profile_photo/student",
       data: formData,
       headers: {
-        "Content-Type": "multipart/form-data" // set content type header
+        "Content-Type": "multipart/form-data", // set content type header
       },
-      withCredentials: true
+      withCredentials: true,
     });
 
     axios({
       method: "POST",
       url: "http://127.0.0.1:5000/authentication/get_profile_picture",
-      withCredentials: true
+      withCredentials: true,
     }).then((response) => {
       const photo_url = response.data;
-      dispatch(editDetails({ 'photo': photo_url }));
+      dispatch(editDetails({ photo: photo_url }));
     });
-
-
   };
 
   const handleChangeProfile = () => {
@@ -176,20 +190,19 @@ function ProfilePage() {
                   {/* {console.log('dp ',details['photo'])} */}
                   <CardMedia
                     component="img"
-                    sx={{ 'object-fit': 'fill', "cursor": "pointer" }}
-                    image={`data:image/png;base64,${details['photo']}`}
+                    sx={{ "object-fit": "fill", cursor: "pointer" }}
+                    image={`data:image/png;base64,${details["photo"]}`}
                     alt="DP"
                     onClick={handleChangeProfile}
                   />
                   <input
                     type="file"
                     ref={fileInputRef}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={handleFileInputChange}
                   />
 
                   <CardContent>
-
                     <List>
                       <ListItem>
                         <Typography gutterBottom variant="h5" component="div">
@@ -221,12 +234,15 @@ function ProfilePage() {
                   <List>
                     <ListItem>
                       <Typography gutterBottom variant="h5" component="div">
-                        Welcome, <EditableTextBox
-                          initialValue={details["first_name"] ? details["first_name"] : "first name"}
+                        Welcome,{" "}
+                        <EditableTextBox
+                          initialValue={
+                            details["first_name"]
+                              ? details["first_name"]
+                              : "first name"
+                          }
                         ></EditableTextBox>
-
                       </Typography>
-
                     </ListItem>
                     <ListItem>
                       <Typography gutterBottom variant="h5" component="div">
@@ -236,11 +252,9 @@ function ProfilePage() {
                   </List>
                 </Box>
                 <Box sx={{ width: "100px" }}>
-                  <Typography>CGPA : {details["cgpa"]}</Typography>
+                  <Typography>CGPA : {calculateCGPA()}</Typography>
                 </Box>
-                <Box sx={{ alignSelf: "flex-end" }}>
-
-                </Box>
+                <Box sx={{ alignSelf: "flex-end" }}></Box>
               </Box>
               <Box>
                 <ProfilePageTabs components={components} labels={labels} />

@@ -35,7 +35,7 @@ function GPAinput({ course_id,open, handleClose }) {
         dispatch(editCourseStatus(course_id,"completed",Grade))
       }
       else{
-        alert(response.msg);
+        alert(response.data.msg);
       }
   })    
   }

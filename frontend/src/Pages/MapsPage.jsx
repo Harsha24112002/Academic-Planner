@@ -64,17 +64,7 @@ function MapsPage() {
       dispatch(fetchStudentCourses({ courses: course_ids }));
     }
   }, [loading]);
-  function getCoursesBySemester(id) {
-    var ret = [];
-    const sz = details.course_list.length;
-    for (let i = 0; i < sz; i++) {
-      if (details.course_list[i].registered_sem == id) {
-        ret.push(details.course_list[i].course_id);
-      }
-    }
-    console.log(id, ret);
-    return ret;
-  }
+  
 
   function getCoursePrerequisites() {
     const course_prereq = [];
@@ -118,7 +108,7 @@ function MapsPage() {
             // overflowX="auto"
             padding={"0px 100px 0px 25px"}
             maxWidth={"false"}
-            // style={{ overflowX: "auto" }}
+            style={{ overflowX: "auto" }}
           >
             {!mode?
             sems.map((sem) => {
@@ -161,14 +151,6 @@ function MapsPage() {
           <CreditsCount details={details}/>
         </div>
       )}
-      <div>
-        <p>
-          {" "}
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,
-          magnam fuga. Hic fugit officia aliquid molestias alias modi labore?
-          Magni minus omnis non unde dolor quo velit ea corporis architecto!{" "}
-        </p>
-      </div>
     </div>
   );
 }

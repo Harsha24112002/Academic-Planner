@@ -27,7 +27,7 @@ class Course(BaseModel):
     def updateCourse(self,**details):
         self.course_name = details.get("course_name",self.course_name)
         self.course_instructor = details.get("course_instructor",self.course_instructor)
-        self.course_prerequisites = details.get("course_prerequisites",self.course_prerequisites)
+        self.course_prerequisites = [] if details.get("course_prerequisites",self.course_prerequisites)==[''] else details.get("course_prerequisites",self.course_prerequisites)
         self.course_sem = details.get("course_sem",self.course_sem)
         self.core_elective = details.get("core_elective",self.core_elective)
         self.course_slot = details.get("course_slot",self.course_slot)

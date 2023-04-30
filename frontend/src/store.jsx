@@ -30,7 +30,7 @@ const rootreducer = combineReducers(reducers);
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth']
+    whitelist: ['auth','studentDetails']
 };
 
 const persistreducer = persistReducer(persistConfig, rootreducer);

@@ -54,6 +54,7 @@ function CreditsCount({ details }) {
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           width: `100%` ,
+          overflowX: 'scroll',
           padding: 2,
           margin: 10
         }}

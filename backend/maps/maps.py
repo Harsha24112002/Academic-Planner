@@ -60,14 +60,13 @@ def register(id):
 
     course_dict = request.json
     course_dict["course_id"] = id
-
+    course_dict["course_status"] = "registered"
     prereq_list = database.courseOperations.get_prerequisites_of_course(id)
     if prereq_list == None :
         return {"success": False,"msg": "The Course " + id + " is not available"}
 
     student_has_this_prereq = { course:False for course in prereq_list }
     student_registered_courses = session["user"]["course_list"]
-
     def is_prerequisite_completed(course_id):
         for course in student_registered_courses :
             if course["course_id"] == course_id and course["registered_sem"] < course_dict["registered_sem"]:
@@ -176,7 +175,7 @@ def update_course_status(course_id):
             break
     
     if present_course == None :
-        return "The Course " + course_id + " is not registered to update it's status"
+        return {"data":"Failure", "msg":"The Course " + course_id + " is not registered to update it's status"}
     
     #  if the course is in the student's course list, update the course status
     req =request.json
@@ -186,7 +185,7 @@ def update_course_status(course_id):
     # if status is "completed", check for GPA score
     if status == "completed" :
         if grade is None :
-            return "Cant mark as completed without a grade"
+            return {"data":"Failure", "msg":"Cant mark as completed without a grade"}
         if not len(session["user"]["course_list"][course_idx]["incomplete_prerequisites"]) == 0:
             return {"data":"Failure","msg":"Prerequisites Not Registered"}
         prereqs = database.courseOperations.get_prerequisites_of_course(course_id)
@@ -198,7 +197,13 @@ def update_course_status(course_id):
             if not session["user"]["course_list"][index]["course_status"] == "completed":
                 return {"data":"Failure","msg":f"Prerequisites {course} Not Completed"}
 
-
+    if status == "registered" and present_course["course_status"] == "completed":
+        course_ids = [course["course_id"] for course in session["user"]["course_list"]]
+        course_prereqs_list = database.courseOperations.get_multiple_courses_prerequisites(course_ids=course_ids)
+        for course in session["user"]["course_list"]:
+            if present_course["course_id"] in course_prereqs_list[course["course_id"]]:
+                return {"data":"Failure", "msg":f"First unmark all other courses having this prerequisite,Eg: {course['course_id']}"}
+    
     response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status, grade)
     if response == "Success":
         result = None

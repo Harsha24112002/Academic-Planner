@@ -6,6 +6,7 @@ import {
   DialogTitle,
   Grid,
   TextField,
+  alertClasses,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -41,7 +42,12 @@ function CourseDetails({ course_id, open, handleClose }) {
       data: { course_status: "registered", grade: null },
       withCredentials: true,
     }).then((response)=>{
+      if(response.data.data == "Success"){
       dispatch(editCourseStatus(course_id, "registered" ,null))
+      }
+      else{
+        alert(response.data.msg)
+      }
     });
   };
   const handleGPAboxclose = () => {

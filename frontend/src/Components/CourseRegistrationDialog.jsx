@@ -76,7 +76,8 @@ function CourseRegistrationDialog({ open, handleClose }) {
           registered_sem: regsem,
           elective: elective,
           met_prerequisite_flag: !flag,
-          incomplete_prerequisites: data.data
+          incomplete_prerequisites: data.data,
+          course_status: "registered"
         };
         
         dispatch(DetailsUpdate(updateData));

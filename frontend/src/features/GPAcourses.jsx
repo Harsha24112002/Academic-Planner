@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const grades = {
+export const grades = {
     "A":10,"A-":9,"B":8,"B-":7,"C":6,"C-":5,"D":4,"F":0
 }
 export const GPAcoursesSlice = createSlice({

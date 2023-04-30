@@ -9,6 +9,7 @@ import SpecializationPathsPage from '../Pages/SpecializationPathsPage';
 import NotFoundPage from '../Pages/NotFoundPage';
 import Header from '../Components/Header';
 import MapsPage from '../Pages/MapsPage';
+import { Modal } from '@mui/material';
 
 
 
@@ -25,6 +26,7 @@ export default function StudentRoutes() {
         <Router>
             <Routes>
                 <Route path="/"  element={<Header pages={studentPages} tos={studentLinks}/>}>
+                    <Route path='/' element={<MapsPage />}/>
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="spPaths" element={<SpecializationPathsPage />} />
                     <Route path="maps" element={<MapsPage />} />
