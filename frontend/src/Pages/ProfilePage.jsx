@@ -31,7 +31,7 @@ import { useState } from "react";
 import axios from "axios";
 import { fetchPaths } from "../features/pathDetailsSlice";
 import { grades } from "../features/GPAcourses";
-const components = [<GPATrends />, <CourseList />];
+// const components = [<GPATrends props={details}/>, <CourseList />];
 const labels = ["GPA trends", "My Courses"];
 
 const EditableTextBox = ({ initialValue }) => {
@@ -257,7 +257,7 @@ function ProfilePage() {
                 <Box sx={{ alignSelf: "flex-end" }}></Box>
               </Box>
               <Box>
-                <ProfilePageTabs components={components} labels={labels} />
+                <ProfilePageTabs components={[<GPATrends props={[details, courseDetails]}/>, <CourseList />]} labels={labels} />
               </Box>
             </Grid>
           </Grid>

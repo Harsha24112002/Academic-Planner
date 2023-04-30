@@ -61,8 +61,6 @@ export default function ConfirmationPage() {
 			.catch((error) => {
 				console.log(error);
 			});
-
-			// !!! Redirect to login page afer successful signup
 		}
 	}, [formErrors]);
 

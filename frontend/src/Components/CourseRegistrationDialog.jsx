@@ -23,12 +23,14 @@ function CourseRegistrationDialog({ open, handleClose }) {
   });
   const electives = [
     "Departmental Core Theory",
-    "Free Elective",
+    "Departmental Core Lab",
     "Departmental Elective",
-    "Liberal Arts Elective",
-    "Life Skills",
+    "Basic Sciences",
     "Basic Engineering Skills",
-    "Creative Arts Elective",
+    "Liberal/Creative Arts Elective",
+    "Free Elective",
+    "Additional",
+    "Audit"
   ];
   const dispatch = useDispatch();
   const oddsems = [1, 3, 5, 7];

@@ -21,7 +21,7 @@ function CreditsCount({ details }) {
         "Additional" : 0,
         "Departmental Elective" : 24,
         "Free Elective" : 20,
-        "Unknown" : 0
+        "Audit" : 0
     };
 
     var student_credit_count = Object.fromEntries(
@@ -30,9 +30,9 @@ function CreditsCount({ details }) {
 
     course_list.forEach(course => {
         if( student_credit_count.hasOwnProperty(course.elective) ) {
-            student_credit_count[course.elective]+=1;
+            student_credit_count[course.elective]+=course.course_credits;
         } else {
-            student_credit_count["Unknown"]+=1;
+            student_credit_count["Audit"]+=1;
         }
     });
 

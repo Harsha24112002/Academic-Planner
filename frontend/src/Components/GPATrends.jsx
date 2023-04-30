@@ -26,12 +26,73 @@ ChartJs.register(
 	LineElement
 )
 
-function GPATrends() {
+function GPATrends({ props }) {
+
+	// const {studentCourses, Course} = props;
+	const studentCourses = props[0];
+	const Course = props[1];
 
 	// need to get the current_elective_count and details
-	const fixed_elective_count = [10, 13, 15, 10, 15, 13, 32, 15]
-	const sem_cgpa = [8, 7.5, 8, 8.5, 8, 7.5, 8, 8.5]
-	const current_elective_count = [2, 3, 5, 1, 2, 2, 8, 2]
+	const fixed_elective_count = [30, 12, 30, 14, 15, 12, 13, 0, 0]
+	// const sem_cgpa = [8, 7.5, 8, 8.5, 8, 7.5, 8, 8.5]
+
+	const details = studentCourses.course_list;
+
+	const mapElectiveToIndex = {
+		"Departmental Core Theory" : 0,
+		"Departmental Core Lab" : 1,
+		"Departmental Elective" : 2,
+		"Basic Sciences": 3,
+		"Basic Engineering Skills": 4,
+		"Liberal/Creative Arts Elective": 5,
+		"Free Elective": 6,
+		"Additional": 7,
+		"Audit": 8
+	}
+
+	console.log('details in Trends : ', Course)
+
+	const getElectiveCount = (details) => {
+		const elective_count = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+		details.forEach(course => {
+			const index = mapElectiveToIndex[course.elective]
+			elective_count[index] += Course[course.course_id]['course_credits']
+		})
+
+		return elective_count
+	}
+
+	const gradeMapping = {
+		"A" : 10,
+		"A-" : 9,
+		"B" : 8,
+		"B-" : 7,
+		"C" : 6,
+		"C-" : 5,
+		"D" : 4,
+		"F" : 0
+	}
+
+	const current_elective_count = getElectiveCount(details)
+	console.log('current_elective_count : ', current_elective_count)
+
+	const get_sem_cgpa = (details) => {
+		var sem_cgpa = [0, 0, 0, 0, 0, 0, 0, 0]
+		details.forEach(course => {
+			console.log('course : ', course)
+			const registered_sem = course.registered_sem
+			const grade = gradeMapping[course.course_grade]
+			sem_cgpa[registered_sem - 1] += grade
+		})
+
+		sem_cgpa.map((element, index) => {
+			sem_cgpa[index] = sem_cgpa[index] == 0 ? NaN : sem_cgpa[index]
+			return sem_cgpa[index]
+		})
+		return sem_cgpa
+	}
+
+	const sem_cgpa = get_sem_cgpa(details)
 
 	const data = {
 		labels : ['sem I', 'sem II', 'sem III', 'sem IV', 'sem V', 'sem VI', 'sem VII', 'sem VIII'],
@@ -71,7 +132,7 @@ function GPATrends() {
 	}
 
 	const elective_count_data = {
-		labels : ['Departmental Core Theory', 'Departmental Core Lab', 'LA/CA', 'Basic Sciences', 'Basic Engineering Skills', 'Additional', 'Departmenal Electives', 'Free Electives'],
+		labels : ["Departmental Core Theory", "Departmental Core Lab", "Departmental Electives", "Basic Sciences", "Basic Engineering Skills", "LA/CA", "Free Electives", "Additional", "Audit"],
 		datasets : [
 			{
 				data: current_elective_count,
@@ -83,7 +144,7 @@ function GPATrends() {
 			},
 			{
 				data: fixed_elective_count.map((element, index) => {
-					if(index === 5) return 0
+					if(index === 8) return 0
 					return element - current_elective_count[index]
 				}),
 				backgroundColor: '#ef5350',

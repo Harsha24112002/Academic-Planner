@@ -78,8 +78,6 @@ def get_details():
 		req = request.json
 		print(req)
 
-  
-		
 		stud.update_metadata(**req)
 		database.studentOperations.update(session["user"]["email"], stud.dict())
 		session["user"] = stud.dict()

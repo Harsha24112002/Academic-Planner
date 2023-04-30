@@ -68,12 +68,16 @@ export default function SignUpPage() {
 					"Content-Type": "multipart/form-data" // set content type header
 				}
 			})
-            .then((Response) => console.log(Response.data))
+            .then((Response) => {
+                if(Response.status === 200){
+                    console.log("User added successfully");
+                    nav("/student/signin");
+                }
+            })
             .then((data) => console.log(data))
             .catch((error) => console.log(error));
 
             // !!! TODO: Redirect to login page after successful signup 
-            nav("/student/signin");
 		}
 	}
   )
