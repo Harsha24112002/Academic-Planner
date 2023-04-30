@@ -222,11 +222,14 @@ function CourseForm({ courseDetails, type }) {
 			const data = (await response).data;
 			// console.log(data);
 			if (data.success) {
+				console.log(data.failed_additions)
 				// Redirect to the success page
-				// console.log("AAAAAAAAAAAA", data)
-				if(data.failedAddtions.length > 0){
-					// setErrors(data.failedAddtions);
-					alert(```Some courses were not added due to invalid data. Courses are ${data.failedAddtions.join(", ")}```)
+				if(data.failed_additions.length > 0){
+					const message = `Some courses were not added due to invalid data. Courses are ${data.failed_additions.join(", ")}`;
+					alert(message);
+				}
+				else if(data.failed_additions.length === 0) {
+					alert('Successfully added all courses')
 				}
 				dispatch(deleteDetails());
 				

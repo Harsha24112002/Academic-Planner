@@ -88,9 +88,12 @@ def get_details():
 		###!!! TO BE CHANGED AFTER LOGIN
 		response = database.studentOperations.get_user(session['user']['email'])
 		# session['user'] = Student(**database.studentOperations.get_user_by_username('gp121')).dict()
-		stud = Student(**response)
-		session["user"] = stud.dict()
-		session["user"]["role"] = "student"
+		try:
+			stud = Student(**response)
+			session["user"] = stud.dict()
+			session["user"]["role"] = "student"
+		except Exception as e:
+			print(f'Error in get_details/student : {e}')
 
 		if not session.get("user"):
 			return "Not logged in"
