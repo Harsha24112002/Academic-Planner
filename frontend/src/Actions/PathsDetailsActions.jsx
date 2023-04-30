@@ -20,7 +20,11 @@ export const fetchDetailsDelete = (error) => ({
   });
 
 export const fetchDetails = () => {
-  return (dispatch) => {
+  return async (dispatch,getState) => {
+    const paths = getState().studentDetails.paths
+    if(Object.keys(paths).length !== 0){
+      return;
+    }
     dispatch(fetchDetailsRequest());
     axios({
         method:"GET",

@@ -107,9 +107,9 @@ const EditableTextBox = ({ initialValue }) => {
 
 function ProfilePage() {
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(fetchDetails());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchDetails());
+  }, []);
 
   const { details, courseDetails, loading, error } = useSelector((state) => {
     console.log(state.studentDetails);
