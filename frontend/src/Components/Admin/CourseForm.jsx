@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 const fileTypes = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv"];
 
 function CourseForm({ courseDetails, type }) {
+
 	const [CourseName, setCourseName] = useState(
 		courseDetails ? courseDetails.course_name : ""
 	);
@@ -170,7 +171,6 @@ function CourseForm({ courseDetails, type }) {
 			});
 		}
 	}
-
 	const handleSubmit = async (event) => {
 		// console.log(CourseNameError)
 		// event.preventDefault();
@@ -224,7 +224,8 @@ function CourseForm({ courseDetails, type }) {
 			if (data.success) {
 				// Redirect to the success page
 				console.log("AAAAAAAAAAAA", data)
-				dispatch(deleteDetails())
+				dispatch(deleteDetails());
+				
 			} else {
 				// console.log("AAAAAAAAAAAA",data)
 				setErrors(data.errors);
@@ -258,6 +259,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseNameError ? "This field is required" : ""}
 					defaultValue={CourseName}
 					value={CourseName}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 				<TextField
 					id="ID"
@@ -270,6 +274,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseIdError ? "This field is required" : ""}
 					defaultValue={CourseId}
 					value={CourseId}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 				<br />
 				<TextField
@@ -283,6 +290,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseInstructorError ? "This field is required" : ""}
 					defaultValue={CourseInstructor}
 					value={CourseInstructor}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 
 				<TextField
@@ -296,6 +306,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseSlotError ? "This field is required" : ""}
 					defaultValue={CourseSlot}
 					value={CourseSlot}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 				<br />
 				<TextField
@@ -309,6 +322,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CourseSemError ? "This field is required" : ""}
 					defaultValue={CourseSem}
 					value={CourseSem}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 
 				<TextField
@@ -322,6 +338,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText={CoreElectiveError ? "This field is required" : ""}
 					defaultValue={CoreElective}
 					value={CoreElective}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 				<br />
 				<TextField
@@ -333,6 +352,9 @@ function CourseForm({ courseDetails, type }) {
 					helperText="Enter prerequisites in multiple lines"
 					defaultValue={CoursePrerequisites.join("\r\n")}
 					value={CoursePrerequisites.join("\r\n")}
+					InputProps={{
+						readOnly: type == "see",
+					  }}
 				/>
 				{/* <TextField
 					id="Course Credits"
@@ -346,7 +368,8 @@ function CourseForm({ courseDetails, type }) {
 					defaultValue={CourseCredit}
 				/> */}
 				<br />
-				<FormControl>
+				{type!=="see"?
+				(<FormControl>
 					<InputLabel id="Course Credits">Course Credits</InputLabel>
 					<Select
 						labelId="Course Credits"
@@ -363,7 +386,19 @@ function CourseForm({ courseDetails, type }) {
 							<MenuItem value={num}>{num}</MenuItem>
 						))}
 					</Select>
-				</FormControl>
+				</FormControl>):
+				(
+					<TextField
+					multiline
+					id="Course Creditss"
+					label="Course Credits"
+					variant="outlined"
+					value={CourseCredit}
+					InputProps={{
+						readOnly: "true",
+					  }}/>
+				)
+}
 				<br />
 
 				{type == "add" ?
@@ -385,9 +420,9 @@ function CourseForm({ courseDetails, type }) {
 			<br />
 			<br />
 
-			<Button variant="contained" color="primary" onClick={handleSubmit}>
+			{type!="see"?(<Button variant="contained" color="primary" onClick={handleSubmit}>
 				Submit
-			</Button>
+			</Button>):<></>}
 		</div>
 	);
 }
