@@ -112,11 +112,15 @@ class CourseDBOperations:
         return courses_dict
     
     def get_courses(self,query):
+        print("AAA",query)
+        query = "" if query==None else query 
         pattern = '.*'+str(query)+'.*'
         courses = self.course_collection.find({"course_id": {"$regex": pattern, "$options":"i"}})
         course_ids = [[course["course_id"],course["course_name"]] for course in courses]
+        if query == "":
+            return course_ids
         courses = self.course_collection.find({"course_name": {"$regex": pattern,"$options":"i"}})
-        course_ids.extend([[course["course_id"],course["course_name"]] for course in courses])
+        course_ids.extend([[course["course_id"],course["course_name"]] for course in courses if [course["course_id"],course["course_name"]] not in course_ids])
         return course_ids
         
     def get_prerequisites_of_course(self, course_id):
@@ -342,7 +346,7 @@ class PathDBOperations:
         
     def get_all_paths(self):
         try:
-            paths = self.pathCollection.find({"name":"Hi"})
+            paths = self.pathCollection.find({})
             return paths
         except Exception as e:
             return e

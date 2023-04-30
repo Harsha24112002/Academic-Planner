@@ -29,7 +29,6 @@ import GPATrends from "../Components/GPATrends";
 import CourseList from "../Components/CourseList";
 import { useState } from "react";
 import axios from "axios";
-import { fetchPaths } from "../features/pathDetailsSlice";
 import { grades } from "../features/GPAcourses";
 // const components = [<GPATrends props={details}/>, <CourseList />];
 const labels = ["GPA trends", "My Courses"];

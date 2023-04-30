@@ -270,7 +270,7 @@ def get_registered_courses():
     course_ids = [course["course_id"] for course in session["user"]["course_list"]]
     return course_ids
     
-
+@maps.route("/get_courses/", defaults={"query":''}, methods = ["GET"])
 @maps.route("/get_courses/<string:query>", methods = ["GET"])
 @login_required(["student","admin"])
 def get_courses(query):

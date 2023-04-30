@@ -13,8 +13,8 @@ import {
 	CircularProgress,
 } from "@mui/material";
 import axios from "axios";
-import { savePath } from "../features/pathDetailsSlice";
 import { fetchpathsSearch, fetchpathsSearchDelete } from "../Actions/PathsSearchActions";
+// import {}
 
 function SearchPaths() {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -62,7 +62,7 @@ function SearchPaths() {
 		})
 			.then((response) => {
 				// console.log("repsonse",response.data.course_id)
-				dispatch(savePath(response.data))
+				// dispatch(savePath(response.data))
 			})
 			.catch((error) => {
 				console.log(error.msg);

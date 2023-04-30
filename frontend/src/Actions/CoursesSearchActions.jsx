@@ -34,6 +34,13 @@ export const fetchcoursesSearch = (searchQuery) => {
     //     dispatch(fetchcoursesSearchFailure(errorMsg));
     //   });
 
+    if(searchQuery == null)
+    {
+      searchQuery = ""
+    }
+
+    console.log("SSSSSSSSSSS",searchQuery);
+
     axios({
         method: "GET",
         url: `http://127.0.0.1:5000/maps/get_courses/${searchQuery}`,

@@ -12,7 +12,7 @@ import GPAcourses from "./features/GPAcourses";
 import thunk from "redux-thunk";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
-import pathDetailsReducer from "./features/pathDetailsSlice";
+import pathsDetailsReducer from "./Reducers/PathsDetailsReducer";
 import pathsSearchReducer from "./Reducers/PathsSearchReducer";
 
 const reducers = {
@@ -21,7 +21,7 @@ const reducers = {
   coursesSearch: coursesSearchReducer,
   pathsSearch: pathsSearchReducer,
   auth: authReducer,
-  pathDetails: pathDetailsReducer,
+  pathDetails: pathsDetailsReducer,
   courseDetails: courseDetailsReducer,
   gpaCourses: GPAcourses
 };
