@@ -8,8 +8,8 @@ import { fetchcoursesSearch } from "../Actions/StudentDetailsActions";
 
 function CourseList() {
     const { details, loading, error } = useSelector((state) => ({
-        details: state.studentDetails.details,
-        loading: state.studentDetails.loading,
+        details: state.studentDetails.course_details,
+        loading: state.studentDetails.course_details_loading,
         error: state.studentDetails.error,
       }));
 
@@ -17,7 +17,8 @@ function CourseList() {
         
         <div>
         {
-            loading?<CircularProgress/>:<PaginationTable courseInfo = {details["course_list"]} ></PaginationTable>
+            loading?<CircularProgress/>:<PaginationTable courseInfo = {details} >{console.log("hi",details)}</PaginationTable>
+
         }
         </div>
     )

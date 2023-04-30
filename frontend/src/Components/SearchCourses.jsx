@@ -19,8 +19,9 @@ import {
 } from "../Actions/CoursesSearchActions";
 import axios from "axios";
 import { saveDetails } from "../features/courseDetailsSlice";
+import SearchCourseTable from "./SearchCoursesTable";
 
-function SearchCourses() {
+function SearchCourses({handleRegister, type}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Enter Query");
@@ -52,35 +53,7 @@ function SearchCourses() {
     setOpen(false);
     dispatch(fetchcoursesSearchDelete());
   };
-  const handleListItemButtonClick = (event) => {
-    setSelectedValue(event.target.textContent);
-    setSearchQuery("")
-    setOpen(false);
-    dispatch(fetchcoursesSearchDelete());
-
-    axios({
-        method: "GET",
-        url: `http://127.0.0.1:5000/maps/get_course_details/${event.target.textContent}`,
-        withCredentials: true
-    })
-    .then((response) => {
-      // console.log("repsonse",response.data.course_id)
-      dispatch(saveDetails(response.data))
-    })
-    .catch((error) => {
-      console.log(error.msg);
-    });
-    
-    // data = {
-    //   course_id: event.target.textContent,
-    //   registered_sem : 3
-    //   elective : Optional[str]
-    //   met_prerequisite_flag : bool
-    //   # note : Optional[Notes]
-    //   note : Optional[Notes]
-    // }
-    // axios.post(`http://127.0.0.1:5000/maps/register/${event.target.textContent}`,data)
-  };
+  
   return (
     <Box onSubmit={handleSearchSubmit} component="form">
       <TextField
@@ -109,21 +82,18 @@ function SearchCourses() {
           {loading ? (
             <CircularProgress />
           ) : (
-            coursesSearch.map((course, i) => (
-              <ListItem key={i} disableGutters>
-                <ListItemButton key={i} onClick={handleListItemButtonClick}>
-                  {course[0]}
-                </ListItemButton>
-              </ListItem>
-            ))
+            // coursesSearch.map((course, i) => (
+            //   // <ListItem key={i} disableGutters>
+            //   //   <ListItemButton key={i} onClick={handleListItemButtonClick}>
+            //   //     {course[0]}
+            //   //   </ListItemButton>
+            //   // </ListItem>
+            //   ))
+              <SearchCourseTable coursesInfo={coursesSearch} handleClose={handleClose} handleRegister={handleRegister} type={type}/>
           )}
         </List>
       </Dialog>
-      {/* {Object.keys(courseDetails).length !== 0 ? (
-	<AddCourse courseDetails={courseDetails} type="update"/>
-	) : (
-	<></>
-	)} */}
+      
     </Box>
   );
 }
