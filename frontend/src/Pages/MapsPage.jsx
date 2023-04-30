@@ -101,8 +101,8 @@ function MapsPage() {
 
   return (
     <div style={{ padding: "20px 0px 0px 0px" }}>
-      <SearchCourses />
-      <Button onClick={handleOpen}>Register</Button>
+      <SearchCourses handleRegister={handleOpen} type="register"/>
+      {/* <Button onClick={handleOpen}>Register</Button> */}
       <CourseRegistrationDialog open={open} handleClose={handleClose}/>   
       {mode?(<div>{creds_count!=0?weightedsum/creds_count:"NA"}</div>):(<></>)}
       <Button onClick={handleModeChange}> {!mode?"GPA calculation":"View Courses"} </Button>

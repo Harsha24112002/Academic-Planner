@@ -14,12 +14,12 @@ const columns = [
   { id: 'Grade', label: 'Grade', minWidth: 50 },
 ];
 
-function createData(info) {
-  return { 'ID':info["course_id"], 'Name':info["course_name"], 'Grade':info["course_grade"]?info["course_grade"]:''};
+function createData(key, info) {
+  return { 'ID': key, 'Name': info["course_name"], 'Grade': info["course_grade"] ? info["course_grade"] : '' };
 }
 
 
-export default function PaginationTable({courseInfo}) {
+export default function PaginationTable({ courseInfo }) {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -33,7 +33,12 @@ export default function PaginationTable({courseInfo}) {
     setPage(0);
   };
 
-  const rows = courseInfo.map((info) => createData(info))
+  const rows = []
+
+  for (const [key, value] of Object.entries(courseInfo)) {
+    rows.push(createData(key, value))
+  }
+  // courseInfo.forEach((key, value) => {  })
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -46,7 +51,7 @@ export default function PaginationTable({courseInfo}) {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  sx={{bgcolor:"lightgrey"}}
+                  sx={{ bgcolor: "lightgrey" }}
                 >
                   {column.label}
                 </TableCell>
