@@ -22,6 +22,7 @@ import SearchCourses from "../Components/SearchCourses";
 import CourseForm from "../Components/Admin/CourseForm";
 import CourseRegistrationDialog from "../Components/CourseRegistrationDialog";
 import CreditsCount from "../Components/CreditsCount";
+import { ClearGPA } from "../features/GPAcourses";
 
 function MapsPage() {
   const { details, loading, error } = useSelector((state) => ({
@@ -47,6 +48,7 @@ function MapsPage() {
   const handleModeChange = () => {
     if(mode){
       setmode(false);
+      dispatch(ClearGPA());
     }
     else{
       setmode(true);

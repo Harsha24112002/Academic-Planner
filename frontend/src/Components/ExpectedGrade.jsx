@@ -13,10 +13,11 @@ function ExpectedGrade({course_id,update_state,open,handleClose}) {
   };
   const handleSubmit = () => {
     const payload = {
+        course_id: course_id,
         course_grade: Grade,
         course_credits: creds
     }
-    update_state(course_id,payload)
+    update_state(payload)
     handleClose();
   };
   return (

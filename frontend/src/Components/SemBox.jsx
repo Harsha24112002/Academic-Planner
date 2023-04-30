@@ -38,17 +38,15 @@ function SemBox({ sem, mode }) {
   const [open, setopen] = useState(false);
   const [expectedOpen, setExpectedOpen] = useState(false);
   const [courseId, setcourseId] = useState("");
-  const [selectedCourses, setSelectedCourses] = useState({});
-  const [expectedGrades, setexpectedGrades] = useState({});
+  const { selectedCourses, expectedGrades } = useSelector((state) => {
+    return{
+      selectedCourses: state.gpaCourses.selectedCourses,
+      expectedGrades: state.gpaCourses.expectedGrades
+    }
+  })
 
-  const update_state = (course_id, payload) => {
+  function update_state(payload) {
     dispatch(AddCourse(payload));
-    const newdict = {};
-    newdict[course_id] = true;
-    const newgrade = {};
-    newgrade[course_id] = payload.course_grade;
-    setSelectedCourses({ ...selectedCourses, ...newdict });
-    setexpectedGrades({ ...expectedGrades, ...newgrade });
   };
 
   const handleopen = (e) => {
@@ -61,18 +59,17 @@ function SemBox({ sem, mode }) {
         : {};
       if (selectedCourses[course_id] || false === true) {
         const payload = {
+          course_id: course_id,
           course_grade: expectedGrades[course_id],
           course_credits: courseDetails
             ? courseDetails[course_id].course_credits
             : 0,
         };
         dispatch(RemoveCourse(payload));
-        const newdict = {};
-        newdict[course_id] = false;
-        setSelectedCourses({ ...selectedCourses, ...newdict });
       } else {
         if (student_course_details.course_status === "completed") {
           const payload = {
+            course_id: course_id,
             course_grade: details.course_list
               ? details.course_list.filter((course) => {
                   return course.course_id === course_id;
@@ -82,7 +79,7 @@ function SemBox({ sem, mode }) {
               ? courseDetails[course_id].course_credits
               : 0,
           };
-          update_state(course_id, payload);
+          update_state(payload);
         } else {
           setcourseId(course_id);
           setExpectedOpen(true);
