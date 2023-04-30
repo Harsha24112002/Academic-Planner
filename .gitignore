@@ -5,5 +5,7 @@ Pipfile
 /frontend/package-lock.json
 /frontendtemp
 /backend/flask_session/
+/backend/testing/flask_session
+/backend/testing/__pycache__
 /backend/email_service/__pycache__
 /flask_session/

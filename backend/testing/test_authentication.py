@@ -22,7 +22,7 @@ def return_mock_user():
 			{
 				"course_id": "CS101",
 				"course_grade": "A",
-				"course_status": "Completed",
+				"course_status": "InCompleted",
 				"registered_sem": 1,
 				"elective": 'Some value',
 				"met_prerequisite_flag": True,

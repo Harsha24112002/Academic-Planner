@@ -47,23 +47,18 @@ def get_many_courses_details():
 @maps.route("/register/<string:id>", methods=["POST","GET"])
 @login_required(["student"])
 def register(id):
-    # session['user'] = database.studentOperations.get_user_by_username("Harsha")
-    # session["user"].pop('_id')
-    # session["user"]['type'] = "student"
-    if session.get("user") is None:
-        return "Not logged in"
     
     if session["user"]["course_list"] is None:
         session["user"]["course_list"] = []
     if any( course["course_id"] == id for course in session["user"]["course_list"]) :
-        return {"success":False, "msg": f"The Course {id} is already registered"}
+        return {"success":False, "msg": f"The Course {id} is already registered"}, 400
 
     course_dict = request.json
     course_dict["course_id"] = id
     course_dict["course_status"] = "registered"
     prereq_list = database.courseOperations.get_prerequisites_of_course(id)
     if prereq_list == None :
-        return {"success": False,"msg": "The Course " + id + " is not available"}
+        return {"success": False,"msg": "The Course " + id + " is not available"}, 400
 
     student_has_this_prereq = { course:False for course in prereq_list }
     student_registered_courses = session["user"]["course_list"]
@@ -90,7 +85,7 @@ def register(id):
     try:
         registeringCourse =  StudentCourseSpecification(**course_dict)    
     except ValidationError as e:
-        return {"success":False, "msg": e.errors()}
+        return {"success":False, "msg": e.errors()}, 400
     
     data = [course for course in student_has_this_prereq.keys() if student_has_this_prereq[course]==False]
     registeringCourse.incomplete_prerequisites = data
@@ -121,23 +116,21 @@ def register(id):
 
         # when all the prerequisites are not met, a dict of prerequisite courses showing course-completion boolean is sent
         if course_dict["met_prerequisite_flag"] == False :
-            return {"success":True,"msg":"Prerequisites are not met" ,"data":data}
+            return {"success":True,"msg":"Prerequisites are not met" ,"data":data}, 200
 
         # return message when the course is registered with all its prerequisites fulfilled
-        return {"success":True, "msg":"Course " + str(id) + " is successfully registered", "data":[]}
+        return {"success":True, "msg":"Course " + str(id) + " is successfully registered", "data":[]}, 200
 
     return response
 
 @maps.route("/deregister/<string:id>", methods=["DELETE"])
 @login_required(["student"])
 def deregister(id):
-    # session['user'] = database.studentOperations.get_user_by_username("Harsha")
-    # session["user"].pop('_id')
-    # session["user"]['type'] = "student"
-    if session.get("user") is None:
-        return "Not logged in"
     if not any( course["course_id"] == id for course in session["user"]["course_list"]) :
-        return "The Course " + id + " is not registered to derigister!"
+        return {
+            "status" : "error",
+            "message" : "The Course " + id + " is not registered to deregister!"
+        }, 400
 
     response = database.studentOperations.delete_course(session["user"]["id"], id)
 
@@ -156,11 +149,13 @@ def deregister(id):
         database.studentOperations.update_course_list(session["user"]["email"],updated_courses)
         session.modified = True
 
-    
-        return "Successfully Deregistered"
-    
+        return {
+            "status" : "success",
+            "message" : "Successfully Deregistered",
+        }, 200 #OK
+        
     # !!! Return proper? error messages or Internal Server Error
-    return response
+    return response, 500
 
 # !!! Not-completed Don't use this route
 @maps.route("/update_course_status/<string:course_id>", methods=["POST"])
@@ -175,7 +170,11 @@ def update_course_status(course_id):
             break
     
     if present_course == None :
-        return {"data":"Failure", "msg":"The Course " + course_id + " is not registered to update it's status"}
+        return {
+            "status" : "error",
+            "message" : "The Course " + course_id + " is not registered to update it's status"
+        }, 400 # Bad request
+        
     
     #  if the course is in the student's course list, update the course status
     req =request.json
@@ -185,9 +184,15 @@ def update_course_status(course_id):
     # if status is "completed", check for GPA score
     if status == "completed" :
         if grade is None :
-            return {"data":"Failure", "msg":"Cant mark as completed without a grade"}
+            return {
+                "status" : "error",
+                "message" : "Cant mark as completed without a grade"
+            }, 400
         if not len(session["user"]["course_list"][course_idx]["incomplete_prerequisites"]) == 0:
-            return {"data":"Failure","msg":"Prerequisites Not Registered"}
+            return {
+                "status" : "error",
+                "message" : "Prerequisites Not Registered"
+            }, 400
         prereqs = database.courseOperations.get_prerequisites_of_course(course_id)
         for course in prereqs:
             index = [i for i,c in enumerate(session["user"]["course_list"]) if c["course_id"] == course]
@@ -195,7 +200,10 @@ def update_course_status(course_id):
                 continue
             index = index[0]
             if not session["user"]["course_list"][index]["course_status"] == "completed":
-                return {"data":"Failure","msg":f"Prerequisites {course} Not Completed"}
+                return {
+                    "status" : "error",
+                    "message" : f"Prerequisites {course} Not Completed"
+                }, 400
 
     if status == "registered" and present_course["course_status"] == "completed":
         course_ids = [course["course_id"] for course in session["user"]["course_list"]]
@@ -220,7 +228,10 @@ def update_course_status(course_id):
 
         if result == None:
             return "Course status update failed or possibly none of the courses were updated"
-        return {"data":"Success","msg":"Course status updated successfully"}
+        return {
+            "status" : "success",
+            "message" : "Course status updated successfully"
+        }, 200 #OK
     
     return response
 
