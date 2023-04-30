@@ -54,7 +54,7 @@ function SearchCourses() {
   };
   const handleListItemButtonClick = (event) => {
     setSelectedValue(event.target.textContent);
-    setSearchQuery(event.target.textContent)
+    setSearchQuery("")
     setOpen(false);
     dispatch(fetchcoursesSearchDelete());
 

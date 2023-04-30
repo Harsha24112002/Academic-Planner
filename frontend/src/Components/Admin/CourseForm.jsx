@@ -9,6 +9,8 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import { Input } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { FormHelperText } from "@mui/material";
+import { deleteDetails } from "../../features/courseDetailsSlice";
+import { useDispatch } from "react-redux";
 
 const fileTypes = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv"];
 
@@ -16,6 +18,9 @@ function CourseForm({ courseDetails, type }) {
 	const [CourseName, setCourseName] = useState(
 		courseDetails ? courseDetails.course_name : ""
 	);
+
+	
+
 	const [CourseId, setCourseId] = useState(
 		courseDetails ? courseDetails.course_id : ""
 	);
@@ -36,8 +41,21 @@ function CourseForm({ courseDetails, type }) {
 	);
 
 	const [CourseCredit, setCourseCredit] = useState(
-		courseDetails ? courseDetails.course_credits : 0
+		courseDetails ? courseDetails.course_credits : 1
 	);
+
+	useEffect(()=>{
+		setCourseName(state=>courseDetails ? courseDetails.course_name : "")
+		setCourseId(state=>courseDetails ? courseDetails.course_id : "")
+		setCourseInstructor(state=>courseDetails ? courseDetails.course_instructor : "")
+		setCourseSlot(state=>courseDetails ? courseDetails.course_slot : "")
+		setCourseSem(state=>courseDetails ? courseDetails.course_sem : "")
+		setCoreElective(state=>courseDetails ? courseDetails.core_elective : "")
+		setCourseCredit(state=>courseDetails ? courseDetails.course_credits : 1)
+	},[courseDetails])
+
+
+	const dispatch = useDispatch();
 
 	const [errors, setErrors] = useState([]);
 	const [CourseNameError, setCourseNameError] = useState(false);
@@ -155,7 +173,7 @@ function CourseForm({ courseDetails, type }) {
 
 	const handleSubmit = async (event) => {
 		// console.log(CourseNameError)
-		event.preventDefault();
+		// event.preventDefault();
 		const fieldsAreEmpty = CourseName == "" || CourseId == "" || CourseInstructor == "" || CourseSlot == "" || CourseSem == "" || CoreElective == "";
 		const isFileEmpty = file.length == 0;
 
@@ -206,6 +224,7 @@ function CourseForm({ courseDetails, type }) {
 			if (data.success) {
 				// Redirect to the success page
 				console.log("AAAAAAAAAAAA", data)
+				dispatch(deleteDetails())
 			} else {
 				// console.log("AAAAAAAAAAAA",data)
 				setErrors(data.errors);
@@ -238,6 +257,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CourseNameError}
 					helperText={CourseNameError ? "This field is required" : ""}
 					defaultValue={CourseName}
+					value={CourseName}
 				/>
 				<TextField
 					id="ID"
@@ -249,6 +269,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CourseIdError}
 					helperText={CourseIdError ? "This field is required" : ""}
 					defaultValue={CourseId}
+					value={CourseId}
 				/>
 				<br />
 				<TextField
@@ -261,6 +282,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CourseInstructorError}
 					helperText={CourseInstructorError ? "This field is required" : ""}
 					defaultValue={CourseInstructor}
+					value={CourseInstructor}
 				/>
 
 				<TextField
@@ -273,6 +295,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CourseSlotError}
 					helperText={CourseSlotError ? "This field is required" : ""}
 					defaultValue={CourseSlot}
+					value={CourseSlot}
 				/>
 				<br />
 				<TextField
@@ -285,6 +308,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CourseSemError}
 					helperText={CourseSemError ? "This field is required" : ""}
 					defaultValue={CourseSem}
+					value={CourseSem}
 				/>
 
 				<TextField
@@ -297,6 +321,7 @@ function CourseForm({ courseDetails, type }) {
 					error={CoreElectiveError}
 					helperText={CoreElectiveError ? "This field is required" : ""}
 					defaultValue={CoreElective}
+					value={CoreElective}
 				/>
 				<br />
 				<TextField
@@ -307,6 +332,7 @@ function CourseForm({ courseDetails, type }) {
 					onChange={handleCoursePrerequisitesChange}
 					helperText="Enter prerequisites in multiple lines"
 					defaultValue={CoursePrerequisites.join("\r\n")}
+					value={CoursePrerequisites.join("\r\n")}
 				/>
 				{/* <TextField
 					id="Course Credits"

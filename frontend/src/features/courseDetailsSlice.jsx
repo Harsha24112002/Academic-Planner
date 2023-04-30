@@ -10,9 +10,12 @@ export const courseDetailsSlice = createSlice({
       console.log("ATREDUXER",action.payload)
       state.details = action.payload;
     },
+    deleteDetails:(state)=>{
+      state.details = {}
+    }
   },
 });
 
-export const { saveDetails } = courseDetailsSlice.actions;
+export const { saveDetails, deleteDetails } = courseDetailsSlice.actions;
 
 export default courseDetailsSlice.reducer;
