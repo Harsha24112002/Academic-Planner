@@ -199,7 +199,7 @@ function GPATrends({ props }) {
 		<Grid container spacing={2} className="container_trend">
 			<div className="gpatrends">
 				<div className="trend">
-					<Bar className="bargraph" padding={-10}
+					<Bar className="bargraph"
 						data = {elective_count_data}
 						options = {{...elective_count_options, indexAxis:'y'}}
 					></Bar>

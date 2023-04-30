@@ -11,13 +11,20 @@
 	justify-content:space-between;
 }
 
-.bargraph {
-	position: relative;
-	padding-left: -10px;
-}
+/* .bargraph { */
+	/* position: relative; */
+	/* padding-left: -20px; */
+	/* padding-right: 20px; */
+	/* margin-right: 10px; */
+/* }  */
 
 .bargraph, .graph{
-	width: 350px;
+	width: 400px;
+}
+
+.bargraph {
+	padding-left: -10px;
+	margin-right: 20px;
 }
 
 /* .trend {

@@ -8,7 +8,8 @@ import CircularCreditProgressBar from './CircularCreditProgressBar';
 // with details/course_list as props...
 function CreditsCount({ details }) {
 
-    const course_list = details.course_list;
+    const course_list = details[0].course_list;
+    const Courses = details[1]
 
     // get from backend?  only once
     // use useEffect // or just place hardcoded config file :-)
@@ -30,7 +31,7 @@ function CreditsCount({ details }) {
 
     course_list.forEach(course => {
         if( student_credit_count.hasOwnProperty(course.elective) ) {
-            student_credit_count[course.elective]+=course.course_credits;
+            student_credit_count[course.elective]+=Courses[course.course_id]['course_credits'];
         } else {
             student_credit_count["Audit"]+=1;
         }

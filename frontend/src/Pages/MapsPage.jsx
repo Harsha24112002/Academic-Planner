@@ -148,7 +148,7 @@ function MapsPage() {
               </>
             )}
           </Grid>
-          <CreditsCount details={details}/>
+          <CreditsCount details={[details, studentCourses]}/>
         </div>
       )}
     </div>

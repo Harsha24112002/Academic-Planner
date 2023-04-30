@@ -60,14 +60,21 @@ export default function ProfilePageTabs({components, labels}) {
           })}
         </Tabs>
       </Box>
-
-      {components.map((component, i) => {
-        return (
-          <TabPanel value={value} index={i}>
-           {component}
-          </TabPanel>
-        );
-      })}
+      <div
+        style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}
+      >
+        {components.map((component, i) => {
+          return (
+            <TabPanel 
+              value={value} 
+              index={i}
+            >
+            {component}
+            </TabPanel>
+          );
+        })}
+      </div>
+      
 
     </Box>
   );
