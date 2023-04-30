@@ -1,6 +1,6 @@
 configurations = {
     'database' : {
-        'host' : "notlocalhost",
+        'host' : "localhost",
         'username' : 'cs19btech11015' ,
         'password' : 'urnheinZYSQOAxLR' ,
         'dbname' : 'testingDB' ,

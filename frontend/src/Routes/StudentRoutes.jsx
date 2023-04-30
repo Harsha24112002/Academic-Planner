@@ -19,7 +19,7 @@ export default function StudentRoutes() {
     const studentLinks = {
         "profile": "/profile",
         "specialization paths": "/spPaths",
-        "maps": "/maps",
+        "maps": "/",
     };
 
     return (
@@ -29,7 +29,7 @@ export default function StudentRoutes() {
                     <Route path='/' element={<MapsPage />}/>
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="spPaths" element={<SpecializationPathsPage />} />
-                    <Route path="maps" element={<MapsPage />} />
+                    {/* <Route path="maps" element={<MapsPage />} /> */}
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
             </Routes>

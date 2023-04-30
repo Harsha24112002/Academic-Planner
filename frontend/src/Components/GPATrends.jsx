@@ -78,21 +78,26 @@ function GPATrends({ props }) {
 
 	const get_sem_cgpa = (details) => {
 		var sem_cgpa = [0, 0, 0, 0, 0, 0, 0, 0]
+		var sem_credits = [0, 0, 0, 0, 0, 0, 0, 0]
 		details.forEach(course => {
-			console.log('course : ', course)
+			// console.log('course : ', course)
 			const registered_sem = course.registered_sem
-			const grade = gradeMapping[course.course_grade]
-			sem_cgpa[registered_sem - 1] += grade
+			if(course.course_grade){
+				sem_cgpa[registered_sem - 1] += gradeMapping[course.course_grade]*Course[course.course_id]['course_credits']
+				sem_credits[registered_sem - 1] += Course[course.course_id]['course_credits']
+			}
 		})
 
-		sem_cgpa.map((element, index) => {
+		sem_cgpa = sem_cgpa.map((element, index) => {
 			sem_cgpa[index] = sem_cgpa[index] == 0 ? NaN : sem_cgpa[index]
-			return sem_cgpa[index]
+			// console.log("zoom : ", sem_cgpa[index], sem_credits[index])
+			return (sem_cgpa[index]/sem_credits[index]).toFixed(2)
 		})
 		return sem_cgpa
 	}
 
 	const sem_cgpa = get_sem_cgpa(details)
+	// console.log("sem_cgpa",sem_cgpa)
 
 	const data = {
 		labels : ['sem I', 'sem II', 'sem III', 'sem IV', 'sem V', 'sem VI', 'sem VII', 'sem VIII'],

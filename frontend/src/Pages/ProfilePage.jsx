@@ -135,7 +135,7 @@ function ProfilePage() {
         )
       : 0;
     if (num && den) {
-      return num/den;
+      return (num/den).toFixed(2);
     } else {
       return "NA";
     }

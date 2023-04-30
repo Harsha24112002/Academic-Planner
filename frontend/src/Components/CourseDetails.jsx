@@ -46,7 +46,7 @@ function CourseDetails({ course_id, open, handleClose }) {
       dispatch(editCourseStatus(course_id, "registered" ,null))
       }
       else{
-        alert(response.data.msg)
+        alert(response.data.message)
       }
     });
   };

@@ -14,14 +14,14 @@ function CreditsCount({ details }) {
     // get from backend?  only once
     // use useEffect // or just place hardcoded config file :-)
     const course_types = {
-        "Departmental Core Theory" : 20,
-        "Departmental Core Lab" : 10,
-        "Liberal/Creative Arts Elective" : 15,
-        "Basic Sciences" : 20,
-        "Basic Engineering" : 20,
+        "Departmental Core Theory" : 30,
+        "Departmental Core Lab" : 12,
+        "Liberal/Creative Arts Elective" : 12,
+        "Basic Sciences" : 14,
+        "Basic Engineering" : 15,
         "Additional" : 0,
-        "Departmental Elective" : 24,
-        "Free Elective" : 20,
+        "Departmental Elective" : 30,
+        "Free Elective" : 13,
         "Audit" : 0
     };
 

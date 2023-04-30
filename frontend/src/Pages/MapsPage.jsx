@@ -29,7 +29,7 @@ function MapsPage() {
     loading: state.studentDetails.details_loading,
     error: state.studentDetails.error,
   }));
-  const [mode, setmode] = useState(false);
+  const [mode,setmode] = useState(true)
   const reg_course_details = useSelector((state) => {
     return state.courseDetails.details;
   });
@@ -99,7 +99,7 @@ function MapsPage() {
       {/* <Button onClick={handleOpen}>Register</Button> */}
       <CourseRegistrationDialog open={open} handleClose={handleClose} />
       {mode ? (
-        <div>{creds_count != 0 ? weightedsum / creds_count : "NA"}</div>
+        <div>{creds_count != 0 ? (weightedsum / creds_count).toFixed(2) : "NA"}</div>
       ) : (
         <></>
       )}
