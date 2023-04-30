@@ -65,7 +65,7 @@ def updateCourse(id):
     response = database.courseOperations.update_course(course.dict())
     return {"success":True}
    
-@admin.route("/uploadfile", methods=["POST"])
+@admin.route("/uploadfile/", methods=["POST"])
 @login_required(["admin"])
 def readFile():
     # !!! appropiate error handling while returning
@@ -83,13 +83,13 @@ def readFile():
             pre_req = frame['course_prerequisites'].split(',')
 
         try:
-            course = Course(course_name=frame['course_name'], course_id=frame['course_id'], course_instructor=frame['course_instructor'], course_slot=str(frame['course_slot']), course_sem=str(frame['course_sem']), core_elective=frame['core_elective'], course_prerequisites = pre_req)
+            course = Course(course_name=frame['course_name'], course_id=frame['course_id'], course_instructor=frame['course_instructor'], course_slot=str(frame['course_slot']), course_sem=str(frame['course_sem']), core_elective=frame['core_elective'], course_prerequisites = pre_req, course_credits=frame['course_credits'])
             database.courseOperations.add_course(course.dict())
         except:
             failed_additions.append(i+1)
 
     # !!! Add good returns, send failed additions to frontend
-    return {"success":True}
+    return {"success":True, "failed_additions":failed_additions}
 
 ### Add Path to DataBase by ADMIN
 @admin.route("/addpath",methods=["POST"])

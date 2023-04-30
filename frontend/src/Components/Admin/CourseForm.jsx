@@ -223,7 +223,11 @@ function CourseForm({ courseDetails, type }) {
 			// console.log(data);
 			if (data.success) {
 				// Redirect to the success page
-				console.log("AAAAAAAAAAAA", data)
+				// console.log("AAAAAAAAAAAA", data)
+				if(data.failedAddtions.length > 0){
+					// setErrors(data.failedAddtions);
+					alert(```Some courses were not added due to invalid data. Courses are ${data.failedAddtions.join(", ")}```)
+				}
 				dispatch(deleteDetails());
 				
 			} else {
