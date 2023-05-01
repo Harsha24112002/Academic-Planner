@@ -60,6 +60,7 @@ export default function ConfirmationPage() {
 			})
 			.catch((error) => {
 				console.log(error);
+				alert(error.response.data.message);
 			});
 		}
 	}, [formErrors]);

@@ -7,9 +7,10 @@ import { CircularProgress } from "@mui/material";
 import { fetchcoursesSearch } from "../Actions/StudentDetailsActions";
 
 function CourseList() {
-    const { details, loading, error } = useSelector((state) => ({
-        details: state.studentDetails.course_details,
+    const { details, course_details, loading, error } = useSelector((state) => ({
+        details: state.studentDetails.details.course_list,
         loading: state.studentDetails.course_details_loading,
+        course_details: state.studentDetails.course_details,
         error: state.studentDetails.error,
       }));
 
@@ -17,8 +18,7 @@ function CourseList() {
         
         <div>
         {
-            loading?<CircularProgress/>:<PaginationTable courseInfo = {details} >{console.log("hi",details)}</PaginationTable>
-
+            loading?<CircularProgress/>:<PaginationTable ></PaginationTable>
         }
         </div>
     )

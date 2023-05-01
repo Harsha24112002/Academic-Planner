@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
+  CircularProgress,
 } from "@mui/material";
 import "../css/Shapes.css";
 import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
@@ -29,7 +30,7 @@ function MapsPage() {
     loading: state.studentDetails.details_loading,
     error: state.studentDetails.error,
   }));
-  const [mode,setmode] = useState(true)
+  const [mode,setmode] = useState(false)
   const reg_course_details = useSelector((state) => {
     return state.courseDetails.details;
   });
@@ -55,11 +56,13 @@ function MapsPage() {
   };
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchDetails());
   }, []);
 
   useEffect(() => {
+
     if (loading != true && details.course_list) {
       const course_ids = details.course_list.map((obj) => obj.course_id);
       dispatch(fetchStudentCourses({ courses: course_ids }));
@@ -99,7 +102,7 @@ function MapsPage() {
       {/* <Button onClick={handleOpen}>Register</Button> */}
       <CourseRegistrationDialog open={open} handleClose={handleClose} />
       {mode ? (
-        <div>{creds_count != 0 ? (weightedsum / creds_count).toFixed(2) : "NA"}</div>
+        <div>GPA : {creds_count != 0 ? (weightedsum / creds_count).toFixed(2) : "NA"}</div>
       ) : (
         <></>
       )}
@@ -108,7 +111,7 @@ function MapsPage() {
         {!mode ? "GPA calculation" : "View Courses"}{" "}
       </Button>
       {loading ? (
-        <h1>Loading{console.log("laoding2")}</h1>
+        <CircularProgress/>
       ) : (
         <div>
           <Grid

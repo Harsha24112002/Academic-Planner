@@ -11,6 +11,7 @@ import {
   InputLabel,
   Button,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CourseForm from "./Admin/CourseForm";
@@ -165,7 +166,7 @@ function CourseRegistrationDialog({ open, handleClose }) {
             </DialogContent>
           </>
         ) : (
-          <h1> Loading... </h1>
+          <CircularProgress/>
         )}
       </Dialog>
     </div>

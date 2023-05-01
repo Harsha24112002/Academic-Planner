@@ -168,6 +168,7 @@ def update_course_status(course_id):
         if course["course_id"] == course_id:
             present_course = course
             break
+    print(course_id)
     
     if present_course == None :
         return {
@@ -210,7 +211,7 @@ def update_course_status(course_id):
         course_prereqs_list = database.courseOperations.get_multiple_courses_prerequisites(course_ids=course_ids)
         for course in session["user"]["course_list"]:
             if present_course["course_id"] in course_prereqs_list[course["course_id"]]:
-                return {"data":"Failure", "msg":f"First unmark all other courses having this prerequisite,Eg: {course['course_id']}"}
+                return {"status":"error", "message":f"First unmark all other courses having this prerequisite,Eg: {course['course_id']}"},400
     
     response = database.studentOperations.update_course_status(session["user"]["id"], course_id, status, grade)
     if response == "Success":

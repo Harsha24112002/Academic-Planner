@@ -1,0 +1,10 @@
+{
+    "first_name": "admin",
+    "last_name" : "",
+    "username" : "AD1",
+    "password" : "a",
+    "email" : "ad1@iith.ac.in",
+    "photo_url" : "",
+    "id" : "admin1",
+    "role" : "admin"
+}

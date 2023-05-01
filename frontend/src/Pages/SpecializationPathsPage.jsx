@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import SearchPaths from '../Components/SearchPaths'
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardContent, CardHeader, CardMedia, Grid, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, CardMedia, CircularProgress, Grid, Typography } from "@mui/material";
 import { fetchDetails } from "../Actions/PathsDetailsActions";
 
 function SpecializationPathsPage() {
@@ -39,7 +39,7 @@ function SpecializationPathsPage() {
             </Grid>
           ))
         ) : (
-          <>Loading!!!</>
+          <CircularProgress/>
         )}
       </Grid>
     </>
