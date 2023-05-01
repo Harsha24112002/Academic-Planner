@@ -24,6 +24,7 @@ import {
   editDetails,
   fetchDetails,
   fetchEditDetails,
+  fetchStudentCourses,
 } from "../Actions/StudentDetailsActions";
 import GPATrends from "../Components/GPATrends";
 import CourseList from "../Components/CourseList";
@@ -106,36 +107,46 @@ const EditableTextBox = ({ initialValue }) => {
 };
 
 function ProfilePage() {
+  const { details, courseDetails, loading, loading2, error } = useSelector(
+    (state) => {
+      console.log(state.studentDetails);
+      return {
+        details: state.studentDetails.details,
+        courseDetails: state.studentDetails.course_details,
+        loading: state.studentDetails.details_loading,
+        loading2: state.studentDetails.course_details_loading,
+        error: state.studentDetails.error,
+      };
+    }
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchDetails());
   }, []);
+  useEffect(() => {
+    dispatch(fetchStudentCourses());
+  }, [loading]);
 
-  const { details, courseDetails, loading, error } = useSelector((state) => {
-    console.log(state.studentDetails);
-    return {
-      details: state.studentDetails.details,
-      courseDetails: state.studentDetails.course_details,
-      loading: state.studentDetails.loading,
-      error: state.studentDetails.error,
-    };
-  });
   const calculateCGPA = () => {
-    var num = 0, den = 0;
+    var num = 0,
+      den = 0;
+      if(Object.keys(details).length === 0 || Object.keys(courseDetails).length === 0){
+        return "NA";
+      }
     const tmp = details.course_list
       ? details.course_list.map((course) => {
-
           if (course.course_grade) {
             var cred = 0;
-            (cred = courseDetails ? courseDetails[course.course_id].course_credits : null);
-            (num += grades[course.course_grade]*cred);
-            (den += cred);
+            cred = Object.keys(courseDetails).length!==0
+              ? courseDetails[course.course_id]["course_credits"]
+              : null;
+            num += grades[course.course_grade] * cred;
+            den += cred;
           }
-        }
-        )
+        })
       : 0;
     if (num && den) {
-      return (num/den).toFixed(2);
+      return (num / den).toFixed(2);
     } else {
       return "NA";
     }
@@ -146,11 +157,9 @@ function ProfilePage() {
   const handleFileInputChange = (event) => {
     event.preventDefault();
     const file = event.target.files[0];
-    console.log("sffgf", file);
     setSelectedFile(file);
     const formData = new FormData();
     formData.append("photo", file, file.name);
-    console.log("fgh", formData);
 
     axios({
       method: "POST",
@@ -256,7 +265,17 @@ function ProfilePage() {
                 <Box sx={{ alignSelf: "flex-end" }}></Box>
               </Box>
               <Box>
-                <ProfilePageTabs components={[<GPATrends props={[details, courseDetails]}/>, <CourseList />]} labels={labels} />
+                {!loading2 ? (
+                  <ProfilePageTabs
+                    components={[
+                      <GPATrends props={[details, courseDetails]} />,
+                      <CourseList />,
+                    ]}
+                    labels={labels}
+                  />
+                ) : (
+                  <CircularProgress />
+                )}
               </Box>
             </Grid>
           </Grid>

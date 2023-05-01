@@ -21,7 +21,7 @@ export const fetchDetailsDelete = (error) => ({
 
 export const fetchDetails = () => {
   return async (dispatch,getState) => {
-    const paths = getState().studentDetails.paths
+    const paths = getState().pathDetails.paths
     if(Object.keys(paths).length !== 0){
       return;
     }
@@ -32,10 +32,8 @@ export const fetchDetails = () => {
         withCredentials: true
       }).then((response) => {
           const pathDetails = response.data;
-          console.log((pathDetails))
           dispatch(fetchDetailsSuccess(pathDetails));
       }).catch((error) => {
-          console.log(error);
           const errorMsg = error.message;
           dispatch(fetchDetailsFailure(errorMsg));
       });

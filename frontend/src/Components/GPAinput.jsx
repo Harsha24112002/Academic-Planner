@@ -30,7 +30,6 @@ function GPAinput({ course_id,open, handleClose }) {
         data: {course_status:"completed",grade: Grade},
         withCredentials:true
     }).then((response) => {
-      console.log("resppp",response.data);
       if(response.data.status == "success"){
         dispatch(editCourseStatus(course_id,"completed",Grade))
       }

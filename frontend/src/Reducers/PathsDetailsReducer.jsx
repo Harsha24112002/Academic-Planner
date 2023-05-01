@@ -12,7 +12,7 @@ const initialState = {
         console.log("Payload ", state,action.payload);
         return {
           ...state,
-          paths: action.payload,
+          paths: {...action.payload},
           loading: false,
           error: null,
         };

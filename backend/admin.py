@@ -103,13 +103,14 @@ def addPath():
     file = request.files["photo"]
     file_name = req["name"]
     file_contents = file.read()
-    path_url = path_fs.put(file_contents, _id = file_name)
+    print("path file", file_name)
+    path_url = path_fs.put(file_contents,_id=file_name)
     req = {}
     req["name"] = file_name
     req["path_url"] = path_url
 
     try:
-        new_course = SpecializationPath(**req)
+        new_course = Path(**req)
     except ValidationError as e:
         return {'success': False, 'errors':e.errors()}
     ### !!! Add good returns 

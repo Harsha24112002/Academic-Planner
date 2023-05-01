@@ -133,8 +133,8 @@ const detailsReducer = (state = initialState, action) => {
       {
         let updated_state = JSON.parse(JSON.stringify(state))
         updated_state.details.course_list = updated_state.details.course_list.map((course) => {
-          if (course.course_id == action.course_id) {
-            course.note = { "note": action.payload }
+          if (course.course_id == action.payload.course_id) {
+            course.note = { "note": action.payload.notes }
           }
           return course;
         })
