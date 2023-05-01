@@ -124,7 +124,10 @@ function ProfilePage() {
     dispatch(fetchDetails());
   }, []);
   useEffect(() => {
-    dispatch(fetchStudentCourses());
+    if (loading != true && details.course_list) {
+      const course_ids = details.course_list.map((obj) => obj.course_id);
+      dispatch(fetchStudentCourses({ courses: course_ids }));
+    }
   }, [loading]);
 
   const calculateCGPA = () => {
