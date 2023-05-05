@@ -110,7 +110,7 @@ def addPath():
     req["path_url"] = path_url
 
     try:
-        new_course = Path(**req)
+        new_course = SpecializationPath(**req)
     except ValidationError as e:
         return {'success': False, 'errors':e.errors()}
     ### !!! Add good returns 

@@ -1,14 +1,14 @@
 configurations = {
     'database' : {
-        'host' : "localhost",
+        'host' : "notlocalhost",
         'username' : 'cs19btech11015' ,
         'password' : 'urnheinZYSQOAxLR' ,
-        'dbname' : 'NEW1' ,
+        'dbname' : 'testingDB' ,
         'pictures' : 'student_profile_pictures',
-        'student_collection' : 'student_collection',
-        'course_collection' : 'course_collection',
-        'path_collection' : 'path_collection',
-        'admin_collection' : 'admin_collection',
+        'student_collection' : 'Students',
+        'course_collection' : 'Courses',
+        'path_collection' : 'SpPaths',
+        'admin_collection' : 'Admin',
         'domain_name' : 'iith.ac.in',
     },
     'mail' : {
@@ -16,9 +16,9 @@ configurations = {
         'MAIL_PORT' : 465,
         'MAIL_USE_TLS': False,
         'MAIL_USE_SSL' : True,
-        'MAIL_USERNAME' : 'panthergolden68@gmail.com',
-        'MAIL_PASSWORD' : 'evyozlcqbxmpnvbg',
-        'MAIL_DEFAULT_SENDER': 'panthergolden68@gmail.com'
+        'MAIL_USERNAME' : None,
+        'MAIL_PASSWORD' : None,
+        'MAIL_DEFAULT_SENDER': None
     },
     'session': {
         'SESSION_TYPE': 'filesystem',
