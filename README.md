@@ -50,22 +50,18 @@ We've gone with MongoDB as our database as it is already horizontally scaled. Al
 
 ### Screenshots and Demo's:
 
-* Home, SignIn, and SignUp screenshots
+* Home Page
 ![home-page](./media/home-page.png) 
 
 
-<div style="display:flex">
-     <div style="flex:1;padding-right:10px;">
-        <img src="media/responsive-home-page.png" />
-		<figcaption>Responsive Home Page</figcaption>
-     </div>
-     <div style="flex:1;padding-left:10px;">
-        <img src="media/registration-form.png"/>
-		<figcaption>Registration Form in SignUp Page</figcaption>
-     </div>
-</div>
-
+* SignIn Page
 ![SignIn Page](./media/signin-page.png)
+
+* Responsive Home Page and Registration form in SignUp Page
+<p float="left">
+  <img src="./media/responsive-home-page.png" width="45%" />
+  <img src="./media/registration-form.png" width="45%" /> 
+</p>
 
 * Admin UI
 <figure>
@@ -74,19 +70,19 @@ We've gone with MongoDB as our database as it is already horizontally scaled. Al
 
 * Student course-maps Page
 
+Landing Page for Students
 <figure>
   <img src="./media/maps-page.png" alt="maps page">
-  <figcaption>Landing Page for Students</figcaption>
 </figure>
 
+GPA Estimation
 <figure>
   <img src="./media/maps-gpa.gif" alt="gif showing GPA estimation">
-  <figcaption>GPA Estimation</figcaption>
 </figure>
 
+Course Prerequisites, and Circular Progress bars
 <figure>
   <img src="./media/maps-course-prerequisite-circular-progress.png" alt="maps-page showing course-prerequisites and credits-circular-progress-bars">
-  <figcaption>Course Prerequisites, and Circular Progress bars</figcaption>
 </figure>
 
 * Student Profile Page UI
