@@ -48,8 +48,62 @@ We've gone with MongoDB as our database as it is already horizontally scaled. Al
 - Provide proper details in Backend ```config.py``` in order for the database to work.
 - All the fields in ```config.py``` are self explanatory.
 
+### Screenshots and Demo's:
+
+* Home, SignIn, and SignUp screenshots
+![home-page](./media/home-page.png) 
+
+
+<div style="display:flex">
+     <div style="flex:1;padding-right:10px;">
+        <img src="media/responsive-home-page.png" />
+		<figcaption>Responsive Home Page</figcaption>
+     </div>
+     <div style="flex:1;padding-left:10px;">
+        <img src="media/registration-form.png"/>
+		<figcaption>Registration Form in SignUp Page</figcaption>
+     </div>
+</div>
+
+![SignIn Page](./media/signin-page.png)
+
+* Admin UI
+<figure>
+  <img src="./media/admin-ui.gif" alt="gif showing admins complete UI">
+</figure>
+
+* Student course-maps Page
+
+<figure>
+  <img src="./media/maps-page.png" alt="maps page">
+  <figcaption>Landing Page for Students</figcaption>
+</figure>
+
+<figure>
+  <img src="./media/maps-gpa.gif" alt="gif showing GPA estimation">
+  <figcaption>GPA Estimation</figcaption>
+</figure>
+
+<figure>
+  <img src="./media/maps-course-prerequisite-circular-progress.png" alt="maps-page showing course-prerequisites and credits-circular-progress-bars">
+  <figcaption>Course Prerequisites, and Circular Progress bars</figcaption>
+</figure>
+
+* Student Profile Page UI
+
+<figure>
+  <img src="./media/profile-page-ui.gif" alt="students profile page UI">
+</figure>
+
+
+* Specialization Paths Page
+<figure>
+  <img src="./media/student-sp-paths.png" alt="specialization paths page">
+</figure>
+
+
 ## Contributors:
-[Uppala Sehouriey](https://github.com/Sehouriey)
-[Sri Hari M](https://github.com/srihari39)
-[Geetha Sowmya Ch](https://github.com/Geetha495)
-[Sri Harsha K](https://github.com/Harsha24112002)
+[Uppala Sehouriey](https://github.com/Sehouriey)  
+[Sri Hari M](https://github.com/srihari39)  
+[Geetha Sowmya Ch](https://github.com/Geetha495)  
+[Sri Harsha K](https://github.com/Harsha24112002)  

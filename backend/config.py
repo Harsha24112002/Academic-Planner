@@ -1,8 +1,8 @@
 configurations = {
     'database' : {
         'host' : "notlocalhost",
-        'username' : 'cs19btech11015' ,
-        'password' : 'urnheinZYSQOAxLR' ,
+        'username' : None ,
+        'password' : None ,
         'dbname' : 'testingDB' ,
         'pictures' : 'student_profile_pictures',
         'student_collection' : 'Students',
