@@ -30,14 +30,17 @@ function GPAinput({ course_id,open, handleClose }) {
         data: {course_status:"completed",grade: Grade},
         withCredentials:true
     }).then((response) => {
-      console.log("AAAA",response)
-      if(response.data.data == "Success"){
+      if(response.data.status == "success"){
         dispatch(editCourseStatus(course_id,"completed",Grade))
       }
       else{
-        alert(response.data.msg);
+        alert(response.data.message);
       }
-  })    
+  }).catch((response)=>
+  {
+    // alert(response.data.message);
+    alert(response.response.data.message);
+  } )   
   }
 
   return (

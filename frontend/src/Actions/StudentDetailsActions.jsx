@@ -55,7 +55,11 @@ export const StudentDetailsDelete = (payload) => ({
   payload: payload
 }) 
 export const fetchDetails = () => {
-  return (dispatch) => {
+  return async (dispatch,getState) => {
+    const details = getState().studentDetails.details
+    if(Object.keys(details).length !== 0){
+      return;
+    }
     dispatch(fetchDetailsRequest());
       axios({
           method: "GET",
@@ -63,6 +67,7 @@ export const fetchDetails = () => {
           withCredentials: true
       }).then((response) => {
           const studentDetails = response.data;
+          console.log("AC",studentDetails)
           dispatch(fetchDetailsSuccess(studentDetails));
       }).catch((error) => {
           console.log(error);
@@ -98,7 +103,11 @@ export const StudentCoursesUpdate = (Details) => ({
 });
 
 export const fetchStudentCourses = (data) => {
-  return (dispatch) => {
+  return async (dispatch,getState) => {
+    const course_details = getState().studentDetails.course_details
+    if(Object.keys(course_details).length !== 0){
+      return;
+    }
     dispatch(fetchStudentCoursesRequest());
     // axios
     //   .post(`http://127.0.0.1:5000/maps/get_multiple_courses/`,data)

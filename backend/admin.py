@@ -43,11 +43,11 @@ def addCourse():
     try:
         new_course = Course(**req)
     except ValidationError as e:
-        return {'success': False, 'errors': e.errors()}
+        return {'success': False, 'errors': e.errors(), "failed_additions":[]}
 
     ### !!! Add good returns 
     response = database.courseOperations.add_course(new_course.dict())
-    return {"success": True}
+    return {"success": True, "failed_additions":[]}
 
 ### Update Course by ID in DataBase by ADMIN
 # !!! Assumed Course ID cannot be updated, should confirm with others
@@ -63,7 +63,7 @@ def updateCourse(id):
     course = Course(**coursedb)
     course.updateCourse(**req)
     response = database.courseOperations.update_course(course.dict())
-    return {"success":True}
+    return {"success":True, "failed_additions":[]}
    
 @admin.route("/uploadfile/", methods=["POST"])
 @login_required(["admin"])
@@ -103,7 +103,8 @@ def addPath():
     file = request.files["photo"]
     file_name = req["name"]
     file_contents = file.read()
-    path_url = path_fs.put(file_contents, _id = file_name)
+    print("path file", file_name)
+    path_url = path_fs.put(file_contents,_id=file_name)
     req = {}
     req["name"] = file_name
     req["path_url"] = path_url

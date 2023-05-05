@@ -51,7 +51,7 @@ export default function CourseDescription() {
 	  }
 
 	return (
-		<div className='card-container'>
+		<div className='card-container' style={{width:"1000px"}}>
 			<div className='header2-row'>
 			</div>
 			<div className='header-row'>

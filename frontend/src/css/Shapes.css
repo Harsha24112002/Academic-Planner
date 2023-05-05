@@ -33,7 +33,9 @@
 }
 .text {
   margin: auto;
-  color: black
+  color: black;
+  padding-left: 15px;
+  margin-bottom: 10px;;
 }
 .error {
   color: red;

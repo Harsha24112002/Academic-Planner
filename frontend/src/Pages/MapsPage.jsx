@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchDetails,
   fetchEditDetails,
-  fetchStudentCourses
+  fetchStudentCourses,
 } from "../Actions/StudentDetailsActions";
 import SemBox from "../Components/SemBox";
 import {
@@ -13,8 +13,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText 
-
+  DialogContentText,
+  CircularProgress,
 } from "@mui/material";
 import "../css/Shapes.css";
 import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
@@ -22,12 +22,13 @@ import SearchCourses from "../Components/SearchCourses";
 import CourseForm from "../Components/Admin/CourseForm";
 import CourseRegistrationDialog from "../Components/CourseRegistrationDialog";
 import CreditsCount from "../Components/CreditsCount";
+import { ClearGPA } from "../features/GPAcourses";
 
 function MapsPage() {
   const { details, loading, error } = useSelector((state) => ({
     details: state.studentDetails.details,
     loading: state.studentDetails.details_loading,
-    error: state.studentDetails.error
+    error: state.studentDetails.error,
   }));
   const [mode,setmode] = useState(false)
   const reg_course_details = useSelector((state) => {
@@ -39,32 +40,38 @@ function MapsPage() {
     loading2: state.studentDetails.course_details_loading,
   }));
 
-  const { weightedsum, creds_count} = useSelector((state) => {
+  const { weightedsum, creds_count } = useSelector((state) => {
     return {
-    weightedsum: state.gpaCourses.weightedsum,
-    creds_count: state.gpaCourses.total_creds
-  }})
+      weightedsum: state.gpaCourses.weightedsum,
+      creds_count: state.gpaCourses.total_creds,
+    };
+  });
   const handleModeChange = () => {
-    if(mode){
+    if (mode) {
       setmode(false);
-    }
-    else{
+      dispatch(ClearGPA());
+    } else {
       setmode(true);
     }
-  }
+  };
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchDetails());
   }, []);
 
   useEffect(() => {
+
     if (loading != true && details.course_list) {
       const course_ids = details.course_list.map((obj) => obj.course_id);
       dispatch(fetchStudentCourses({ courses: course_ids }));
     }
   }, [loading]);
   
+  
+
+
 
   function getCoursePrerequisites() {
     const course_prereq = [];
@@ -91,13 +98,20 @@ function MapsPage() {
 
   return (
     <div style={{ padding: "20px 0px 0px 0px" }}>
-      <SearchCourses handleRegister={handleOpen} type="register"/>
+      <SearchCourses handleRegister={handleOpen} type="register" />
       {/* <Button onClick={handleOpen}>Register</Button> */}
-      <CourseRegistrationDialog open={open} handleClose={handleClose}/>   
-      {mode?(<div>{creds_count!=0?weightedsum/creds_count:"NA"}</div>):(<></>)}
-      <Button onClick={handleModeChange}> {!mode?"GPA calculation":"View Courses"} </Button>
+      <CourseRegistrationDialog open={open} handleClose={handleClose} />
+      {mode ? (
+        <div>GPA : {creds_count != 0 ? (weightedsum / creds_count).toFixed(2) : "NA"}</div>
+      ) : (
+        <></>
+      )}
+      <Button onClick={handleModeChange}>
+        {" "}
+        {!mode ? "GPA calculation" : "View Courses"}{" "}
+      </Button>
       {loading ? (
-        <h1>Loading{console.log("laoding2")}</h1>
+        <CircularProgress/>
       ) : (
         <div>
           <Grid
@@ -148,7 +162,11 @@ function MapsPage() {
               </>
             )}
           </Grid>
-          <CreditsCount details={[details, studentCourses]}/>
+          {!loading2 ? (
+            <CreditsCount details={[details, studentCourses]} />
+          ) : (
+            <></>
+          )}
         </div>
       )}
     </div>

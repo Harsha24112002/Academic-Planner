@@ -11,12 +11,14 @@ import {
   InputLabel,
   Button,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CourseForm from "./Admin/CourseForm";
 import { useState } from "react";
 import axios from "axios";
 import { DetailsUpdate,StudentCoursesUpdate } from "../Actions/StudentDetailsActions";
+import CourseDescription from "../Pages/CourseDescriptionPage"
 function CourseRegistrationDialog({ open, handleClose }) {
   const reg_course_details = useSelector((state) => {
     return state.courseDetails.details;
@@ -37,6 +39,14 @@ function CourseRegistrationDialog({ open, handleClose }) {
   const evensems = [2, 4, 6, 8];
   const [elective, setElective] = useState(electives[0]);
   const [regsem, setRegSem] = useState();
+  const [infoopen, setInfoOpen] = useState(false);
+
+  const handleInfoClose = () => {
+    setInfoOpen(false);
+  }
+  const handleInfoOpen = () => {
+    setInfoOpen(true);
+  }
   const handleChange = (event) => {
     setElective(event.target.value);
   };
@@ -162,12 +172,22 @@ function CourseRegistrationDialog({ open, handleClose }) {
                 </Grid>
               </Grid>
               <Button onClick={handleRegister}>Register</Button>
+              <Button onClick={handleInfoOpen}>Info</Button>
             </DialogContent>
           </>
         ) : (
-          <h1> Loading... </h1>
+          <CircularProgress/>
         )}
       </Dialog>
+      <Dialog
+      open={infoopen}
+      onClose={handleInfoClose}
+      >
+        <DialogContent>
+          <CourseDescription></CourseDescription>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 }

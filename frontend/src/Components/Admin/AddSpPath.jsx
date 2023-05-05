@@ -7,7 +7,7 @@ import PathForm from "./PathForm";
 const AddSpPath = () => {
 
   return (
-   <PathForm></PathForm>
+   <PathForm type="add"></PathForm>
   );
 };
 

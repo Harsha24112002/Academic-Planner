@@ -42,11 +42,12 @@ function CourseDetails({ course_id, open, handleClose }) {
       data: { course_status: "registered", grade: null },
       withCredentials: true,
     }).then((response)=>{
-      if(response.data.data == "Success"){
+      if(response.data.status == "success"){
       dispatch(editCourseStatus(course_id, "registered" ,null))
       }
       else{
-        alert(response.data.msg)
+        console.log("resp",response.data.message);
+        alert(response.data.message)
       }
     });
   };

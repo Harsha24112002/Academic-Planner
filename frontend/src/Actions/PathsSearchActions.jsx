@@ -25,7 +25,6 @@ export const fetchpathsSearch = (searchQuery) => {
         url: `http://127.0.0.1:5000/maps/get_paths/${searchQuery}`,
         withCredentials: true
     }).then((response) => {
-        console.log("[paths]",response.data)
         const data = response.data;
         dispatch(fetchpathsSearchSuccess(data));
     }).catch((error) => {
